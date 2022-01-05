@@ -28,12 +28,14 @@ const MADE = 'Made'
 const findFirstToPoints = (targetPoints, plays) => {
   const results = {}
   const shootingPlays = plays.filter(play => scoringPlays[play.actionType] && play.shotResult === MADE)
-  console.log(_.uniq(shootingPlays.map(play => play.teamTricode)).join('-'))
+  const teams = _.uniq(shootingPlays.map(play => play.teamTricode)).join('-')
   let someoneReachedTargetedPoints = false
+  let winner;
   shootingPlays.forEach(play => {
     if(!someoneReachedTargetedPoints && play.pointsTotal >= targetPoints){
       someoneReachedTargetedPoints = true
-      console.log(play.playerNameI, play.teamTricode)
+      // console.log(play.playerNameI, play.teamTricode)
+      winner = [play.playerNameI, play.teamTricode, teams]
     }
     results[play.playerNameI] = play.pointsTotal
   })
@@ -42,7 +44,7 @@ const findFirstToPoints = (targetPoints, plays) => {
     const sorted = 
       Object.keys(results)
       .sort((a,b) =>results[b] - results[a] )
-      .slice(0,6)
+      .slice(0,4)
       .reduce(
         (_sortedObj, key) => ({
           ..._sortedObj,
@@ -50,27 +52,58 @@ const findFirstToPoints = (targetPoints, plays) => {
         }),
         {}
       );
-    console.log(sorted)
+    if(sorted){
+      winner = {
+        teams: _.uniq(shootingPlays.map(play => play.teamTricode)).join('-'),
+        sorted,
+      }
+    }
   }
+
+  return winner;
 }
 
-const runFunction = () => {
-  BB.map(URLS, async url => {
-    await axios.get(url)
+const runFunction = async () => {
+  let remainingGames= 0;
+  console.log(`## Final`)
+
+  const results =await BB.map(URLS, async url => {
+    return axios.get(url)
       .then(response => {
         const plays = response.data.game.actions;
-        findFirstToPoints(15, plays)
+        return findFirstToPoints(15, plays)
       })
       .catch(function (error) {
         // handle error
+        remainingGames++
         // console.log(error.response.data);
-        console.log('Game has Not started yet');
+        // console.log('Game has Not started yet');
       })
+  })
+  results.filter(r => r?.length).forEach(result => {
+    console.log(`- ${result[2]}`)
+    console.log(
+      `**${result.slice(0,1).join(' ')}**`
+    )
+    console.log('\n')
+  })
+  console.log('Games That Have Not Started Yet:', remainingGames)
+  console.log('\n')
+  console.log(`## Ongoing Games`)
+  console.log('\n')
+  results.filter(r => !r?.length && r!= undefined).forEach(res => {
+    console.log(`**${res.teams}**`)
+    console.log('\n')
+    for(const person in res.sorted){
+
+      console.log(`- ${person}: ${res.sorted[person]}`)
+      console.log('\n')
+    }
   })
   console.log('\n')
 }
 
-setInterval(runFunction, 20000)
+setInterval(runFunction, 10000)
 
 
 
