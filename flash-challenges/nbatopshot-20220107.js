@@ -78,7 +78,6 @@ const runFunction = async () => {
 
   // const allPlayers = results.flat();
   const sortedList = results.map(game => {
-    // const sortedGame = game.sort((a,b) => b.points - a.points);
     const sortedGame = game.sort((a,b) => {
       // Main Sort
       if(a.points != b.points){
