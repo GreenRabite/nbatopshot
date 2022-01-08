@@ -125,25 +125,28 @@ const runFunction = async () => {
   //   return [player.name, player.ratio, player.teams]
   // })
 
-  const markdown = `## Points Leaders  \n
-${sortedList.map((teamArr) => {
-  return teamArr.map((player, idx) => {
-    if(idx === 0){
-      return `**${player.teams}**\n\n* ${player.name}: ${player.points}`
-    }
-    return `* ${player.name}: ${player.points}`
-  }).join('  \n')
-}).join('  \n\n')}
-\n**Update: ${new Date().toLocaleString()}**\n
-There are ${remainingGames} games that have not started yet.
-  `
+  const standings = sortedList.map(teamArr => {
+    return teamArr.map((player, idx) => {
+      if(idx === 0){
+        return `**${player.teams}**\n\n* ${player.name}: ${player.points}`;
+      }
+
+      return `* ${player.name}: ${player.points}`;
+    }).join("\n\n")
+  })
+
+  const markdown = [
+    `## Points Leaders`,
+    ...standings,
+    `**Update: ${new Date().toLocaleString()}**`,
+    `There are ${remainingGames} games that have not started yet.`
+  ].join("\n\n")
 
   console.log(markdown)
-
 
   r.getComment(COMMENT_ID).edit(markdown)
 
 }
 
-// setInterval(runFunction, 60000)
-runFunction()
+setInterval(runFunction, 60000)
+// runFunction()
