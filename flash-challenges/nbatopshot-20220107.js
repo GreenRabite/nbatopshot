@@ -125,15 +125,15 @@ const runFunction = async () => {
   //   return [player.name, player.ratio, player.teams]
   // })
 
-  const markdown = `## Points Leaders \n
+  const markdown = `## Points Leaders  \n
 ${sortedList.map((teamArr) => {
   return teamArr.map((player, idx) => {
     if(idx === 0){
-      return `**${player.teams}**\n\n${player.name}: ${player.points}`
+      return `**${player.teams}**\n\n* ${player.name}: ${player.points}`
     }
-    return `${player.name}: ${player.points}`
-  }).join('\n\n')
-}).join('\n\n')}
+    return `* ${player.name}: ${player.points}`
+  }).join('  \n')
+}).join('  \n\n')}
 \n**Update: ${new Date().toLocaleString()}**\n
 There are ${remainingGames} games that have not started yet.
   `
@@ -145,5 +145,5 @@ There are ${remainingGames} games that have not started yet.
 
 }
 
-setInterval(runFunction, 60000)
-// runFunction()
+// setInterval(runFunction, 60000)
+runFunction()
