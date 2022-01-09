@@ -1,0 +1,6 @@
+%syntax-version=1.0.0
+%project=nbatopshot
+%uri=https://github.com/GreenRabite/nbatopshot
+
+create_moments 2022-01-08T18:09:44Z Andy <green.rabite@gmail.com> # create moments table
+create_owned_moments 2022-01-09T07:11:00Z Andy <green.rabite@gmail.com> # Create owned moments
