@@ -13,6 +13,7 @@
     "lodash": "^4.17.21",
     "pg": "^8.0.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.12.5"
+    "sequelize": "^6.12.5",
+    "snoowrap": "^1.23.0"
   }
 }
