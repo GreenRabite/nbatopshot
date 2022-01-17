@@ -7,17 +7,63 @@ const BB = require("bluebird");
 const snoowrap = require('snoowrap');
 require('dotenv').config();
 
-const IDS = [
-  '0022100627',
-  '0022100628',
-  '0022100629',
-  '0022100630',
-  '0022100631',
+const DATE_1 = '20220114'
+const DATE_2 = '20220115'
+const DATE_3 = '20220116'
+
+const DATE_AND_IDS = [
+  [DATE_1,'0022100632'],
+  [DATE_1,'0022100633'],
+  [DATE_1,'0022100634'],
+  [DATE_1,'0022100635'],
+  [DATE_1,'0022100636'],
+  [DATE_1,'0022100637'],
+  [DATE_1,'0022100638'],
+  [DATE_1,'0022100639'],
+  [DATE_1,'0022100640'],
+  [DATE_2,'0022100641'],
+  [DATE_2,'0022100642'],
+  [DATE_2,'0022100643'],
+  [DATE_2,'0022100644'],
+  [DATE_2,'0022100645'],
+  [DATE_2,'0022100646'],
+  [DATE_2,'0022100647'],
+  [DATE_2,'0022100648'],
+  [DATE_2,'0022100649'],
+  [DATE_2,'0022100650'],
+  [DATE_3,'0022100617'],
+  [DATE_3,'0022100651'],
+  [DATE_3,'0022100652'],
+  [DATE_3,'0022100653'],
 ]
 
-const DATE = "20220113"
-const COMMENT_ID = 'hsjtgr0'
-const URLS = IDS.map(id => `https://data.nba.net/10s/prod/v1/${DATE}/${id}_boxscore.json`);
+const PLAY_TWICE ={
+  'SAC': true,
+  'HOU': true,
+  'ORL': true,
+  'TOR': true,
+  'DET': true,
+  'PHX': true,
+  'BOS': true,
+  'PHI': true,
+  'GSW': true,
+  'CHI': true,
+  'ATL': true,
+  'MIA': true,
+  'CLE': true,
+  'SAS': true,
+  'DAL': true,
+  'DEN': true,
+}
+
+const gameCounter = Object.keys(PLAY_TWICE).reduce((counter,team) => {
+  counter[team] = 2
+  return counter
+}, {})
+
+// const DATE = "20220113"
+const COMMENT_ID = 'hsotou1'
+const URLS = DATE_AND_IDS.map(date_and_id => `https://data.nba.net/10s/prod/v1/${date_and_id[0]}/${date_and_id[1]}_boxscore.json`);
 
 
 const calculateSeconds = (time) => {
@@ -40,29 +86,47 @@ const formatStats = (players, gameData) => {
       teamMargin: gameData[player.teamId].margin,
       plusMinus: Number(player.plusMinus),
       secondsPlayed: calculateSeconds(player.min),
+      team: gameData[player.teamId].code,
+      flashSeriesOver: gameData[player.teamId].flashSeriesOver,
     }
   })
 }
 
-const runFunction = async (playersWithMoments) => {
+const runFunction = async () => {
   let remainingGames= 0;
+
+  // shallow clone of game counter
+  const newGameCounter = _.clone(gameCounter)
 
   const results =await BB.map(URLS, async url => {
     return axios.get(url)
       .then(response => {
         const players = response.data.stats.activePlayers;
+        const clockRunning = !!response.data.basicGameData.clock
+        const period = response.data.basicGameData?.period?.current
+        const gameOver = !clockRunning && period > 3;
+
+        // update series tracker
+        ([response.data.basicGameData.hTeam.triCode, response.data.basicGameData.vTeam.triCode]).forEach(code => {
+          if(newGameCounter[code]){
+            newGameCounter[code] = newGameCounter[code] - 1
+          }
+        })
+
         const vTeam = {
           code: response.data.basicGameData.vTeam.triCode,
           margin: Number(response.data.basicGameData.vTeam.score) - Number(response.data.basicGameData.hTeam.score),
+          flashSeriesOver: gameOver,
         }
 
         const hTeam = {
           code: response.data.basicGameData.hTeam.triCode,
           margin: Number(response.data.basicGameData.hTeam.score) - Number(response.data.basicGameData.vTeam.score),
+          flashSeriesOver: gameOver,
         }
         const gameData = {
           teams: [vTeam.code, hTeam.code].join('-'),
-          gameOver: !(!!response.data.basicGameData.clock),
+          gameOver,
           [response.data.basicGameData.hTeam.teamId]: hTeam,
           [response.data.basicGameData.vTeam.teamId]: vTeam,
         }
@@ -70,7 +134,7 @@ const runFunction = async (playersWithMoments) => {
         return formatStats(players, gameData)
       })
       .catch(function (error) {
-        // handle error
+        // console.log(error)
         remainingGames++
         return []
         // console.log('Game has Not started yet');
@@ -78,9 +142,32 @@ const runFunction = async (playersWithMoments) => {
   })
 
   const allPlayers = results.flat();
-  const allPlayersSorted = allPlayers.sort((a,b) => {
-    if(a.rebsBlks != b.rebsBlks){
-      return b.rebsBlks - a.rebsBlks
+  // combine existing players into one entry
+  const combinePlayers = allPlayers.reduce((combined, player) => {
+    if(combined[player.name]){
+      const existingPlayer = combined[player.name];
+      combined[player.name] = {
+        ...existingPlayer,
+        ...{
+          points: existingPlayer.points + player.points,
+          teamMargin: existingPlayer.teamMargin + player.teamMargin,
+          plusMinus: existingPlayer.plusMinus + player.plusMinus,
+          secondsPlayed: existingPlayer.secondsPlayed + player.secondsPlayed,
+          flashSeriesOver: !!(existingPlayer.flashSeriesOver && player.flashSeriesOver),
+        }
+      }
+      return combined
+    }else{
+      combined[player.name] = {...player, ...{flashSeriesOver: player.flashSeriesOver && (newGameCounter[player.team] === 0 || newGameCounter[player.team] === undefined)}};
+      return combined;
+    }
+  }, {})
+
+  const combinedPlayersList = Object.values(combinePlayers)
+
+  const allPlayersSorted = combinedPlayersList.sort((a,b) => {
+    if(a.points != b.points){
+      return b.points - a.points
     }
 
     // First tiebreaker
@@ -99,7 +186,7 @@ const runFunction = async (playersWithMoments) => {
     }
 
     return 0;
-  }).slice(0,15)
+  })
   // const sortedList = results.map(game => {
   //   const sortedGame = game.sort((a,b) => {
   //     // Main Sort
@@ -158,20 +245,26 @@ const runFunction = async (playersWithMoments) => {
   // })
 
   const sortedPlayerList = allPlayersSorted.filter(player => player.name != "John Konchar" && player.name != "Jose Alvarado")
-  const playersRemovedCount = allPlayersSorted.length - sortedPlayerList.length
 
   const standings = sortedPlayerList.map((player, idx)=> {
-    const tieBreaker = `[Margin: ${player.teamMargin} / +/-: ${player.plusMinus} / Min: ${Math.round(player.secondsPlayed / 60)}]`
-    if(idx===10) return `-------------------------\n\n${player.name}: ${player.rebsBlks} ${idx > 6 ? tieBreaker : ""}`
-    return `${player.name}: ${player.rebsBlks} ${idx > 6 ? tieBreaker : ""}`
-  })
+    // const tieBreaker = `[Margin: ${player.teamMargin} / +/-: ${player.plusMinus} / Min: ${Math.round(player.secondsPlayed / 60)}]`
+    const extraData = PLAY_TWICE[player.team] ? '' : '```*``` ';
+    const playerTeam = `[${player.team}]`;
+    const flashSeriesOver = player.flashSeriesOver;
+    const playerInfo = flashSeriesOver ? `**${player.name}: ${player.points}** ${extraData}` : `${player.name}: ${player.points} ${extraData}`
+    // remove players if they have no shot
+    if(idx >= 10 && flashSeriesOver) return undefined
+    if(idx===9) return `* ${playerInfo}\n\n-------------------------`
+    return `* ${playerInfo}`
+  }).filter(x => !!x).slice(0,15)
 
   const markdown = [
-    `## Block/Reb Leaders`,
+    `## Points Leaders`,
     ...standings,
     `**Update: ${new Date().toLocaleString()}**`,
     `There are ${remainingGames} games that have not started yet.`,
-    `Removed ${playersRemovedCount} players from the standings due to no moment minted for them`
+    `**Bolded players** are finished for the weekend`,
+    "A ```*``` denotes that player team only plays **ONCE** during the duration of this challenge",
   ].join("\n\n")
 
   console.log(markdown)
@@ -182,5 +275,5 @@ const runFunction = async (playersWithMoments) => {
 
 
 
-setInterval(runFunction, 45000)
+setInterval(runFunction, 60000)
 // runFunction()
