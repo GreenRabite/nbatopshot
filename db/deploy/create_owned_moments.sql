@@ -5,6 +5,7 @@ BEGIN;
 CREATE TABLE owned_moments (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
+  serial INT NOT NULL,
   set TEXT NOT NULL,
   tier TEXT NOT NULL,
   series TEXT NOT NULL,

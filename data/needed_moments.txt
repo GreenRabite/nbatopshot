@@ -1,238 +1,159 @@
-Nickeil Alexander-Walker
-Thaddeus Young
-Dwight Powell
-Terrence Ross
-James Ennis III
-Rudy Gay
-Royce O'Neale
-Victor Oladipo
-Robert Covington
-Glenn Robinson III
-Sean McDermott
-Donte DiVincenzo
-Willie Cauley-Stein
-Delon Wright
-Duncan Robinson
-Jarrett Culver
-Nerlens Noel
-Serge Ibaka
-Bismack Biyombo
-Maxi Kleber
-Dwayne Bacon
-Robin Lopez
-Troy Brown Jr.
-David Nwaba
-Otto Porter Jr.
-Darius Bazley
-Stanley Johnson
-Josh Green
-Kira Lewis Jr.
-Sam Merrill
-Alec Burks
-Mitchell Robinson
-Markelle Fultz
-Jalen Smith
-Tyrese Maxey
-Bruno Fernando
-Dorian Finney-Smith
-Damion Lee
-Gary Harris
-Thomas Bryant
-Marvin Bagley III
-Elfrid Payton
-Théo Maledon
-Edmond Sumner
-Isaiah Joe
-Desmond Bane
-Mason Jones
-Dean Wade
-Chimezie Metu
-Furkan Korkmaz
-Dennis Smith Jr.
-Danuel House Jr.
-Tony Snell
-Naz Reid
-Juancho Hernangómez
-Jevon Carter
-Dylan Windler
-Bruce Brown
-Kevin Huerter
-Garrett Temple
-Malachi Flynn
-Moses Brown
-Jarred Vanderbilt
-KZ Okpala
-Pat Connaughton
-Aaron Nesmith
-Denzel Valentine
-Nathan Knight
-Trey Burke
-Derrick White
-Goga Bitadze
-JJ Redick
-Tremont Waters
-Kevin Love
-Chandler Hutchison
-Semi Ojeleye
-Joe Harris
-Solomon Hill
-JaKarr Sampson
-Mychal Mulder
-Luke Kennard
-Jeremy Lamb
-Aaron Holiday
-Sekou Doumbouya
-Raul Neto
-Maurice Harkless
-Brad Wanamaker
-Georges Niang
-Ty Jerome
-Taj Gibson
-Jordan McLaughlin
-Kevin Knox
-Zeke Nnaji
-D.J. Augustin
-Damyean Dotson
-Jake Layman
-DaQuan Jeffries
-Sterling Brown
-PJ Dozier
-Saben Lee
-Doug McDermott
-Armoni Brooks
-Mike James
-Torrey Craig
-Naji Marshall
-Yuta Watanabe
-Udoka Azubuike
-E'Twaun Moore
-Dario Šarić
-Grant Williams
-Isaac Bonga
-Aron Baynes
-Tre Jones
-Kentavious Caldwell-Pope
-Reggie Perry
-Nico Mannion
-Tina Charles
-Diana Taurasi
-Brionna Jones
-Aari McDonald
-Nneka Ogwumike
-Dearica Hamby
-Sami Whitcomb
-Ariel Atkins
-Kysre Gondrezick
-Danielle Robinson
-Courtney Vandersloot
-Sylvia Fowles
-Arike Ogunbowale
-Courtney Williams
-Kelsey Plum
-Sabrina Ionescu
-Jonquel Jones
-DiDi Richards
-Natasha Cloud
-Kayla McBride
-Napheesa Collier
-Allisha Gray
-Katie Lou Samuelson
-Brianna Turner
-Natasha Howard
-Odyssey Sims
-Dana Evans
-Myisha Hines-Allen
-Tiffany Hayes
-Awak Kuier
-Kristi Toliver
-DeWanna Bonner
-Ezi Magbegor
-Jackie Young
-Jasmine Thomas
-Michaela Onyenwere
-Jordin Canada
-Charli Collier
-Monique Billings
-Allie Quigley
-Te'a Cooper
-DiJonai Carrington
-Jared Jeffries
-Andrew Bogut
-Nate Robinson
-Deron Williams
-Kevin Garnett
-Bonzi Wells
-Richard Jefferson
-Elton Brand
-Jermaine O'Neal
-Danny Granger
-Stromile Swift
-Ben Wallace
-Morris Peterson
-Andrei Kirilenko
-Zach Randolph
-Robert Horry
-Jason Richardson
-Kyle Korver
-Manu Ginobili
-Hakim Warrick
-Paul Pierce
-Shawn Marion
-Ben Gordon
-Jerry Stackhouse
-Luke Ridnour
-Boris Diaw
-Smush Parker
-Baron Davis
-Michael Redd
-Tracy McGrady
-Ray Allen
-Steve Francis
-Kenyon Martin
-Jason Kidd
-Tim Duncan
-Udonis Haslem
-Chauncey Billups
-Vince Carter
-Shaquille O'Neal
-Wally Szczerbiak
-Stephon Marbury
-Marcus Camby
-Dirk Nowitzki
-Josh Smith
-Richard Hamilton
-Mario Chalmers
-Moritz Wagner
-Jalen Suggs
-Josh Christopher
-Davion Mitchell
-Nemanja Bjelica
-Evan Mobley
-Jalen Johnson
-Moses Moody
-Corey Kispert
-Ayo Dosunmu
-Dalano Banton
-Ziaire Williams
-Chris Duarte
-Gary Payton II
-Josh Giddey
-Joshua Primo
-Scottie Barnes
-Jeremiah Robinson-Earl
-Frank Kaminsky
-Trey Murphy III
-Bones Hyland
-Usman Garuba
-Greg Brown III
-Franz Wagner
-Tre Mann
-Gabe Vincent
-Alperen Şengün
-Cory Joseph
-Santi Aldama
-Cade Cunningham
-Brandon Boston Jr.
-Kelan Martin
-Jonathan Kuminga
-Oshae Brissett
+Chuma Okeke: 4000-40000
+Austin Rivers: 40000-12000
+Larry Nance Jr.: 35000-40000
+Thaddeus Young: 40000
+Dwight Powell: 12000
+Terrence Ross: 40000
+James Ennis III: 12000
+De'Aaron Fox: 40000-15000
+Joe Ingles: 40000-11500
+Royce O'Neale: 12000
+Victor Oladipo: 35125
+Robert Covington: 12000
+Glenn Robinson III: 12000
+Sean McDermott: 4000
+Jaden McDaniels: 4000-40000
+Donte DiVincenzo: 40000
+Willie Cauley-Stein: 12000
+Delon Wright: 35000
+Duncan Robinson: 40000
+Jarrett Culver: 15000
+Nerlens Noel: 15000
+Serge Ibaka: 15000
+Will Barton: 12000-11500
+Bismack Biyombo: 15000
+Maxi Kleber: 15000
+Dwayne Bacon: 12000
+Troy Brown Jr.: 15000
+Khem Birch: 12000-40000
+David Nwaba: 12000
+Otto Porter Jr.: 15000
+Stanley Johnson: 12000
+Josh Green: 12000
+Kira Lewis Jr.: 4000
+Sam Merrill: 12000
+Alec Burks: 12000
+Mitchell Robinson: 15000
+Markelle Fultz: 15000
+Jalen Smith: 4000
+Patrick Williams: 4000-40000
+Tyrese Maxey: 4000
+Bruno Fernando: 12000
+Danny Green: 40000-12000
+Dorian Finney-Smith: 12000
+Damion Lee: 40000
+Thomas Bryant: 12000
+Marvin Bagley III: 40000
+Elfrid Payton: 12000
+Theo Maledon: 4000
+Lauri Markkanen: 12000-40000
+Edmond Sumner: 12000
+Isaiah Joe: 4000
+Mason Jones: 4000
+Dean Wade: 12000
+Furkan Korkmaz: 12000
+Aleksej Pokusevski: 4000-40000
+Dennis Smith Jr.: 40000
+Danuel House Jr.: 40000
+Tony Snell: 12000
+Naz Reid: 12000
+Michael Carter-Williams: 35000-40000
+Juancho Hernangómez: 12000
+Jevon Carter: 12000
+Dylan Windler: 4000
+Bruce Brown: 40000
+Kevin Porter Jr.: 35000-40000
+Kevin Huerter: 40000
+Garrett Temple: 12000
+Malachi Flynn: 12000
+Moses Brown: 12000
+KZ Okpala: 12000
+Pat Connaughton: 12000
+Saddiq Bey: 12000-18000
+Denzel Valentine: 12000
+Nathan Knight: 12000
+Chris Chiozza: 18000-40000
+Derrick White: 12000-9999
+Goga Bitadze: 12000
+JJ Redick: 12000
+Tremont Waters: 12000
+Kevin Love: 40000
+Chandler Hutchison: 12000
+Semi Ojeleye: 12000
+Joe Harris: 40000
+Solomon Hill: 12000
+JaKarr Sampson: 12000
+Mychal Mulder: 40000
+Luke Kennard: 12000
+Jeremy Lamb: 12000
+Sekou Doumbouya: 12000
+Bobby Portis: 12000-11250
+Maurice Harkless: 12000
+Brad Wanamaker: 12000
+Georges Niang: 12000
+Monte Morris: 12000-12000
+Ty Jerome: 12000
+Taj Gibson: 12000
+Jordan McLaughlin: 40000
+Kevin Knox: 12000
+Zeke Nnaji: 12000
+D.J. Augustin: 12000
+Damyean Dotson: 12000
+Jake Layman: 12000
+DaQuan Jeffries: 12000
+Sterling Brown: 12000
+PJ Dozier: 12000
+Saben Lee: 4000
+Doug McDermott: 12000
+Armoni Brooks: 12000
+Mike James: 12000
+Norman Powell: 12000-40000
+Torrey Craig: 11500
+Naji Marshall: 4000
+Yuta Watanabe: 12000
+Udoka Azubuike: 4000
+E'Twaun Moore: 12000
+Dario Saric: 12000
+Grant Williams: 12000
+Isaac Bonga: 12000
+Aron Baynes: 12000
+Tre Jones: 4000
+Reggie Perry: 4000
+Nico Mannion: 4000
+Jalen Suggs: 4000
+Josh Christopher: 4000
+Davion Mitchell: 4000
+Evan Mobley: 4000
+Jalen Johnson: 4000
+Moses Moody: 4000
+Corey Kispert: 4000
+Ayo Dosunmu: 4000
+Dalano Banton: 4000
+Ziaire Williams: 4000
+Chris Duarte: 4000
+Gary Payton II: 12000
+Josh Giddey: 4000
+Joshua Primo: 4000
+Scottie Barnes: 4000
+Jeremiah Robinson-Earl: 4000
+Frank Kaminsky: 12000
+Trey Murphy III: 4000
+Bones Hyland: 4000
+Usman Garuba: 4000
+Franz Wagner: 4000
+Tre Mann: 4000
+Gabe Vincent: 12000
+Alperen Sengun: 4000
+Cory Joseph: 12000
+Santi Aldama: 4000
+Cade Cunningham: 4000
+Brandon Boston Jr.: 4000
+Kelan Martin: 12000
+Jonathan Kuminga: 4000
+Oshae Brissett: 12000
+Dewayne Dedmon: 12000
+JT Thor: 12000
+Jaylen Nowell: 12000
+Herbert Jones: 12000
+Lance Stephenson: 12000
+Jalen Green: 4000
