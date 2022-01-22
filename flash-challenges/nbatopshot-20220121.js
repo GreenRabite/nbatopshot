@@ -245,7 +245,7 @@ const runFunction = async () => {
     // const tieBreaker = `[Margin: ${player.teamMargin} / +/-: ${player.plusMinus} / Min: ${Math.round(player.secondsPlayed / 60)}]`
     const matchup = `[${player.teams}]`;
     // const playerInfo = flashSeriesOver ? `**${player.name}: ${player.points}** ${extraData}` : `${player.name}: ${player.points} ${extraData}`
-    const playerInfo = player.gameOver ? `**${player.name}: ${player.points} ${matchup}**` : `${player.name}: ${player.points} ${matchup}`
+    const playerInfo = player.gameOver ? `**${player.name}: ${player.points}** ${matchup}` : `${player.name}: ${player.points}`
     // remove players if they have no shot
     if(idx >= 9 && player.gameOver) return undefined
     if(idx===8) return `* ${playerInfo} ${player.timeLeft}\n\n-------------------------`
@@ -258,6 +258,7 @@ const runFunction = async () => {
     `**Update: ${new Date().toLocaleString()}**`,
     `There are ${remainingGames} games that have not started yet.`,
     `**Bolded players** are done for that game`,
+    `Team Margin / Player's ± / Minutes Played`,
   ].join("\n\n")
 
   console.log(markdown)
