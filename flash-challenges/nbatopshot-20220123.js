@@ -7,43 +7,23 @@ const BB = require("bluebird");
 const snoowrap = require('snoowrap');
 require('dotenv').config();
 
-const DATE_1 = '20220121'
-const DATE_2 = '20220122'
-const DATE_3 = '20220123'
-
-const DATE_AND_IDS = [
-  [DATE_1,'0022100684'],
-  [DATE_1,'0022100685'],
-  [DATE_1,'0022100686'],
-  [DATE_1,'0022100687'],
-  [DATE_1,'0022100688'],
-  [DATE_1,'0022100689'],
-  [DATE_1,'0022100690'],
-  [DATE_1,'0022100691'],
-  [DATE_1,'0022100692'],
-  [DATE_1,'0022100693'],
-  [DATE_1,'0022100694'],
-  [DATE_2,'0022100695'],
-  [DATE_2,'0022100696'],
-  [DATE_2,'0022100697'],
-  [DATE_3,'0022100698'],
-  [DATE_3,'0022100699'],
-  [DATE_3,'0022100700'],
-  [DATE_3,'0022100701'],
-  [DATE_3,'0022100702'],
-  [DATE_3,'0022100703'],
-  [DATE_3,'0022100704'],
-  [DATE_3,'0022100705'],
-  [DATE_3,'0022100706'],
-  [DATE_3,'0022100707'],
-  [DATE_3,'0022100708'],
+const IDS = [
+'0022100698',
+'0022100699',
+'0022100700',
+'0022100701',
+'0022100702',
+'0022100703',
+'0022100704',
+'0022100705',
+'0022100706',
+'0022100707',
+'0022100708',
 ]
 
-
-// const DATE = "20220113"
-const COMMENT_ID = 'htnq2hj'
-const URLS = DATE_AND_IDS.map(date_and_id => `https://data.nba.net/10s/prod/v1/${date_and_id[0]}/${date_and_id[1]}_boxscore.json`);
-
+const DATE = "20220121"
+const COMMENT_ID = 'htt05zo'
+const URLS = IDS.map(id => `https://data.nba.net/10s/prod/v1/${DATE}/${id}_boxscore.json`);
 
 
 const calculateSeconds = (time) => {
@@ -60,13 +40,15 @@ const formatStats = (players, gameData) => {
       points: Number(player.points),
       rebs: Number(player.totReb),
       blks: Number(player.blocks),
-      rebsBlks: Number(player.totReb) + Number(player.blocks),
+      fga: Number(player.fga),
+      fgm: Number(player.fgm),
+      assists: Number(player.assists),
       teams: gameData.teams,
+      team: gameData[player.teamId].code,
       gameOver: gameData.gameOver,
       teamMargin: gameData[player.teamId].margin,
       plusMinus: Number(player.plusMinus),
       secondsPlayed: calculateSeconds(player.min),
-      team: gameData[player.teamId].code,
       timeLeft: gameData.timeLeft,
     }
   })
@@ -100,15 +82,6 @@ const runFunction = async () => {
         const period = response.data.basicGameData?.period?.current
         const gameOver = !clockRunning && period > 3;
         const timeLeft = calculateTimeLeft(period, response.data.basicGameData.clock)
-
-        // update series tracker
-        // update this
-        // ([response.data.basicGameData.hTeam.triCode, response.data.basicGameData.vTeam.triCode]).forEach(code => {
-        //   if(newGameCounter[code]){
-        //     newGameCounter[code] = newGameCounter[code] - 1
-        //   }
-        // })
-
         const vTeam = {
           code: response.data.basicGameData.vTeam.triCode,
           margin: Number(response.data.basicGameData.vTeam.score) - Number(response.data.basicGameData.hTeam.score),
@@ -118,9 +91,11 @@ const runFunction = async () => {
           code: response.data.basicGameData.hTeam.triCode,
           margin: Number(response.data.basicGameData.hTeam.score) - Number(response.data.basicGameData.vTeam.score),
         }
+        // console.log(hTeam.code, vTeam.code)
+
         const gameData = {
           teams: [vTeam.code, hTeam.code].join('-'),
-          gameOver,
+          gameOver: gameOver,
           [response.data.basicGameData.hTeam.teamId]: hTeam,
           [response.data.basicGameData.vTeam.teamId]: vTeam,
           timeLeft,
@@ -129,40 +104,17 @@ const runFunction = async () => {
         return formatStats(players, gameData)
       })
       .catch(function (error) {
-        // console.log(error)
+        // handle error
         remainingGames++
-        return []
         // console.log('Game has Not started yet');
+        return []
       })
   })
 
   const allPlayers = results.flat();
-  // combine existing players into one entry
-
-  // const combinePlayers = allPlayers.reduce((combined, player) => {
-  //   if(combined[player.name]){
-  //     const existingPlayer = combined[player.name];
-  //     combined[player.name] = {
-  //       ...existingPlayer,
-  //       ...{
-  //         points: existingPlayer.points + player.points,
-  //         teamMargin: existingPlayer.teamMargin + player.teamMargin,
-  //         plusMinus: existingPlayer.plusMinus + player.plusMinus,
-  //         secondsPlayed: existingPlayer.secondsPlayed + player.secondsPlayed,
-  //       }
-  //     }
-  //     return combined
-  //   }else{
-  //     combined[player.name] = {...player, ...{flashSeriesOver: player.flashSeriesOver && (newGameCounter[player.team] === 0 || newGameCounter[player.team] === undefined)}};
-  //     return combined;
-  //   }
-  // }, {})
-
-  // const combinedPlayersList = Object.values(combinePlayers)
-
   const allPlayersSorted = allPlayers.sort((a,b) => {
-    if(a.points != b.points){
-      return b.points - a.points
+    if(a.assists != b.assists){
+      return b.assists - a.assists
     }
 
     // First tiebreaker
@@ -182,6 +134,11 @@ const runFunction = async () => {
 
     return 0;
   })
+
+  const lakersPlayers = allPlayers.filter(player => player.team === 'LAL')
+  const clippersPlayers = allPlayers.filter(player => player.team === 'LAC')
+  const knicksPlayers = allPlayers.filter(player => player.team === 'NYK')
+  const netsPlayers = allPlayers.filter(player => player.team === 'BKN')
 
   const r = new snoowrap({
     userAgent: 'KobeBot',
@@ -204,25 +161,75 @@ const runFunction = async () => {
   //   }).join("\n\n")
   // })
 
-  const sortedPlayerList = allPlayersSorted
+  const sortByPoints = (players) => {
+    return players.sort((a,b) => {
+      if(a.points != b.points){
+        return b.points - a.points
+      }
+
+      // First tiebreaker
+      if(a.teamMargin != b.teamMargin){
+        return b.teamMargin - a.teamMargin
+      }
+
+      // Second tiebreaker
+      if(a.plusMinus != b.plusMinus){
+        return b.plusMinus - a.plusMinus
+      }
+
+      // Third tiebreaker
+      if(a.secondsPlayed != b.secondsPlayed){
+        return b.secondsPlayed - a.secondsPlayed
+      }
+
+      return 0;
+    })
+  }
+
+  const sortedPlayerList = allPlayersSorted.filter(player => player.name != 'Kessler Edwards');
+  const lakersSorted = sortByPoints(lakersPlayers)
+  const clippersSorted = sortByPoints(clippersPlayers)
+  const knicksSorted = sortByPoints(knicksPlayers)
+  const netsSorted = sortByPoints(netsPlayers)
+
+  const teamStandings = (players) => {
+    if(players.length ===0) return ['The game has not started yet']
+
+    return players.map((player, idx) => {
+      const playerInfo = player.gameOver ? `* **${player.name}: ${player.points}**` : `${player.name}: ${player.points}`
+  
+      if(idx === 0) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
+      if(idx >= 1 && player.gameOver) return undefined;
+      return `${playerInfo} ${player.timeLeft}`
+    }).filter(x => !!x).slice(0,3)
+  }
 
   const standings = sortedPlayerList.map((player, idx)=> {
     // const tieBreaker = `[Margin: ${player.teamMargin} / +/-: ${player.plusMinus} / Min: ${Math.round(player.secondsPlayed / 60)}]`
-    const matchup = `[${player.teams}]`;
-    const playerInfo = player.gameOver ? `**${player.name}: ${player.points}** ${matchup}` : `${player.name}: ${player.points}`
-    // remove players if they have no shot
-    if(idx >= 9 && player.gameOver) return undefined
-    if(idx===8) return `* ${playerInfo} ${player.timeLeft}\n\n-------------------------`
-    return `* ${playerInfo} ${player.timeLeft}`
+    const playerInfo = player.gameOver ? `* **${player.name}: ${player.assists}**` : `${player.name}: ${player.assists}`
+
+    if(idx === 2) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
+    if(idx >= 3 && player.gameOver) return undefined;
+    return `${playerInfo} ${player.timeLeft}`
   }).filter(x => !!x).slice(0,15)
 
+
   const markdown = [
-    `## Points Leaders`,
+    '### LA Lakers Top Scorers',
+    ...teamStandings(lakersSorted),
+    '### LA Clippers Top Scorers',
+    ...teamStandings(clippersSorted),
+    '### New York Knicks Top Scorers',
+    ...teamStandings(knicksSorted),
+    '### Brooklyn Nets Top Scorers',
+    ...teamStandings(netsSorted),
+    `### Assists Leaders`,
     ...standings,
-    `**Update: ${new Date().toLocaleString()}**`,
+    `**Update: ${new Date().toLocaleString()} PST**`,
     `There are ${remainingGames} games that have not started yet.`,
-    `**Bolded players** are done for that game`,
-    `Team Margin / Player's ± / Minutes Played`,
+    `**Bolded players** are done for the challenge`,
+    `[Numbers] in bracket show time left in regulation for the game`,
+    `Tiebreakers: Team Margin / Player's ± / Minutes Played`
   ].join("\n\n")
 
   console.log(markdown)
@@ -231,5 +238,7 @@ const runFunction = async () => {
 
 }
 
-setInterval(runFunction, 60000)
+
+
+setInterval(runFunction, 120000)
 // runFunction()
