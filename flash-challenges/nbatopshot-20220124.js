@@ -8,21 +8,14 @@ const snoowrap = require('snoowrap');
 require('dotenv').config();
 
 const IDS = [
-'0022100698',
-'0022100699',
-'0022100700',
-'0022100701',
-'0022100702',
-'0022100703',
-'0022100704',
-'0022100705',
-'0022100706',
-'0022100707',
-'0022100708',
+  '0022100709',
+  '0022100730',
+  '0022100712',
+  '0022100713',
 ]
 
-const DATE = "20220123"
-const COMMENT_ID = 'htt05zo'
+const DATE = "20220124"
+const COMMENT_ID = 'hu36ycx'
 const URLS = IDS.map(id => `https://data.nba.net/10s/prod/v1/${DATE}/${id}_boxscore.json`);
 
 
@@ -41,9 +34,11 @@ const formatStats = (players, gameData) => {
       rebs: Number(player.totReb),
       blks: Number(player.blocks),
       fga: Number(player.fga),
-      fgm: Number(player.fgm),
       assists: Number(player.assists),
+      fgm: Number(player.fgm),
+      rebsBlks: Number(player.totReb) + Number(player.blocks),
       teams: gameData.teams,
+      totalCat: Number(player.points) + Number(player.totReb) + Number(player.assists),
       team: gameData[player.teamId].code,
       gameOver: gameData.gameOver,
       teamMargin: gameData[player.teamId].margin,
@@ -113,8 +108,8 @@ const runFunction = async () => {
 
   const allPlayers = results.flat();
   const allPlayersSorted = allPlayers.sort((a,b) => {
-    if(a.assists != b.assists){
-      return b.assists - a.assists
+    if(a.totalCat != b.totalCat){
+      return b.totalCat - a.totalCat
     }
 
     // First tiebreaker
@@ -135,10 +130,60 @@ const runFunction = async () => {
     return 0;
   })
 
-  const lakersPlayers = allPlayers.filter(player => player.team === 'LAL')
-  const clippersPlayers = allPlayers.filter(player => player.team === 'LAC')
-  const knicksPlayers = allPlayers.filter(player => player.team === 'NYK')
-  const netsPlayers = allPlayers.filter(player => player.team === 'BKN')
+  const startingPlayers = [
+    // Knicks
+    "RJ Barrett",
+    "Kemba Walker",
+    "Evan Fournier",
+    "Julius Randle",
+    "Nerlens Noel",
+    // Cavs
+    "Darius Garland",
+    "Isaac Okoro",
+    "Dean Wade",
+    "Evan Mobley",
+    "Ed Davis",
+    // Pacers
+    "Justin Holiday",
+    "Caris LeVert",
+    "Torrey Craig",
+    "Chris Duarte",
+    "Goga Bitadze",
+    // Pelicians
+    "Devonte' Graham",
+    "Garrett Temple",
+    "Josh Hart",
+    "Herbert Jones",
+    "Jonas Valanciunas",
+    // Bulls
+    "Zach LaVine",
+    "Troy Brown Jr.",
+    "Javonte Green",
+    "Nikola Vucevic",
+    "Ayo Dosunmu",
+    // Thunder
+    "Shai Gilgeous-Alexander",
+    "Luguentz Dort",
+    "Josh Giddey",
+    "Aaron Wiggins",
+    "Jeremiah Robinson-Earl",
+    // Jazz
+    "Jordan Clarkson",
+    "Trent Forrest",
+    "Rudy Gay",
+    "Danuel House Jr.",
+    "Hassan Whiteside",
+    // Sun
+    "Chris Paul",
+    "Devin Booker",
+    "Mikal Bridges",
+    "Cameron Johnson",
+    "JaVale McGee",
+  ]
+
+
+  // const sortedList = allPlayers.sort((a,b) => b.ratio - a.ratio)
+  // console.log(sortedList.slice(0,6))
 
   const r = new snoowrap({
     userAgent: 'KobeBot',
@@ -161,69 +206,22 @@ const runFunction = async () => {
   //   }).join("\n\n")
   // })
 
-  const sortByPoints = (players) => {
-    return players.sort((a,b) => {
-      if(a.points != b.points){
-        return b.points - a.points
-      }
+  const sortedPlayerList = allPlayersSorted.filter(player => !startingPlayers.includes(player.name)).filter(player => player.name != 'Duane Washington Jr.')
 
-      // First tiebreaker
-      if(a.teamMargin != b.teamMargin){
-        return b.teamMargin - a.teamMargin
-      }
-
-      // Second tiebreaker
-      if(a.plusMinus != b.plusMinus){
-        return b.plusMinus - a.plusMinus
-      }
-
-      // Third tiebreaker
-      if(a.secondsPlayed != b.secondsPlayed){
-        return b.secondsPlayed - a.secondsPlayed
-      }
-
-      return 0;
-    })
-  }
-
-  const sortedPlayerList = allPlayersSorted.filter(player => player.name != 'Kessler Edwards');
-  const lakersSorted = sortByPoints(lakersPlayers)
-  const clippersSorted = sortByPoints(clippersPlayers)
-  const knicksSorted = sortByPoints(knicksPlayers)
-  const netsSorted = sortByPoints(netsPlayers)
-
-  const teamStandings = (players) => {
-    if(players.length ===0) return ['The game has not started yet']
-
-    return players.map((player, idx) => {
-      const playerInfo = player.gameOver ? `* **${player.name}: ${player.points}**` : `${player.name}: ${player.points}`
-  
-      if(idx === 0) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
-      if(idx >= 1 && player.gameOver) return undefined;
-      return `${playerInfo} ${player.timeLeft}`
-    }).filter(x => !!x).slice(0,3)
-  }
+  // console.log(sortedPlayerList)
 
   const standings = sortedPlayerList.map((player, idx)=> {
     // const tieBreaker = `[Margin: ${player.teamMargin} / +/-: ${player.plusMinus} / Min: ${Math.round(player.secondsPlayed / 60)}]`
-    const playerInfo = player.gameOver ? `* **${player.name}: ${player.assists}**` : `${player.name}: ${player.assists}`
+    const playerInfo = player.gameOver ? `* **${player.name}: ${player.totalCat}**` : `${player.name}: ${player.totalCat}`
 
-    if(idx === 2) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
-    if(idx >= 3 && player.gameOver) return undefined;
+    if(idx===4) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
+    if(idx >= 5 && player.gameOver) return undefined;
     return `${playerInfo} ${player.timeLeft}`
-  }).filter(x => !!x).slice(0,5)
+  }).filter(x => !!x).slice(0,10)
 
 
   const markdown = [
-    '### LA Lakers Top Scorers',
-    ...teamStandings(lakersSorted),
-    '### LA Clippers Top Scorers',
-    ...teamStandings(clippersSorted),
-    '### New York Knicks Top Scorers',
-    ...teamStandings(knicksSorted),
-    '### Brooklyn Nets Top Scorers',
-    ...teamStandings(netsSorted),
-    `### Assists Leaders`,
+    `## Points/Reb/Ast Leaders`,
     ...standings,
     `**Update: ${new Date().toLocaleString()} PST**`,
     `There are ${remainingGames} games that have not started yet.`,
@@ -240,5 +238,5 @@ const runFunction = async () => {
 
 
 
-// setInterval(runFunction, 120000)
-runFunction()
+setInterval(runFunction, 45000)
+// runFunction()
