@@ -7,53 +7,60 @@ const BB = require("bluebird");
 const snoowrap = require('snoowrap');
 require('dotenv').config();
 
-const DATE_1 = '20220114'
-const DATE_2 = '20220115'
-const DATE_3 = '20220116'
+const DATE_1 = '20220128'
+const DATE_2 = '20220129'
+const DATE_3 = '20220130'
 
 const DATE_AND_IDS = [
-  [DATE_1,'0022100632'],
-  [DATE_1,'0022100633'],
-  [DATE_1,'0022100634'],
-  [DATE_1,'0022100635'],
-  [DATE_1,'0022100636'],
-  [DATE_1,'0022100637'],
-  [DATE_1,'0022100638'],
-  [DATE_1,'0022100639'],
-  [DATE_1,'0022100640'],
-  [DATE_2,'0022100641'],
-  [DATE_2,'0022100642'],
-  [DATE_2,'0022100643'],
-  [DATE_2,'0022100644'],
-  [DATE_2,'0022100645'],
-  [DATE_2,'0022100646'],
-  [DATE_2,'0022100647'],
-  [DATE_2,'0022100648'],
-  [DATE_2,'0022100649'],
-  [DATE_2,'0022100650'],
-  [DATE_3,'0022100617'],
-  [DATE_3,'0022100651'],
-  [DATE_3,'0022100652'],
-  [DATE_3,'0022100653'],
+  [DATE_1,'0022100729'],
+  [DATE_1,'0022100735'],
+  [DATE_1,'0022100736'],
+  [DATE_1,'0022100737'],
+  [DATE_1,'0022100738'],
+  [DATE_1,'0022100739'],
+  [DATE_1,'0022100740'],
+  [DATE_1,'0022100741'],
+  [DATE_1,'0022100742'],
+  [DATE_1,'0022100743'],
+  [DATE_1,'0022100744'],
+  [DATE_2,'0022100745'],
+  [DATE_2,'0022100746'],
+  [DATE_2,'0022100747'],
+  [DATE_2,'0022100748'],
+  [DATE_2,'0022100749'],
+  [DATE_2,'0022100750'],
+  [DATE_3,'0022100751'],
+  [DATE_3,'0022100752'],
+  [DATE_3,'0022100753'],
+  [DATE_3,'0022100754'],
+  [DATE_3,'0022100755'],
+  [DATE_3,'0022100756'],
+  [DATE_3,'0022100757'],
+  [DATE_3,'0022100758'],
+
 ]
 
 const PLAY_TWICE ={
-  'SAC': true,
-  'HOU': true,
-  'ORL': true,
-  'TOR': true,
-  'DET': true,
-  'PHX': true,
-  'BOS': true,
-  'PHI': true,
-  'GSW': true,
-  'CHI': true,
   'ATL': true,
-  'MIA': true,
-  'CLE': true,
-  'SAS': true,
+  'BOS': true,
+  'CHA': true,
+  'CHI': true,
   'DAL': true,
   'DEN': true,
+  'DET': true,
+  'IND': true,
+  'LAC': true,
+  'LAL': true,
+  'MEM': true,
+  'MIA': true,
+  'MIL': true,
+  'MIN': true,
+  'NOP': true,
+  'ORL': true,
+  'PHX': true,
+  'POR': true,
+  'SAS': true,
+  'UTA': true,
 }
 
 const gameCounter = Object.keys(PLAY_TWICE).reduce((counter,team) => {
@@ -62,7 +69,8 @@ const gameCounter = Object.keys(PLAY_TWICE).reduce((counter,team) => {
 }, {})
 
 // const DATE = "20220113"
-const COMMENT_ID = 'hsotou1'
+const COMMENT_ID = 'hunqjm4'
+const COMMENT_ID_2 = 'hun99z2'
 const URLS = DATE_AND_IDS.map(date_and_id => `https://data.nba.net/10s/prod/v1/${date_and_id[0]}/${date_and_id[1]}_boxscore.json`);
 
 
@@ -87,6 +95,7 @@ const formatStats = (players, gameData) => {
       secondsPlayed: calculateSeconds(player.min),
       team: gameData[player.teamId].code,
       flashSeriesOver: gameData[player.teamId].flashSeriesOver,
+      timeLeft: gameData.timeLeft,
     }
   })
 }
@@ -98,7 +107,7 @@ const calculateTimeLeft = (period, clock) => {
   let seconds;
   if(clock?.length){
     minutes = Number(clock.split(":")[0])
-    seconds = clock.split(":")[1] || '-'
+    seconds = clock.split(":")[1] || 0
   }else{
     minutes=0;
     seconds=0;
@@ -122,12 +131,13 @@ const runFunction = async () => {
         const gameOver = !clockRunning && period > 3;
 
         // update series tracker
-        ([response.data.basicGameData.hTeam.triCode, response.data.basicGameData.vTeam.triCode]).forEach(code => {
+        [response.data.basicGameData.hTeam.triCode, response.data.basicGameData.vTeam.triCode].forEach(code => {
           if(newGameCounter[code]){
             newGameCounter[code] = newGameCounter[code] - 1
           }
         })
 
+        const timeLeft = calculateTimeLeft(period, response.data.basicGameData.clock)
         const vTeam = {
           code: response.data.basicGameData.vTeam.triCode,
           margin: Number(response.data.basicGameData.vTeam.score) - Number(response.data.basicGameData.hTeam.score),
@@ -144,6 +154,7 @@ const runFunction = async () => {
           gameOver,
           [response.data.basicGameData.hTeam.teamId]: hTeam,
           [response.data.basicGameData.vTeam.teamId]: vTeam,
+          timeLeft,
         }
 
         return formatStats(players, gameData)
@@ -170,6 +181,7 @@ const runFunction = async () => {
           plusMinus: existingPlayer.plusMinus + player.plusMinus,
           secondsPlayed: existingPlayer.secondsPlayed + player.secondsPlayed,
           flashSeriesOver: !!(existingPlayer.flashSeriesOver && player.flashSeriesOver),
+          timeLeft: !!(existingPlayer.timeLeft) ? existingPlayer.timeLeft : !!player.timeLeft ? player.timeLeft : '',
         }
       }
       return combined
@@ -260,17 +272,19 @@ const runFunction = async () => {
   //   }).join("\n\n")
   // })
 
-  const sortedPlayerList = allPlayersSorted.filter(player => player.name != "John Konchar" && player.name != "Jose Alvarado")
+  const sortedPlayerList = allPlayersSorted.filter(player => player.name != "Willy Hernangomez")
+  const omittedPlayers = allPlayersSorted.length - sortedPlayerList.length
 
   const standings = sortedPlayerList.map((player, idx)=> {
     // const tieBreaker = `[Margin: ${player.teamMargin} / +/-: ${player.plusMinus} / Min: ${Math.round(player.secondsPlayed / 60)}]`
     const extraData = PLAY_TWICE[player.team] ? '' : '```*``` ';
     const playerTeam = `[${player.team}]`;
     const flashSeriesOver = player.flashSeriesOver;
-    const playerInfo = flashSeriesOver ? `**${player.name}: ${player.points}** ${extraData}` : `${player.name}: ${player.points} ${extraData}`
+    const playerInfo = flashSeriesOver ? `**${player.name}: ${player.rebs}** ${extraData}` : `${player.name}: ${player.rebs} ${extraData} ${player.timeLeft}`
+    // const playerInfo = flashSeriesOver ? `**${player.name}: ${player.rebs}** ${extraData}` : `${player.name}: ${player.rebs} ${extraData}`
     // remove players if they have no shot
-    if(idx >= 10 && flashSeriesOver) return undefined
-    if(idx===9) return `* ${playerInfo}\n\n-------------------------`
+    if(idx >= 5 && flashSeriesOver) return undefined
+    if(idx===4) return `* ${playerInfo}\n\n-------------------------`
     return `* ${playerInfo}`
   }).filter(x => !!x).slice(0,15)
 
@@ -281,11 +295,15 @@ const runFunction = async () => {
     `There are ${remainingGames} games that have not started yet.`,
     `**Bolded players** are finished for the weekend`,
     "A ```*``` denotes that player team only plays **ONCE** during the duration of this challenge",
+    `There are ${omittedPlayers} omitted players from this list`,
   ].join("\n\n")
 
   console.log(markdown)
 
   // r.getComment(COMMENT_ID).edit(markdown)
+  // setTimeout(()=>{
+  //   r.getComment(COMMENT_ID_2).edit(markdown)
+  // }, 15000)
 
 }
 
