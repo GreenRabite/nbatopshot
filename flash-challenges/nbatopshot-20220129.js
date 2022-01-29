@@ -98,7 +98,7 @@ const calculateTimeLeft = (period, clock) => {
   let seconds;
   if(clock?.length){
     minutes = Number(clock.split(":")[0])
-    seconds = clock.split(":")[1] || 0
+    seconds = clock.split(":")[1] || '-'
   }else{
     minutes=0;
     seconds=0;
