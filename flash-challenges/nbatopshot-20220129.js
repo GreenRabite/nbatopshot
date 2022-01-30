@@ -107,7 +107,7 @@ const calculateTimeLeft = (period, clock) => {
   let seconds;
   if(clock?.length){
     minutes = Number(clock.split(":")[0])
-    seconds = clock.split(":")[1] || 0
+    seconds = clock.split(":")[1] || ''
   }else{
     minutes=0;
     seconds=0;
@@ -300,14 +300,14 @@ const runFunction = async () => {
 
   console.log(markdown)
 
-  // r.getComment(COMMENT_ID).edit(markdown)
-  // setTimeout(()=>{
-  //   r.getComment(COMMENT_ID_2).edit(markdown)
-  // }, 15000)
+  r.getComment(COMMENT_ID).edit(markdown)
+  setTimeout(()=>{
+    r.getComment(COMMENT_ID_2).edit(markdown)
+  }, 15000)
 
 }
 
 
 
-// setInterval(runFunction, 60000)
-runFunction()
+setInterval(runFunction, 60000)
+// runFunction()
