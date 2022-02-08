@@ -8,21 +8,18 @@ const snoowrap = require('snoowrap');
 require('dotenv').config();
 
 const IDS = [
-  '0022100722',
-  '0022100723',
-  '0022100724',
-  '0022100725',
-  '0022100727',
-  '0022100453',
-  '0022100472',
-  '0022100728',
-  '0022100731',
-  '0022100732',
+  '0022100759',
+  '0022100760',
+  '0022100761',
+  '0022100762',
+  '0022100763',
+  '0022100764',
+  '0022100765',
+  '0022100767',
 ]
 
-const DATE = "20220126"
-const COMMENT_ID = 'huczleg'
-const COMMENT_ID_2 = 'hue9nih'
+const DATE = "20220131"
+const COMMENT_ID = 'hv1y176'
 const URLS = IDS.map(id => `https://data.nba.net/10s/prod/v1/${DATE}/${id}_boxscore.json`);
 
 const calculateSeconds = (time) => {
@@ -110,10 +107,10 @@ const runFunction = async () => {
       })
   })
 
-  const allPlayers = results.flat();
-  const allPlayersSorted = allPlayers.sort((a,b) => {
-    if(a.ftm != b.ftm){
-      return b.ftm - a.ftm
+  const allPlayers = results.flat().filter(player => player.name != 'Amir Coffey' && player.name != 'Isaiah Jackson');
+  const pointsSorted = _.clone(allPlayers).sort((a,b) => {
+    if(a.points != b.points){
+      return b.points - a.points
     }
 
     // First tiebreaker
@@ -134,37 +131,60 @@ const runFunction = async () => {
     return 0;
   })
 
-  const sortedList = results.map(game => {
-    const sortedGame = game.sort((a,b) => {
-      // Main Sort
-      if(a.ftm != b.ftm){
-        return b.ftm - a.ftm
-      }
-
-      // First tiebreaker
-      if(a.teamMargin != b.teamMargin){
-        return b.teamMargin - a.teamMargin
-      }
-
-      // Second tiebreaker
-      if(a.plusMinus != b.plusMinus){
-        return b.plusMinus - a.plusMinus
-      }
-
-      // Third tiebreaker
-      if(a.secondsPlayed != b.secondsPlayed){
-        return b.secondsPlayed - a.secondsPlayed
-      }
-
-      return 0;
-    });
-
-    if(sortedGame.length && sortedGame[0].gameOver){
-      return sortedGame.slice(0,1);
-    }else{
-      return sortedGame.slice(0,3);
+  const assistsSorted = _.clone(allPlayers).sort((a,b) => {
+    if(a.assists != b.assists){
+      return b.assists - a.assists
     }
+
+    // First tiebreaker
+    if(a.teamMargin != b.teamMargin){
+      return b.teamMargin - a.teamMargin
+    }
+
+    // Second tiebreaker
+    if(a.plusMinus != b.plusMinus){
+      return b.plusMinus - a.plusMinus
+    }
+
+    // Third tiebreaker
+    if(a.secondsPlayed != b.secondsPlayed){
+      return b.secondsPlayed - a.secondsPlayed
+    }
+
+    return 0;
   })
+
+  // const sortedList = results.map(game => {
+  //   const sortedGame = game.sort((a,b) => {
+  //     // Main Sort
+  //     if(a.points != b.points){
+  //       return b.points - a.points
+  //     }
+
+  //     // First tiebreaker
+  //     if(a.teamMargin != b.teamMargin){
+  //       return b.teamMargin - a.teamMargin
+  //     }
+
+  //     // Second tiebreaker
+  //     if(a.plusMinus != b.plusMinus){
+  //       return b.plusMinus - a.plusMinus
+  //     }
+
+  //     // Third tiebreaker
+  //     if(a.secondsPlayed != b.secondsPlayed){
+  //       return b.secondsPlayed - a.secondsPlayed
+  //     }
+
+  //     return 0;
+  //   });
+
+  //   if(sortedGame.length && sortedGame[0].gameOver){
+  //     return sortedGame.slice(0,1);
+  //   }else{
+  //     return sortedGame.slice(0,3);
+  //   }
+  // })
 
   // const sortedList = allPlayers.sort((a,b) => b.ratio - a.ratio)
   // console.log(sortedList.slice(0,6))
@@ -201,33 +221,47 @@ const runFunction = async () => {
   //   return `${playerInfo} ${player.timeLeft}`
   // }).filter(x => !!x).slice(0,10)
 
-  const standings = sortedList.map(teamArr => {
-    return teamArr.map((player, idx) => {
-      if(idx === 0){
-        return `**${player.teams}**\n\n* ${player.name}: ${player.ftm}`;
-      }
+  const standings = pointsSorted.map((player, idx)=> {
+    // const tieBreaker = `[Margin: ${player.teamMargin} / +/-: ${player.plusMinus} / Min: ${Math.round(player.secondsPlayed / 60)}]`
+    const matchup = `[${player.teams}]`;
+    const playerInfo = player.gameOver ? `**${player.name}: ${player.points}**` : `${player.name}: ${player.points}`
+    // remove players if they have no shot
+    if(idx >= 5 && player.gameOver) return undefined
+    if(idx===4) return `* ${playerInfo} ${player.timeLeft}\n\n-------------------------`
+    return `* ${playerInfo} ${player.timeLeft}`
+  }).filter(x => !!x).slice(0,10)
 
-      return `* ${player.name}: ${player.ftm}`;
-    }).join("\n\n")
-  })
+  const assistsLeader = assistsSorted.map((player, idx)=> {
+    // const tieBreaker = `[Margin: ${player.teamMargin} / +/-: ${player.plusMinus} / Min: ${Math.round(player.secondsPlayed / 60)}]`
+    const matchup = `[${player.teams}]`;
+    const playerInfo = player.gameOver ? `**${player.name}: ${player.assists}**` : `${player.name}: ${player.assists}`
+    // remove players if they have no shot
+    if(idx >= 5 && player.gameOver) return undefined
+    if(idx===4) return `* ${playerInfo} ${player.timeLeft}\n\n-------------------------`
+    return `* ${playerInfo} ${player.timeLeft}`
+  }).filter(x => !!x).slice(0,10)
+
+
 
   const markdown = [
-    `## Free Throws Made`,
+    `## Points Leader`,
     ...standings,
+    '',
+    '## Assists Leader',
+    ...assistsLeader,
     `**Update: ${new Date().toLocaleString()} PST**`,
     `There are ${remainingGames} games that have not started yet.`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
     `Tiebreakers: Team Margin / Player's ± / Minutes Played`,
-    `1 ommitted player`
   ].join("\n\n")
 
   console.log(markdown)
 
   r.getComment(COMMENT_ID).edit(markdown)
-  setTimeout(()=>{
-    r.getComment(COMMENT_ID_2).edit(markdown)
-  }, 15000)
+  // setTimeout(()=>{
+  //   r.getComment(COMMENT_ID_2).edit(markdown)
+  // }, 15000)
 
 }
 

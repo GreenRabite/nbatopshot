@@ -8,21 +8,19 @@ const snoowrap = require('snoowrap');
 require('dotenv').config();
 
 const IDS = [
-  '0022100722',
-  '0022100723',
-  '0022100724',
-  '0022100725',
-  '0022100727',
-  '0022100453',
-  '0022100472',
-  '0022100728',
-  '0022100731',
-  '0022100732',
+  '0022100773',
+  '0022100774',
+  '0022100775',
+  '0022100776',
+  '0022100777',
+  '0022100778',
+  '0022100779',
+  '0022100780',
+  '0022100781',
 ]
 
-const DATE = "20220126"
-const COMMENT_ID = 'huczleg'
-const COMMENT_ID_2 = 'hue9nih'
+const DATE = "20220202"
+const COMMENT_ID = 'hvc636w'
 const URLS = IDS.map(id => `https://data.nba.net/10s/prod/v1/${DATE}/${id}_boxscore.json`);
 
 const calculateSeconds = (time) => {
@@ -43,6 +41,7 @@ const formatStats = (players, gameData) => {
       ftm: Number(player.ftm),
       assists: Number(player.assists),
       fgm: Number(player.fgm),
+      fgmFtm: Number(player.ftm) + Number(player.fgm),
       teams: gameData.teams,
       team: gameData[player.teamId].code,
       gameOver: gameData.gameOver,
@@ -135,10 +134,10 @@ const runFunction = async () => {
   })
 
   const sortedList = results.map(game => {
-    const sortedGame = game.sort((a,b) => {
+    const sortedGame = game.filter(player => player.name != 'Terry Taylor').sort((a,b) => {
       // Main Sort
-      if(a.ftm != b.ftm){
-        return b.ftm - a.ftm
+      if(a.fgmFtm != b.fgmFtm){
+        return b.fgmFtm - a.fgmFtm
       }
 
       // First tiebreaker
@@ -162,7 +161,7 @@ const runFunction = async () => {
     if(sortedGame.length && sortedGame[0].gameOver){
       return sortedGame.slice(0,1);
     }else{
-      return sortedGame.slice(0,3);
+      return sortedGame.slice(0,5);
     }
   })
 
@@ -202,32 +201,31 @@ const runFunction = async () => {
   // }).filter(x => !!x).slice(0,10)
 
   const standings = sortedList.map(teamArr => {
-    return teamArr.map((player, idx) => {
+    return teamArr.map((player, idx, list) => {
       if(idx === 0){
-        return `**${player.teams}**\n\n* ${player.name}: ${player.ftm}`;
+        return `**${player.teams}** ${player.timeLeft}\n\n* ${list.length === 1 ? `**${player.name}**` : player.name}: ${player.fgmFtm}`;
       }
 
-      return `* ${player.name}: ${player.ftm}`;
+      return `* ${player.name}: ${player.fgmFtm}`;
     }).join("\n\n")
   })
 
   const markdown = [
-    `## Free Throws Made`,
+    `## Field Goals Made / Free Throws Made Leaders`,
     ...standings,
     `**Update: ${new Date().toLocaleString()} PST**`,
     `There are ${remainingGames} games that have not started yet.`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
     `Tiebreakers: Team Margin / Player's ± / Minutes Played`,
-    `1 ommitted player`
   ].join("\n\n")
 
   console.log(markdown)
 
   r.getComment(COMMENT_ID).edit(markdown)
-  setTimeout(()=>{
-    r.getComment(COMMENT_ID_2).edit(markdown)
-  }, 15000)
+  // setTimeout(()=>{
+  //   r.getComment(COMMENT_ID_2).edit(markdown)
+  // }, 15000)
 
 }
 
