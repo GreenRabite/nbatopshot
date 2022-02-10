@@ -36,11 +36,21 @@ const TUESDAY_IDS = [
   [DATE_2,'0022100824'],
 ]
 
+const WEDNESDAY_IDS = [
+  [DATE_3,'0022100825'],
+  [DATE_3,'0022100826'],
+  [DATE_3,'0022100827'],
+  [DATE_3,'0022100828'],
+  [DATE_3,'0022100829'],
+  [DATE_3,'0022100830'],
+]
+
 const COMMENT_ID = 'hw04ca0'
 const genUrls = (date_and_ids) => date_and_ids.map(date_and_id => `https://data.nba.net/10s/prod/v1/${date_and_id[0]}/${date_and_id[1]}_boxscore.json`);
 
 const MONDAY_URLS = genUrls(MONDAY_IDS)
 const TUESDAY_URLS = genUrls(TUESDAY_IDS)
+const WEDNESDAY_URLS = genUrls(WEDNESDAY_IDS)
 
 
 const calculateSeconds = (time) => {
@@ -176,7 +186,7 @@ const runFunction = async () => {
 
   const {results:mondayResults, remainingGames: mondayRemainingGames} = await fetchGameResults(MONDAY_URLS)
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchGameResults(TUESDAY_URLS)
-  // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchGameResults(SUNDAY_URLS)
+  const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchGameResults(WEDNESDAY_URLS)
 
   const mondayPlayers = mondayResults.flat();
   const mondayPointLeaders = sortPlayersByAttribute(_.clone(mondayPlayers), 'points')
@@ -184,16 +194,8 @@ const runFunction = async () => {
   const tuesdayPlayers = tuesdayResults.flat();
   const tuesdayPointLeaders = sortPlayersByAttribute(_.clone(tuesdayPlayers), 'points')
 
-  // const satPlayers = satResults.flat();
-  // const satPointLeaders = sortPlayersByAttribute(_.clone(satPlayers), 'points')
-  // const satReboundsLeaders = sortPlayersByAttribute(_.clone(satPlayers), 'rebs')
-  // const satAssistsLeaders = sortPlayersByAttribute(_.clone(satPlayers), 'assists')
-
-  // const sundayPlayers = sundayResults.flat();
-  // const sundayPointLeaders = sortPlayersByAttribute(_.clone(sundayPlayers), 'points')
-  // const sundayReboundsLeaders = sortPlayersByAttribute(_.clone(sundayPlayers), 'rebs')
-  // const sundayAssistsLeaders = sortPlayersByAttribute(_.clone(sundayPlayers), 'assists')
-
+  const wednesdayPlayers = wednesdayResults.flat();
+  const wednesdayPointLeaders = sortPlayersByAttribute(_.clone(wednesdayPlayers), 'assists')
 
   const r = new snoowrap({
     userAgent: 'KobeBot',
@@ -212,7 +214,9 @@ const runFunction = async () => {
     ...standingsByAttribute(tuesdayPointLeaders, 'points'),
     `There are ${tuesdayRemainingGames} Tuesday games that have not started yet.`,
     `## Wednesday Leaders`,
-    `The games have not started yet`,
+    `### Points Leaders`,
+    ...standingsByAttribute(wednesdayPointLeaders, 'assists'),
+    `There are ${wednesdayRemainingGames} Wednesday games that have not started yet.`,
     `## Thursday Leaders`,
     `The games have not started yet`,
     `## Friday Leaders`,
