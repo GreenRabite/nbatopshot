@@ -45,12 +45,55 @@ const WEDNESDAY_IDS = [
   [DATE_3,'0022100830'],
 ]
 
+const THURSDAY_IDS = [
+  [DATE_4,'0022100831'],
+  [DATE_4,'0022100832'],
+  [DATE_4,'0022100833'],
+  [DATE_4,'0022100834'],
+  [DATE_4,'0022100835'],
+  [DATE_4,'0022100836'],
+  [DATE_4,'0022100837'],
+]
+
+const FRIDAY_IDS = [
+  [DATE_5,'0022100838'],
+  [DATE_5,'0022100839'],
+  [DATE_5,'0022100840'],
+  [DATE_5,'0022100841'],
+  [DATE_5,'0022100842'],
+  [DATE_5,'0022100843'],
+  [DATE_5,'0022100844'],
+]
+
+const SATURDAY_IDS = [
+  [DATE_6,'0022100845'],
+  [DATE_6,'0022100846'],
+  [DATE_6,'0022100847'],
+  [DATE_6,'0022100848'],
+  [DATE_6,'0022100849'],
+  [DATE_6,'0022100850'],
+  [DATE_6,'0022100851'],
+  [DATE_6,'0022100852'],
+  [DATE_6,'0022100853'],
+  [DATE_6,'0022100854'],
+  [DATE_6,'0022100855'],
+]
+
+const SUNDAY_IDS = [
+  [DATE_7,'0022100856'],
+  [DATE_7,'0022100857'],
+]
+
 const COMMENT_ID = 'hw04ca0'
 const genUrls = (date_and_ids) => date_and_ids.map(date_and_id => `https://data.nba.net/10s/prod/v1/${date_and_id[0]}/${date_and_id[1]}_boxscore.json`);
 
 const MONDAY_URLS = genUrls(MONDAY_IDS)
 const TUESDAY_URLS = genUrls(TUESDAY_IDS)
 const WEDNESDAY_URLS = genUrls(WEDNESDAY_IDS)
+const THURSDAY_URLS = genUrls(THURSDAY_IDS)
+const FRIDAY_URLS = genUrls(FRIDAY_IDS)
+const SATURDAY_URLS = genUrls(SATURDAY_IDS)
+const SUNDAY_URLS = genUrls(SUNDAY_IDS)
 
 
 const calculateSeconds = (time) => {
@@ -69,6 +112,7 @@ const formatStats = (players, gameData) => {
       blks: Number(player.blocks),
       fga: Number(player.fga),
       ftm: Number(player.ftm),
+      tpm: Number(player.tpm),
       assists: Number(player.assists),
       fgm: Number(player.fgm),
       fgmFtm: Number(player.ftm) + Number(player.fgm),
@@ -187,6 +231,10 @@ const runFunction = async () => {
   const {results:mondayResults, remainingGames: mondayRemainingGames} = await fetchGameResults(MONDAY_URLS)
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchGameResults(TUESDAY_URLS)
   const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchGameResults(WEDNESDAY_URLS)
+  const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchGameResults(THURSDAY_URLS)
+  const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchGameResults(FRIDAY_URLS)
+  const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
+  const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchGameResults(SUNDAY_URLS)
 
   const mondayPlayers = mondayResults.flat();
   const mondayPointLeaders = sortPlayersByAttribute(_.clone(mondayPlayers), 'points')
@@ -196,6 +244,18 @@ const runFunction = async () => {
 
   const wednesdayPlayers = wednesdayResults.flat();
   const wednesdayPointLeaders = sortPlayersByAttribute(_.clone(wednesdayPlayers), 'assists')
+
+  const thursdayPlayers = thursdayResults.flat();
+  const thursdayPointLeaders = sortPlayersByAttribute(_.clone(thursdayPlayers), 'assists')
+
+  const fridayPlayers = fridayResults.flat();
+  const fridayPointLeaders = sortPlayersByAttribute(_.clone(fridayPlayers), 'rebs')
+
+  const saturdayPlayers = saturdayResults.flat();
+  const saturdayPointLeaders = sortPlayersByAttribute(_.clone(saturdayPlayers), 'rebs')
+
+  const sundayPlayers = sundayResults.flat();
+  const sundayPointLeaders = sortPlayersByAttribute(_.clone(sundayPlayers), 'tpm')
 
   const r = new snoowrap({
     userAgent: 'KobeBot',
@@ -214,23 +274,32 @@ const runFunction = async () => {
     ...standingsByAttribute(tuesdayPointLeaders, 'points'),
     `There are ${tuesdayRemainingGames} Tuesday games that have not started yet.`,
     `## Wednesday Leaders`,
-    `### Points Leaders`,
+    `### Assists Leaders`,
     ...standingsByAttribute(wednesdayPointLeaders, 'assists'),
     `There are ${wednesdayRemainingGames} Wednesday games that have not started yet.`,
     `## Thursday Leaders`,
-    `The games have not started yet`,
+    `### Assists Leaders`,
+    ...standingsByAttribute(thursdayPointLeaders, 'assists'),
+    `There are ${thursdayRemainingGames} Thursday games that have not started yet.`,
     `## Friday Leaders`,
-    `The games have not started yet`,
+    `### Rebound Leaders`,
+    ...standingsByAttribute(fridayPointLeaders, 'rebs'),
+    `There are ${fridayRemainingGames} Friday games that have not started yet.`,
     `## Saturday Leaders`,
-    `The games have not started yet`,
+    `### Rebound Leaders`,
+    ...standingsByAttribute(saturdayPointLeaders, 'rebs'),
+    `There are ${saturdayRemainingGames} Saturaday games that have not started yet.`,
     `## Sunday Leaders`,
-    `The games have not started yet`,
+    `### Three Points Made Leaders`,
+    ...standingsByAttribute(sundayPointLeaders, 'tpm'),
+    `There are ${sundayRemainingGames} Sunday games that have not started yet.`,
     `**Update: ${new Date().toLocaleString()} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
     `Tiebreakers: Team Margin / Player's ± / Minutes Played`,
   ].join("\n\n")
 
+  console.clear()
   console.log(markdown)
 
   r.getComment(COMMENT_ID).edit(markdown)
