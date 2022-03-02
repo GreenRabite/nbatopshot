@@ -15,6 +15,7 @@ axios.get(TODAY_LINEUP)
         const teamName = individualTeam.children[0].children[0].children[1].firstChild.data;
         const teamLink = individualTeam.children[0].attribs.href
         const teamId = teamLink.split('/')[teamLink.split('/').length - 1]
+        // Starting Lineup - FIrst 5 players listed
         const players = individualTeam.children.slice(2,7).map(player => {
           const playerLink = player.attribs.href;
           const playerName = player.firstChild.lastChild.firstChild.data
