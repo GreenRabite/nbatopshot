@@ -45,7 +45,7 @@ Damion Lee: 40000
 Thomas Bryant: 12000
 Marvin Bagley III: 40000
 Elfrid Payton: 12000
-Theo Maledon: 4000
+Théo Maledon: 4000
 Lauri Markkanen: 12000-40000
 Edmond Sumner: 12000
 Isaiah Joe: 4000
@@ -113,7 +113,7 @@ Naji Marshall: 4000
 Yuta Watanabe: 12000
 Udoka Azubuike: 4000
 E'Twaun Moore: 12000
-Dario Saric: 12000
+Dario Šarić: 12000
 Grant Williams: 12000
 Isaac Bonga: 12000
 Aron Baynes: 12000
@@ -143,7 +143,7 @@ Usman Garuba: 4000
 Franz Wagner: 4000
 Tre Mann: 4000
 Gabe Vincent: 12000
-Alperen Sengun: 4000
+Alperen Şengün: 4000
 Cory Joseph: 12000
 Santi Aldama: 4000
 Cade Cunningham: 4000

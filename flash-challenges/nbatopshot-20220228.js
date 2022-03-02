@@ -5,14 +5,18 @@ const snoowrap = require('snoowrap');
 require('dotenv').config();
 
 const IDS = [
-  '0032100004',
-  '0032100005',
-  '0032100006',
+  '0022100920',
+  '0022100921',
+  '0022100726',
+  '0022100922',
+  '0022100923',
+  '0022100924',
+  '0022100925'
 ]
 
 const URLS = IDS.map(id => `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${id}.json`);
 
-const COMMENT_ID = 'hxj3q9m'
+const COMMENT_ID = 'hyubzyt'
 const MADE = 'Made'
 
 const scoringPlays = {
@@ -72,28 +76,42 @@ const findFirstToFGM = (targetFGM, plays) => {
   let winner;
   shootingPlays.forEach(play => {
     const playerName = play.playerNameI;
-
-    if(results[playerName]){
-      results[playerName].fgm += 1
-      if(results[playerName].fgm > 7){
-        winner = [play.playerNameI, play.teamTricode, teams]
-        return winner
-      }
-    }else{
-      results[playerName] = {
-        name: playerName,
-        fgm: 1,
-        playerId: String(play.personId)
+    if(!someoneReachedTargetedFGM){
+      if(results[playerName]){
+        results[playerName].fgm += 1
+        if(results[playerName].fgm >= targetFGM){
+          winner = [play.playerNameI, play.teamTricode, teams]
+          someoneReachedTargetedFGM = true
+          console.log(winner)
+          return winner
+        }
+      }else{
+        results[playerName] = {
+          name: playerName,
+          fgm: 1,
+          playerId: String(play.personId)
+        }
       }
     }
   })
 
+  if(winner){
+    return {
+      status: 'finished',
+      winner
+    }
+  }
+
   const sorted = 
     Object.keys(results)
-    .sort((a,b) =>results[b].dunks - results[a].dunks)
+    .sort((a,b) =>results[b].fgm - results[a].fgm)
     .map(key => results[key])
 
-  return sorted;
+  return {
+    status: 'in_progress',
+    teams,
+    sorted
+  };
 }
 
 const findFirstToAst = (targetAst, plays) => {
@@ -301,6 +319,11 @@ const renderSortedObject = (sortedObj) => {
   return result.slice(0,3)
 }
 
+const renderSortedArray = (sortedArray) => {
+  console.log(sortedArray)
+  return sortedArray.map(res => `* ${res.name}: ${res.fgm}`).slice(0,3)
+}
+
 const runFunction = async () => {
   let remainingGames= 0;
   // console.log(`## Final`)
@@ -332,8 +355,8 @@ const runFunction = async () => {
 
   console.log(results)
 
-  const finalResults = results.filter(r => r?.length).map((result, idx) => {
-    return [`${result[2]}`, `**${result.slice(0,1).join(' ')}**`].join("\n\n")
+  const finalResults = results.filter(x=>x).filter(r => r.status === 'finished').map((result, idx) => {
+    return [`${result.winner[2]}`, `**${result.winner.slice(0,1).join(' ')}**`].join("\n\n")
   })
 
   // const dummy = {
@@ -344,17 +367,17 @@ const runFunction = async () => {
   //   }
   // }
 
-  const gamesInProgress = results.filter(r => !r?.length && r!= undefined).map((res, idx) => {
+  const gamesInProgress = results.filter(x=>x).filter(r => r.status === 'in_progress').map((res, idx) => {
     // return [`**${res.teams}**`, renderSortedObject(res.sorted)]
-    // if(idx===0) return [`## Ongoing Games`,`**${res.teams}**`, renderSortedObject(res.sorted).join("\n\n")].join("\n\n")
-    // return [`**${res.teams}**`, renderSortedObject(res.sorted).join("\n\n")].join("\n\n")
-    return [`## Ongoing Games`,`**${res.teams}**`, 'Status: TBD', `Last bucket: _${res.currentLastShot}_`].join("\n\n")
+    if(idx===0) return [`## Ongoing Games`,`**${res.teams}**`, renderSortedArray(res.sorted).join("\n\n")].join("\n\n")
+    return [`**${res.teams}**`, renderSortedArray(res.sorted).join("\n\n")].join("\n\n")
+    // return [`## Ongoing Games`,`**${res.teams}**`, 'Status: TBD', `Last bucket: _${res.currentLastShot}_`].join("\n\n")
   })
 
   // const testGamesInProgress = [`## Ongoing Games`,`**${dummy.teams}**`, renderSortedObject(dummy.sorted).join("\n\n")]
 
    const markdown = [
-    `## First to FGM Shots`,
+    `## First to 7 FGM Shots`,
     ...finalResults,
     ...gamesInProgress,
     `**Update: ${new Date().toLocaleString()}**`,
@@ -364,11 +387,11 @@ const runFunction = async () => {
   console.clear()
   console.log(markdown)
 
-  // r.getComment(COMMENT_ID).edit(markdown)
+  r.getComment(COMMENT_ID).edit(markdown)
 }
 
-// setInterval(runFunction, 30000)
-runFunction()
+setInterval(runFunction, 30000)
+// runFunction()
 
 
 
