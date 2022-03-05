@@ -311,6 +311,7 @@ const runFunction = async () => {
     `**Update: ${new Date().toLocaleString()} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
+    `_dd_ denotes Double Double / _td_ denotes Triple Double`,
     `Tiebreakers: TieBreaker Pts / Team Margin / Player's ± / Minutes Played`,
   ].join("\n\n")
 
