@@ -1,8 +1,9 @@
 {
-  "name": "sample",
+  "name": "NBA Top Shot",
   "version": "1.0.0",
   "description": "nbatopshot",
-  "main": "app.js",
+  "source": "frontend/index.tsx",
+  "main": "dist/main.js",
   "dependencies": {
     "axios": "^0.24.0",
     "bluebird": "^3.7.2",

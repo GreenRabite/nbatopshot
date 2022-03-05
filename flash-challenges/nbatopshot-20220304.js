@@ -142,7 +142,6 @@ const fetchGameResults = async (urls) => {
           margin: Number(response.data.basicGameData.hTeam.score) - Number(response.data.basicGameData.vTeam.score),
           assists: Number(response.data.stats.hTeam.totals.assists),
         }
-        // console.log(hTeam.code, vTeam.code)
 
         const gameData = {
           teams: [vTeam.code, hTeam.code].join('-'),
@@ -159,7 +158,6 @@ const fetchGameResults = async (urls) => {
       .catch(function (error) {
         // handle error
         remainingGames++
-        // console.log('Game has Not started yet');
         return []
       })
      }),
@@ -192,22 +190,34 @@ const sortPlayersByAttribute = (players, attribute) => {
   })
 }
 
-const sortPlayersByTripleDouble = (players) => {
+const sortPlayersByTripleDouble = (players, string) => {
+  let sort;
+  if(string === 'td'){
+    sort = 'tripleDoublePoints'
+  }else if(string === 'dd'){
+    sort = 'doubleDoublePoints'
+  }
+  
   return players.sort((a,b) => {
-
-    if(a.tripleDoubleCount != b.tripleDoubleCount){
-      return b.tripleDoubleCount - a.tripleDoubleCount
+    
+    if(a[sort] != b[sort]){
+      return b[sort] - a[sort]
     }
 
-    if(a.doubleDoubleCount != b.doubleDoubleCount){
-      return b.doubleDoubleCount - a.doubleDoubleCount
+    // First tiebreaker
+    if(a.teamMargin != b.teamMargin){
+      return b.teamMargin - a.teamMargin
     }
 
-    if(a.totalSum != b.totalSum){
-      return b.totalSum - a.totalSum
+    // Second tiebreaker
+    if(a.plusMinus != b.plusMinus){
+      return b.plusMinus - a.plusMinus
     }
 
-    return 0;
+    // Third tiebreaker
+    if(a.secondsPlayed != b.secondsPlayed){
+      return b.secondsPlayed - a.secondsPlayed
+    }
   })
 }
 
@@ -238,10 +248,11 @@ const standingsByOngoingAttribute = (players, attribute) => {
 const standingsByTripleDoubles = (players) => {
   return players.map((player, idx) => {
     // const playerInfo = player.gameOver ? `* **${player.name}: ${player[attribute]}**` : `${player.name}: ${player[attribute]}`
-    const playerInfo = `${player.name}: ${player.tripleDoubleCount} td | ${player.doubleDoubleCount} dd | ${player.totalSum} tiebreaker points`
+    const stats = `${player.isTripleDouble ? 'td' : 'dd'} | [${player.teams}] | ${player.isTripleDouble ? player.tripleDoublePoints : player.doubleDoublePoints} tiebreaker points`;
+    const playerInfo = player.gameOver ?  `* **${player.name}**: ${stats}` : `${player.name} ${stats}`;
 
-    if(idx===9) return `${playerInfo}\n\n-------------------------`
-    // if(idx >= 1 && player.gameOver) return undefined;
+    if(idx===9) return `${playerInfo}\n\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+`
+    if(idx >= 10 && player.gameOver) return undefined;
     return  `${playerInfo}`
   }).filter(x => !!x).slice(0,15)
 }
@@ -249,8 +260,6 @@ const standingsByTripleDoubles = (players) => {
 
 
 const runFunction = async () => {
-
-  const results = {}
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchGameResults(FRIDAY_URLS)
   const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
@@ -275,38 +284,10 @@ const runFunction = async () => {
   const tripleDoubles = [...fridayTripleDoubleLeaders, ...saturdayTripleDoubleLeaders, ...sundayTripleDoubleLeaders]
   const doubleDoubles = [...fridayDoubleDoubleLeaders, ...saturdayDoubleDoubleLeaders, ...sundayDoubleDoubleLeaders]
 
-
-  tripleDoubles.forEach(triplePlayer => {
-    if(results[triplePlayer.playerId]){
-      results[triplePlayer.playerId]['tripleDoubleCount'] += 1
-      results[triplePlayer.playerId]['totalSum'] += triplePlayer.doubleDoublePoints
-    }else{
-      results[triplePlayer.playerId] = {
-        ...triplePlayer,
-        tripleDoubleCount: 1,
-        doubleDoubleCount: 0,
-        totalSum: triplePlayer.tripleDoublePoints
-      }
-    }
-  })
-
-  doubleDoubles.forEach(doublePlayer => {
-    if(results[doublePlayer.playerId]){
-      results[doublePlayer.playerId]['doubleDoubleCount'] += 1
-      results[doublePlayer.playerId]['totalSum'] += doublePlayer.doubleDoublePoints
-    }else{
-      results[doublePlayer.playerId] = {
-        ...doublePlayer,
-        tripleDoubleCount: 0,
-        doubleDoubleCount: 1,
-        totalSum: doublePlayer.doubleDoublePoints
-      }
-    }
-  })
-
-  const winners = sortPlayersByTripleDouble(Object.values(results));
-
-  console.log(winners)
+  const results = [
+    ...sortPlayersByTripleDouble(tripleDoubles, 'td'),
+    ...sortPlayersByTripleDouble(doubleDoubles, 'dd'),
+  ]
 
   const r = new snoowrap({
     userAgent: 'KobeBot',
@@ -318,7 +299,7 @@ const runFunction = async () => {
   const markdown = [
     `# Doubles`,
     `## Weekend Leader`,
-    ...standingsByTripleDoubles(winners),
+    ...standingsByTripleDoubles(results),
     `## Saturday Leaders`,
     `### Saturday Triple Dubs`,
     ...standingsByAttribute(saturdayTripleDoubleLeaders, 'tripleDoublePoints'),
@@ -330,7 +311,7 @@ const runFunction = async () => {
     `**Update: ${new Date().toLocaleString()} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
-    `Tiebreakers: Team Margin / Player's ± / Minutes Played`,
+    `Tiebreakers: TieBreaker Pts / Team Margin / Player's ± / Minutes Played`,
   ].join("\n\n")
 
   console.clear()
@@ -342,5 +323,5 @@ const runFunction = async () => {
 
 
 
-setInterval(runFunction, 45000)
-// runFunction()
+// setInterval(runFunction, 45000)
+runFunction()
