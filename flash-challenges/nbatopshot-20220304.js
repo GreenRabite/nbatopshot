@@ -24,15 +24,12 @@ const FRIDAY_IDS = [
 ]
 
 const SATURDAY_IDS = [
-  [DATE_2, '0022100946'],
-  [DATE_2, '0022100947'],
-  [DATE_2, '0022100948'],
-  [DATE_2, '0022100458'],
-  [DATE_2, '0022100949'],
-  [DATE_2, '0022100950'],
-  [DATE_2, '0022100951'],
-  [DATE_2, '0022100952'],
-  [DATE_2, '0022100953'],
+  [DATE_2, '0022100954'],
+  [DATE_2, '0022100955'],
+  [DATE_2, '0022100956'],
+  [DATE_2, '0022100957'],
+  [DATE_2, '0022100958'],
+  [DATE_2, '0022100959'],
 ]
 
 // Need to update
@@ -101,9 +98,9 @@ const formatStats = (players, gameData) => {
       doubleDoublePoints: doubleDoubleValues.reduce((accum,curr) => accum + curr),
       tripleDoublePoints: tripleDoubleValues.reduce((accum,curr) => accum + curr),
       doubleDoubleOffTracker: doubleDoubleValues.reduce((accum,curr) => {
-        if(curr > 10) return accum - 10;
-        return accum - (10 - curr);
-      }, 20)
+        if(curr > 10) return accum + 10;
+        return accum + curr;
+      }, 0)
     }
   })
 }
