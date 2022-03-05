@@ -35,6 +35,7 @@ const SATURDAY_IDS = [
   [DATE_2, '0022100953'],
 ]
 
+// Need to update
 const SUNDAY_IDS = [
   [DATE_3,'0022100912'],
   [DATE_3,'0022100913'],
@@ -99,6 +100,10 @@ const formatStats = (players, gameData) => {
       isDoubleDouble,
       doubleDoublePoints: doubleDoubleValues.reduce((accum,curr) => accum + curr),
       tripleDoublePoints: tripleDoubleValues.reduce((accum,curr) => accum + curr),
+      doubleDoubleOffTracker: doubleDoubleValues.reduce((accum,curr) => {
+        if(curr > 10) return accum - 10;
+        return accum - (10 - curr);
+      }, 20)
     }
   })
 }
@@ -268,18 +273,18 @@ const runFunction = async () => {
   const fridayPlayers = fridayResults.flat();
   const fridayTripleDoubleLeaders = sortPlayersByAttribute(_.clone(fridayPlayers.filter(player => player.isTripleDouble)), 'tripleDoublePoints')
   const fridayDoubleDoubleLeaders = sortPlayersByAttribute(_.clone(fridayPlayers.filter(player => player.isDoubleDouble)), 'doubleDoublePoints')
-  const fridayOngoingLeaders = sortPlayersByAttribute(_.clone(fridayPlayers.filter(player => !player.isDoubleDouble && !player.isTripleDouble)), 'doubleDoublePoints')
+  const fridayOngoingLeaders = sortPlayersByAttribute(_.clone(fridayPlayers.filter(player => !player.isDoubleDouble && !player.isTripleDouble)), 'doubleDoubleOffTracker')
 
   
   const saturdayPlayers = saturdayResults.flat();
   const saturdayTripleDoubleLeaders = sortPlayersByAttribute(_.clone(saturdayPlayers.filter(player => player.isTripleDouble)), 'tripleDoublePoints')
   const saturdayDoubleDoubleLeaders = sortPlayersByAttribute(_.clone(saturdayPlayers.filter(player => player.isDoubleDouble)), 'doubleDoublePoints')
-  const saturdayOngoingLeaders = sortPlayersByAttribute(_.clone(saturdayPlayers.filter(player => !player.isDoubleDouble && !player.isTripleDouble)), 'doubleDoublePoints')
+  const saturdayOngoingLeaders = sortPlayersByAttribute(_.clone(saturdayPlayers.filter(player => !player.isDoubleDouble && !player.isTripleDouble)), 'doubleDoubleOffTracker')
 
   const sundayPlayers = sundayResults.flat();
   const sundayTripleDoubleLeaders = sortPlayersByAttribute(_.clone(sundayPlayers.filter(player => player.isTripleDouble)), 'tripleDoublePoints')
   const sundayDoubleDoubleLeaders = sortPlayersByAttribute(_.clone(sundayPlayers.filter(player => player.isDoubleDouble)), 'doubleDoublePoints')
-  const sundayOngoingLeaders = sortPlayersByAttribute(_.clone(sundayPlayers.filter(player => !player.isDoubleDouble && !player.isTripleDouble)), 'doubleDoublePoints')
+  const sundayOngoingLeaders = sortPlayersByAttribute(_.clone(sundayPlayers.filter(player => !player.isDoubleDouble && !player.isTripleDouble)), 'doubleDoubleOffTracker')
 
   const tripleDoubles = [...fridayTripleDoubleLeaders, ...saturdayTripleDoubleLeaders, ...sundayTripleDoubleLeaders]
   const doubleDoubles = [...fridayDoubleDoubleLeaders, ...saturdayDoubleDoubleLeaders, ...sundayDoubleDoubleLeaders]
