@@ -308,7 +308,7 @@ const runFunction = async () => {
     `### Saturday Ongoing Games`,
     ...standingsByOngoingAttribute(saturdayOngoingLeaders, 'doubleDoublePoints'),
     `There are ${saturdayRemainingGames} Saturday games that have not started yet.`,
-    `**Update: ${new Date().toLocaleString()} PST**`,
+    `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
     `_dd_ denotes Double Double / _td_ denotes Triple Double`,
