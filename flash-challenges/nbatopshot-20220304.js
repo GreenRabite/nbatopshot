@@ -282,8 +282,17 @@ const runFunction = async () => {
   const sundayDoubleDoubleLeaders = sortPlayersByAttribute(_.clone(sundayPlayers.filter(player => player.isDoubleDouble)), 'doubleDoublePoints')
   const sundayOngoingLeaders = sortPlayersByAttribute(_.clone(sundayPlayers.filter(player => !player.isDoubleDouble && !player.isTripleDouble)), 'doubleDoubleOffTracker')
 
+  const lebron = {
+    name: 'LeBron James',
+    teams: 'LAL-GSW',
+    gameOver: true,
+    isTripleDouble: false,
+    isDoubleDouble: true,
+    doubleDoublePoints: 66,
+  }
+
   const tripleDoubles = [...fridayTripleDoubleLeaders, ...saturdayTripleDoubleLeaders, ...sundayTripleDoubleLeaders]
-  const doubleDoubles = [...fridayDoubleDoubleLeaders, ...saturdayDoubleDoubleLeaders, ...sundayDoubleDoubleLeaders]
+  const doubleDoubles = [lebron,...fridayDoubleDoubleLeaders, ...saturdayDoubleDoubleLeaders, ...sundayDoubleDoubleLeaders]
 
   const results = [
     ...sortPlayersByTripleDouble(tripleDoubles, 'td'),
@@ -325,5 +334,5 @@ const runFunction = async () => {
 
 
 
-setInterval(runFunction, 45000)
-// runFunction()
+// setInterval(runFunction, 45000)
+runFunction()
