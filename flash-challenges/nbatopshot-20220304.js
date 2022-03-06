@@ -32,16 +32,15 @@ const SATURDAY_IDS = [
   [DATE_2, '0022100959'],
 ]
 
-// Need to update
 const SUNDAY_IDS = [
-  [DATE_3,'0022100912'],
-  [DATE_3,'0022100913'],
-  [DATE_3,'0022100914'],
-  [DATE_3,'0022100915'],
-  [DATE_3,'0022100916'],
-  [DATE_3,'0022100917'],
-  [DATE_3,'0022100918'],
-  [DATE_3,'0022100919'],
+  [DATE_3,'0022100960'],
+  [DATE_3,'0022100961'],
+  [DATE_3,'0022100963'],
+  [DATE_3,'0022100964'],
+  [DATE_3,'0022100965'],
+  [DATE_3,'0022100962'],
+  [DATE_3,'0022100967'],
+  [DATE_3,'0022100966'],
 ]
 
 const COMMENT_ID = 'hze1dhp'
@@ -302,14 +301,14 @@ const runFunction = async () => {
     `# Doubles`,
     `## Weekend Leader`,
     ...standingsByTripleDoubles(results),
-    `## Saturday Leaders`,
-    `### Saturday Triple Dubs`,
-    ...standingsByAttribute(saturdayTripleDoubleLeaders, 'tripleDoublePoints'),
-    `### Saturday Double Dubs`,
-    ...standingsByAttribute(saturdayDoubleDoubleLeaders, 'doubleDoublePoints'),
-    `### Saturday Ongoing Games`,
-    ...standingsByOngoingAttribute(saturdayOngoingLeaders, 'doubleDoublePoints'),
-    `There are ${saturdayRemainingGames} Saturday games that have not started yet.`,
+    `## Sunday Leaders`,
+    `### Sunday Triple Dubs`,
+    ...standingsByAttribute(sundayTripleDoubleLeaders, 'tripleDoublePoints'),
+    `### Sunday Double Dubs`,
+    ...standingsByAttribute(sundayDoubleDoubleLeaders, 'doubleDoublePoints'),
+    `### Sunday Ongoing Games`,
+    ...standingsByOngoingAttribute(sundayOngoingLeaders, 'doubleDoublePoints'),
+    `There are ${sundayRemainingGames} Saturday games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
