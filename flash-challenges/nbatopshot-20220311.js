@@ -24,11 +24,22 @@ const FRIDAY_IDS = [
   [DATE_1, '0022101004'],
 ]
 
+const SATURDAY_IDS = [
+  [DATE_2, '0022101005'],
+  [DATE_2, '0022101006'],
+  [DATE_2, '0022101007'],
+  [DATE_2, '0022101008'],
+  [DATE_2, '0022101009'],
+  [DATE_2, '0022101010'],
+  [DATE_2, '0022101011'],
+]
+
 const COMMENT_ID = 'i0b0hi2'
 const COMMENT_2_ID = 'i0b0fe5'
 const genUrls = (date_and_ids) => date_and_ids.map(date_and_id => `https://data.nba.net/10s/prod/v1/${date_and_id[0]}/${date_and_id[1]}_boxscore.json`);
 
 const FRIDAY_URLS = genUrls(FRIDAY_IDS)
+const SATURDAY_URLS = genUrls(SATURDAY_IDS)
 
 const zeroPad = (num, places) => String(num).padStart(places, '0')
 
@@ -175,12 +186,13 @@ const standingsByAttribute = (players, attribute) => {
 const runFunction = async () => {
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchGameResults(FRIDAY_URLS)
-  // const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
+  const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
   // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchGameResults(SUNDAY_URLS)
 
   const fridayPlayers = fridayResults.flat();
+  const saturdayPlayers = saturdayResults.flat();
   const fridayStealsAndBlockLeader = sortPlayersByAttribute(_.clone(fridayPlayers), 'stlBlks')
-  // const saturdayRebsAndAstLeader = sortPlayersByAttribute(_.clone(saturdayPlayers), 'rebAsts')
+  const saturdayRebsAndAstLeader = sortPlayersByAttribute(_.clone(saturdayPlayers), 'rebAsts')
   // const sundayScoringLeaders = sortPlayersByAttribute(_.clone(sundayPlayers), 'points')
 
 
@@ -198,11 +210,11 @@ const runFunction = async () => {
     ...standingsByAttribute(fridayStealsAndBlockLeader, 'stlBlks'),
     `## Saturday`,
     `### Rebounds and Assists`,
-    `Games have not started yet`,
+    ...standingsByAttribute(saturdayRebsAndAstLeader, 'rebAsts'),
     `## Sunday`,
     `### Scoring Leaders`,
     `Games have not started yet`,
-    `There are ${fridayRemainingGames} Friday games that have not started yet.`,
+    `There are ${saturdayRemainingGames} Saturday games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
@@ -221,5 +233,5 @@ const runFunction = async () => {
 
 
 
-setInterval(runFunction, 30000)
-// runFunction()
+// setInterval(runFunction, 30000)
+runFunction()
