@@ -192,7 +192,7 @@ const runFunction = async () => {
   });
 
   const markdown = [
-    `# Raising The Bar Challenge`,
+    `# Around The Bend Challenge`,
     `## Friday`,
     `### Steals and Blocks`,
     ...standingsByAttribute(fridayStealsAndBlockLeader, 'stlBlks'),
