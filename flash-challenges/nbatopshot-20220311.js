@@ -34,6 +34,17 @@ const SATURDAY_IDS = [
   [DATE_2, '0022101011'],
 ]
 
+const SUNDAY_IDS = [
+  [DATE_3, '0022101012'],
+  [DATE_3, '0022101013'],
+  [DATE_3, '0022101014'],
+  [DATE_3, '0022101015'],
+  [DATE_3, '0022101016'],
+  [DATE_3, '0022101017'],
+  [DATE_3, '0022101018'],
+  [DATE_3, '0022101019'],
+]
+
 const COMMENT_ID = 'i0b0hi2'
 const COMMENT_2_ID = 'i0b0fe5'
 const genUrls = (date_and_ids) => date_and_ids.map(date_and_id => `https://data.nba.net/10s/prod/v1/${date_and_id[0]}/${date_and_id[1]}_boxscore.json`);
@@ -187,13 +198,13 @@ const runFunction = async () => {
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchGameResults(FRIDAY_URLS)
   const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
-  // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchGameResults(SUNDAY_URLS)
+  const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchGameResults(SUNDAY_URLS)
 
   const fridayPlayers = fridayResults.flat();
   const saturdayPlayers = saturdayResults.flat();
   const fridayStealsAndBlockLeader = sortPlayersByAttribute(_.clone(fridayPlayers), 'stlBlks')
   const saturdayRebsAndAstLeader = sortPlayersByAttribute(_.clone(saturdayPlayers), 'rebAsts')
-  // const sundayScoringLeaders = sortPlayersByAttribute(_.clone(sundayPlayers), 'points')
+  const sundayScoringLeaders = sortPlayersByAttribute(_.clone(sundayPlayers), 'points')
 
 
   const r = new snoowrap({
@@ -213,8 +224,8 @@ const runFunction = async () => {
     ...standingsByAttribute(saturdayRebsAndAstLeader, 'rebAsts'),
     `## Sunday`,
     `### Scoring Leaders`,
-    `Games have not started yet`,
-    `There are ${saturdayRemainingGames} Saturday games that have not started yet.`,
+    ...standingsByAttribute(sundayScoringLeaders, 'points'),
+    `There are ${sundayRemainingGames} Sunday games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
