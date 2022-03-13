@@ -51,6 +51,7 @@ const genUrls = (date_and_ids) => date_and_ids.map(date_and_id => `https://data.
 
 const FRIDAY_URLS = genUrls(FRIDAY_IDS)
 const SATURDAY_URLS = genUrls(SATURDAY_IDS)
+const SUNDAY_URLS = genUrls(SUNDAY_IDS)
 
 const zeroPad = (num, places) => String(num).padStart(places, '0')
 
@@ -202,6 +203,7 @@ const runFunction = async () => {
 
   const fridayPlayers = fridayResults.flat();
   const saturdayPlayers = saturdayResults.flat();
+  const sundayPlayers = sundayResults.flat();
   const fridayStealsAndBlockLeader = sortPlayersByAttribute(_.clone(fridayPlayers), 'stlBlks')
   const saturdayRebsAndAstLeader = sortPlayersByAttribute(_.clone(saturdayPlayers), 'rebAsts')
   const sundayScoringLeaders = sortPlayersByAttribute(_.clone(sundayPlayers), 'points')
