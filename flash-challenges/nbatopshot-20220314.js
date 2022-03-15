@@ -407,7 +407,7 @@ const renderSortedArray = (result, stat) => {
     return [
       `_First to ${stat}_`,
       ...listPlayByPlay(result.sorted)
-    ]
+    ].join('\n\n')
   }
 }
 
