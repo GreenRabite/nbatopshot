@@ -413,7 +413,7 @@ const renderSortedArray = (result, stat) => {
 const renderLastShot = (result) => {
   if(!result) return [];
   if(result.status === 'finished'){
-    return [`* **${result.name}**`]
+    return [`**${result.teams}**`,`* **${result.name}**`]
   }else if(result.status === 'in_progress'){
     return [`**${result.teams}**`, `Current Last Shot: ${result.currentLastShot}`].join('\n\n')
   }
