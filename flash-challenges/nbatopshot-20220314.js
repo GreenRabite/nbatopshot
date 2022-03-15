@@ -316,7 +316,7 @@ const findFirstToReb = (plays, number) => {
     if(!someoneReachedTarget && isPlayerFinish){
       someoneReachedTarget = true
       winner = {
-        teams: _.uniq(filteredPlays.map(play => play.teamTricode)).join('-'),
+        teams: _.uniq(plays.map(play => play.teamTricode)).join('-'),
         status: 'finished',
         name: playerName
       }
@@ -331,7 +331,7 @@ const findFirstToReb = (plays, number) => {
 
     if(sorted){
       winner = {
-        teams: _.uniq(filteredPlays.map(play => play.teamTricode)).join('-'),
+        teams: _.uniq(plays.map(play => play.teamTricode)).join('-'),
         status: 'in_progress',
         sorted,
       }
@@ -399,13 +399,11 @@ const listPlayByPlay = (sorted) => {
 const renderSortedArray = (result, stat) => {
   if(result.status === 'finished'){
     return [
-      `**${result.teams}**`,
       `_First to ${stat}_`,
       `* **${result.name}**`
     ].join('\n\n')
   }else if(result.status === 'in_progress'){
     return [
-      result.teams,
       `_First to ${stat}_`,
       ...listPlayByPlay(result.sorted)
     ]
@@ -504,7 +502,7 @@ const runFunction = async () => {
     const results = await fetchPlayByPlay(config.url);
     const method = config.method
     if(method === 'firstToStat'){
-      return  renderSortedArray(firstToStat(results, config.stat, config.number), config.stat)
+      return  [`**${config.teams}**`, renderSortedArray(firstToStat(results, config.stat, config.number), config.stat)].join('\n\n')
     }else if(method === 'lastMade'){
       return renderLastShot(lastMade(results, config.stat))
     }else{
