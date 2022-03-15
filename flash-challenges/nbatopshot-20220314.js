@@ -10,6 +10,7 @@ const snoowrap = require('snoowrap');
 require('dotenv').config();
 
 const DATE_1 = '20220314'
+const MADE = 'Made'
 
 const MONDAY_IDS = [
   [ 'LAC-CLE', '0022101020' ],
@@ -413,7 +414,7 @@ const renderSortedArray = (result, stat) => {
 const renderLastShot = (result) => {
   if(!result) return [];
   if(result.status === 'finished'){
-    return [`**${result.teams}**`,`* **${result.name}**`]
+    return [`**${result.teams}**`,`* Last Shot: **${result.name}**`].join('\n\n')
   }else if(result.status === 'in_progress'){
     return [`**${result.teams}**`, `Current Last Shot: ${result.currentLastShot}`].join('\n\n')
   }
