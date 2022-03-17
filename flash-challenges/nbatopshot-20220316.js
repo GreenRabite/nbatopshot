@@ -166,7 +166,7 @@ const standingsByAttribute = (players, attribute) => {
     if(idx===4) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
     if(idx >= 5 && player.gameOver && player[attribute] < 4) return undefined;
     return `${playerInfo} ${player.timeLeft}`
-  }).filter(x => !!x).slice(0,20)
+  }).filter(x => !!x).slice(0,25)
 }
 
 const runFunction = async () => {
