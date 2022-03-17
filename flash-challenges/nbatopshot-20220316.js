@@ -166,7 +166,19 @@ const standingsByAttribute = (players, attribute) => {
     if(idx===4) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
     if(idx >= 5 && player.gameOver && player[attribute] < 4) return undefined;
     return `${playerInfo} ${player.timeLeft}`
-  }).filter(x => !!x).slice(0,25)
+  }).filter(x => !!x)
+}
+
+const standingsOngoing = (players, attribute) => {
+  return players.map((player, idx) => {
+    const playerInfo = player.gameOver ? `* **${player.name}: ${player[attribute]}**` : `${player.name}: ${player[attribute]}`
+
+    // if(idx===4) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
+    // if(idx >= 5 && player.gameOver && player[attribute] < 4) return undefined;
+    if(player.tpm >= 4) return undefined;
+    if(player.gameOver) return undefined;
+    return `${playerInfo} ${player.timeLeft}`
+  }).filter(x => !!x).slice(0,5)
 }
 
 const runFunction = async () => {
@@ -174,7 +186,8 @@ const runFunction = async () => {
   const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchGameResults(WEDNESDAY_URLS)
 
   const wednesdayPlayers = wednesdayResults.flat();
-  const wednesdayLeaders = sortPlayersByAttribute(_.clone(wednesdayPlayers), 'tpm')
+  const wednesdayOnGoingLeaders = sortPlayersByAttribute(_.clone(wednesdayPlayers), 'tpm').filter(x => !x.gameOver)
+  const wednesdayLeaders = sortPlayersByAttribute(_.clone(wednesdayPlayers), 'tpm').filter(x => x.tpm >= 4)
 
 
   const r = new snoowrap({
@@ -186,8 +199,10 @@ const runFunction = async () => {
 
   const markdown = [
     `# Count 'Em All Challenge`,
-    `## 3PM Leader`,
+    `## 3PM Leaders`,
     ...standingsByAttribute(wednesdayLeaders, 'tpm'),
+    `## Ongoing Games`,
+    ...standingsOngoing(wednesdayOnGoingLeaders, 'tpm'),
     `There are ${wednesdayRemainingGames} Wednesday games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
