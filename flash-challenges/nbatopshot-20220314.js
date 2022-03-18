@@ -345,7 +345,7 @@ const findFirstToReb = (plays, number) => {
 const findLastMadeShot = (plays) => {
   const teams = _.uniq(plays.map(play => play.teamTricode).filter(x=>x)).join('-')
   const lastPlay = plays[plays.length - 1]
-  const scoringPlays = plays.filter(play => play?.shotResult === MADE);
+  const scoringPlays = plays.filter(play => play?.shotResult === MADE && play.isFieldGoal === 1);
   const winningShot = scoringPlays[scoringPlays.length - 1]
   let winner;
   if(lastPlay.actionType === 'game' && lastPlay.subType === 'end'){
@@ -542,5 +542,5 @@ const runFunction = async () => {
 
 
 
-setInterval(runFunction, 30000)
-// runFunction()
+// setInterval(runFunction, 30000)
+runFunction()
