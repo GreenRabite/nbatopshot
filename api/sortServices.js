@@ -42,14 +42,14 @@ const sortPlayersByAttribute = (players, attribute, options = {}) => {
   })
 }
 
-const filterPlayersByThreshold = (players, attribute, target, options = {}) => {
+const filterPlayersByThreshold = (players, attribute, target, options = {limit: 5}) => {
   const leaders = players.filter(player => player[attribute] >= target);
   // If there is a threshold (for like a rookie challenge) and not enough participants, default to regular list
   if(options.threshold && options.threshold > leaders.length){
-    return players;
+    return players.slice(0, options.limit);
   }
 
-  return leaders
+  return leaders;
 };
 
 const onGoingLeaders = (players, attribute, target, options = {}) => {
