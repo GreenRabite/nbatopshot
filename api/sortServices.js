@@ -13,6 +13,7 @@ const sortPlayersByAttribute = (players, attribute, options = {}) => {
       return b[attribute] - a[attribute]
     }
 
+    // custom tiebreakers
     if(options.customSort?.length > 0){
       for(let i=0; i < options.customSort.length; i++){
         const sortVar = options.customSort[i];
@@ -41,4 +42,25 @@ const sortPlayersByAttribute = (players, attribute, options = {}) => {
   })
 }
 
+const filterPlayersByThreshold = (players, attribute, target, options = {}) => {
+  const leaders = players.filter(player => player[attribute] >= target);
+  // If there is a threshold (for like a rookie challenge) and not enough participants, default to regular list
+  if(options.threshold && options.threshold > leaders.length){
+    return players;
+  }
+
+  return leaders
+};
+
+const onGoingLeaders = (players, attribute, target, options = {}) => {
+  const leaders =  players.filter(player => player[attribute] < target && !player.gameOver)
+  if(options.limit){
+    return leaders.slice(0, options.limit)
+  }else{
+    return leaders;
+  }
+}
+
 exports.sortPlayersByAttribute = sortPlayersByAttribute;
+exports.filterPlayersByThreshold = filterPlayersByThreshold;
+exports.onGoingLeaders = onGoingLeaders;

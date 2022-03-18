@@ -7,11 +7,12 @@
  * @returns {string[]} Converted markdown
 */
 const defaultOptions = {
-  hasThreshold: true;
-  hasDividers: true;
+  hasThreshold: true,
+  hasDividers: true
 }
 
 const standingsByAttribute = (players, attribute, options = defaultOptions) => {
+  if(players.length === 0 && options.onGoing) return ["No games going on right now"]
   if(players.length === 0) return ['No Players Have Reached This Threshold']
   let dividers = []
   let threshold;

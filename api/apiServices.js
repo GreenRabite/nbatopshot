@@ -71,6 +71,15 @@ const fetchPlayByPlay = async (url) => {
       })
 }
 
+const generateBoxScoreUrls = async (ids, date) => {
+  return ids.map(id => generateBoxScoreUrl(id, date))
+};
+
+const generateBoxScoreUrl = (id, date) => `https://data.nba.net/10s/prod/v1/${date}/${id}_boxscore.json`;
+
+
 exports.redditBot = redditBot;
 exports.fetchGameResults = fetchGameResults;
 exports.fetchPlayByPlay = fetchPlayByPlay;
+exports.generateBoxScoreUrls = generateBoxScoreUrls;
+exports.generateBoxScoreUrl = generateBoxScoreUrl;
