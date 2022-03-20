@@ -7,7 +7,7 @@ const _ = require('lodash')
 
 const DATE_1 = '20220318'
 const DATE_2 = '20220319'
-const DATE_2 = '20220320'
+const DATE_3 = '20220320'
 
 const FRIDAY_IDS = [
   '0022101046',
