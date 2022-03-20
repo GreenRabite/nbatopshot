@@ -7,6 +7,7 @@ const _ = require('lodash')
 
 const DATE_1 = '20220318'
 const DATE_2 = '20220319'
+const DATE_2 = '20220320'
 
 const FRIDAY_IDS = [
   '0022101046',
@@ -39,8 +40,10 @@ const runFunction = async () => {
 
   const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_1);
   const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
+  const SUNDAY_URLS = apiServices.generateBoxScoreUrls(SUNDAY_IDS, DATE_3);
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchGameResults(FRIDAY_URLS)
   const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
+  // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchGameResults(SUNDAY_URLS)
 
   const fridayPlayers = fridayResults.flat();
   const fridaySorted = sortPlayersByAttribute(_.clone(fridayPlayers), 'points');
@@ -52,6 +55,11 @@ const runFunction = async () => {
   const saturdayLeaders = filterPlayersByThreshold(_.clone(saturdaySorted), 'rebs', 10, {threshold: 3})
   const saturdayOngoingLeaders = onGoingLeaders(_.clone(saturdaySorted), 'rebs', 10, {limit: 4})
 
+  // const sundayPlayers = sundayResults.flat();
+  // const sundaySorted = sortPlayersByAttribute(_.clone(sundayPlayers), 'assists');
+  // const sundayLeaders = filterPlayersByThreshold(_.clone(sundaySorted), 'assists', 10, {threshold: 3})
+  // const sundayOngoingLeaders = onGoingLeaders(_.clone(sundaySorted), 'assists', 10, {limit: 6})
+
   const markdown = [
     `# Mayhem Flash Challenge`,
     `## Friday Leaders`,
@@ -62,11 +70,14 @@ const runFunction = async () => {
     `## Saturday Leaders`,
     `## Rebound Leaders`,
     ...standingsByAttribute(saturdayLeaders, 'rebs', {dividers: [2], hasThreshold: false} ),
-    `### Ongoing Games`,
-    ...standingsByAttribute(saturdayOngoingLeaders, 'rebs', {hasDividers: false, hasThreshold: false, onGoing: true} ),
+    // `### Ongoing Games`,
+    // ...standingsByAttribute(saturdayOngoingLeaders, 'rebs', {hasDividers: false, hasThreshold: false, onGoing: true} ),
     `## Sunday Leaders`,
-    `Games Have Not Started Yet`,
-    `There are ${fridayRemainingGames} games that have not started yet.`,
+    `## Assists Leaders`,
+    // ...standingsByAttribute(sundayLeaders, 'assists', {dividers: [2], hasThreshold: false} ),
+    // `### Ongoing Games`,
+    // ...standingsByAttribute(sundayOngoingLeaders, 'assists', {hasDividers: false, hasThreshold: false, onGoing: true} ),
+    // `There are ${sundayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
