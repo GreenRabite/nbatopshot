@@ -44,12 +44,12 @@ const runFunction = async () => {
 
   const fridayPlayers = fridayResults.flat();
   const fridaySorted = sortPlayersByAttribute(_.clone(fridayPlayers), 'points');
-  const fridayLeaders = filterPlayersByThreshold(_.clone(fridaySorted), 'points', 35, {threshold: 2})
+  const fridayLeaders = filterPlayersByThreshold(_.clone(fridaySorted), 'points', 35, {threshold: 3})
   const fridayOngoingLeaders = onGoingLeaders(_.clone(fridaySorted), 'points', 35, {limit: 4})
 
   const saturdayPlayers = saturdayResults.flat();
   const saturdaySorted = sortPlayersByAttribute(_.clone(saturdayPlayers), 'rebs');
-  const saturdayLeaders = filterPlayersByThreshold(_.clone(saturdaySorted), 'rebs', 10, {threshold: 2})
+  const saturdayLeaders = filterPlayersByThreshold(_.clone(saturdaySorted), 'rebs', 10, {threshold: 3})
   const saturdayOngoingLeaders = onGoingLeaders(_.clone(saturdaySorted), 'rebs', 10, {limit: 4})
 
   const markdown = [
@@ -80,5 +80,5 @@ const runFunction = async () => {
 
 }
 
-setInterval(runFunction, 30000)
-// runFunction()
+// setInterval(runFunction, 30000)
+runFunction()

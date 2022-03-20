@@ -45,8 +45,8 @@ const sortPlayersByAttribute = (players, attribute, options = {}) => {
 const filterPlayersByThreshold = (players, attribute, target, options = {}) => {
   const leaders = players.filter(player => player[attribute] >= target);
   // If there is a threshold (for like a rookie challenge) and not enough participants, default to regular list
-  if(options.threshold && options.threshold >= leaders.length){
-    return players.slice(0, options.threshold + 1);
+  if(options.threshold && options.threshold > leaders.length){
+    return players.slice(0, options.threshold);
   }
 
   return leaders;

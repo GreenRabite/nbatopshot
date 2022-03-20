@@ -24,7 +24,6 @@ const fetchGameResults = async (urls) => {
         const period = response.data.basicGameData?.period?.current
         const gameOver = !clockRunning && period > 3;
         const timeLeft = timeServices.calculateTimeLeft(period, response.data.basicGameData.clock)
-        console.log(timeLeft)
         const vTeam = {
           code: response.data.basicGameData.vTeam.triCode,
           margin: Number(response.data.basicGameData.vTeam.score) - Number(response.data.basicGameData.hTeam.score),
