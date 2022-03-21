@@ -116,7 +116,7 @@ const runFunction = async () => {
   const boxScores = await BB.mapSeries(boxScoreUrls, async (config) => {
     const result = await fetchGameResult(config.url);
     const sorted =  sortPlayersByAttribute(result, config.stat)
-    return [`**${config.teams}**`, `Most ${config.stat}`, ...standingsByAttribute(sorted, config.stat, {dividers: [0], threshold: 3})].join('\n\n')
+    return [`**${config.teams}**`, `_Most ${config.stat}_`, ...standingsByAttribute(sorted, config.stat, {dividers: [0], threshold: 3})].join('\n\n')
   })
 
   const playByPlays = await BB.mapSeries(playByPlayUrls, async (config) => {
