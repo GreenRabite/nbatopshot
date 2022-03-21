@@ -73,7 +73,7 @@ const GAME_MAPPING = {
     }
   }
 
-const COMMENT_ID = 'i17l9ir'
+const COMMENT_ID = 'i1l3eop'
 
 const listPlayByPlay = (sorted) => {
   return sorted.map((player, idx) => {
@@ -146,9 +146,9 @@ const runFunction = async () => {
   console.clear()
   console.log(markdown)
 
-  // redditBot.getComment(COMMENT_ID).edit(markdown)
+  redditBot.getComment(COMMENT_ID).edit(markdown)
 
 }
 
-// setInterval(runFunction, 30000)
-runFunction()
+setInterval(runFunction, 30000)
+// runFunction()
