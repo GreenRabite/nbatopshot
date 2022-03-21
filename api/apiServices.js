@@ -66,7 +66,7 @@ const fetchGameResult = async (url) => {
         const clockRunning = !!response.data.basicGameData.clock
         const period = response.data.basicGameData?.period?.current
         const gameOver = !clockRunning && period > 3;
-        const timeLeft = calculateTimeLeft(period, response.data.basicGameData.clock)
+        const timeLeft = timeServices.calculateTimeLeft(period, response.data.basicGameData.clock)
         const vTeam = {
           code: response.data.basicGameData.vTeam.triCode,
           margin: Number(response.data.basicGameData.vTeam.score) - Number(response.data.basicGameData.hTeam.score),
@@ -89,10 +89,11 @@ const fetchGameResult = async (url) => {
           timeLeft,
         }
 
-        return formatStats(players, gameData)
+        return statsServices.formatStats(players, gameData)
       })
       .catch(function (error) {
         // handle error
+        // console.log(error)
         return []
       })
 }

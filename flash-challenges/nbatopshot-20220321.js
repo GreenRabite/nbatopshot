@@ -115,7 +115,7 @@ const runFunction = async () => {
 
   const boxScores = await BB.mapSeries(boxScoreUrls, async (config) => {
     const result = await fetchGameResult(config.url);
-    const sorted =  sortPlayersByAttribute(result, config.stat)
+    const sorted =  sortPlayersByAttribute(_.clone(result), config.stat)
     return [`**${config.teams}**`, `_Most ${config.stat}_`, ...standingsByAttribute(sorted, config.stat, {dividers: [0], threshold: 3})].join('\n\n')
   })
 
@@ -143,12 +143,12 @@ const runFunction = async () => {
     `Tiebreakers: Team Margin / Player's ± / Minutes Played`,
   ].join("\n\n")
 
-  console.clear()
+  // console.clear()
   console.log(markdown)
 
   redditBot.getComment(COMMENT_ID).edit(markdown)
 
 }
 
-setInterval(runFunction, 30000)
-// runFunction()
+// setInterval(runFunction, 30000)
+runFunction()

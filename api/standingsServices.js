@@ -8,7 +8,7 @@
 */
 const defaultOptions = {
   hasThreshold: true,
-  hasDividers: true
+  hasDividers: true,
 }
 
 const standingsByAttribute = (players, attribute, options = defaultOptions) => {
@@ -16,6 +16,7 @@ const standingsByAttribute = (players, attribute, options = defaultOptions) => {
   if(players.length === 0) return ['No Players Have Reached This Threshold']
   let dividers = []
   let threshold;
+  let limit = 5;
 
   if(options.hasDividers){
     dividers = [4];
@@ -33,13 +34,17 @@ const standingsByAttribute = (players, attribute, options = defaultOptions) => {
     threshold = options.threshold
   }
 
+  if(options.limit){
+    limit = options.limit;
+  }
+
   return players.map((player, idx) => {
     const playerInfo = player.gameOver ? `* **${player.name}: ${player[attribute]}**` : `${player.name}: ${player[attribute]}`
 
     if(dividers.includes(idx)) return `${playerInfo} ${player.timeLeft}\n\n-+-+-+-+-+-+-+-+-+-+-+-+-+-`
     if(idx >= threshold && player.gameOver) return undefined;
     return `${playerInfo} ${player.timeLeft}`;
-  }).filter(x => !!x)
+  }).filter(x => !!x).slice(0, limit)
 }
 
 exports.standingsByAttribute = standingsByAttribute;
