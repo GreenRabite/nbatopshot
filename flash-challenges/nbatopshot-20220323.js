@@ -51,7 +51,7 @@ const runFunction = async () => {
   const markdown = [
     `# Turn It To 11 Flash Challenge`,
     `## Scoring Leaders (Rookie/Hero)`,
-    ...standingsByAttribute(wednesdaySortedRookie, 'points', {dividers: [10]} ),
+    ...standingsByAttribute(wednesdaySortedRookie, 'points', {dividers: [10], limit: 15} ),
     `## Scoring Leaders (Vet)`,
     ...wednesdayTeamDisplay,
     `There are ${wednesdayRemainingGames} games that have not started yet.`,
