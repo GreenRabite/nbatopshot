@@ -98,6 +98,61 @@ const fetchGameResult = async (url) => {
       })
 }
 
+const fetchTeamResults = async (urls) => {
+  let remainingGames= 0;
+
+  return {
+    results: await BB.mapSeries(urls, async url => {
+    return axios.get(url)
+      .then(response => {
+        const players = response.data.stats.activePlayers;
+        const clockRunning = !!response.data.basicGameData.clock
+        const period = response.data.basicGameData?.period?.current
+        const gameOver = !clockRunning && period > 3;
+        const timeLeft = timeServices.calculateTimeLeft(period, response.data.basicGameData.clock)
+        const vTeam = {
+          code: response.data.basicGameData.vTeam.triCode,
+          margin: Number(response.data.basicGameData.vTeam.score) - Number(response.data.basicGameData.hTeam.score),
+          assists: Number(response.data.stats.vTeam.totals.assists),
+        }
+
+        const hTeam = {
+          code: response.data.basicGameData.hTeam.triCode,
+          margin: Number(response.data.basicGameData.hTeam.score) - Number(response.data.basicGameData.vTeam.score),
+          assists: Number(response.data.stats.hTeam.totals.assists),
+        }
+
+        const gameData = {
+          teams: [vTeam.code, hTeam.code].join('-'),
+          gameOver: gameOver,
+          [response.data.basicGameData.hTeam.teamId]: hTeam,
+          [response.data.basicGameData.vTeam.teamId]: vTeam,
+          vTeam,
+          hTeam,
+          timeLeft,
+        }
+
+        // New code
+        const vTeamCode = vTeam.code
+        const hTeamCode = hTeam.code
+
+        const formattedPlayers = statsServices.formatStats(players, gameData)
+        const vTeamPlayers = formattedPlayers.filter(player => player.ownTeam === vTeamCode)
+        const hTeamPlayers = formattedPlayers.filter(player => player.ownTeam === hTeamCode)
+
+        return [vTeamPlayers, hTeamPlayers]
+      })
+      .catch(function (error) {
+        // handle error
+        // console.log(error)
+        remainingGames++
+        return undefined
+      })
+     }).filter(x=>!!x),
+     remainingGames
+  }
+}
+
 const fetchPlayByPlay = async (url) => {
   return axios.get(url)
       .then(response => {
@@ -140,6 +195,7 @@ const fetchMixScoreResults = async (teamsAndGameIds, date, map) => {
 exports.redditBot = redditBot;
 exports.fetchGameResults = fetchGameResults;
 exports.fetchGameResult = fetchGameResult;
+exports.fetchTeamResults = fetchTeamResults;
 exports.fetchPlayByPlay = fetchPlayByPlay;
 exports.fetchMixScoreResults = fetchMixScoreResults;
 exports.generateBoxScoreUrls = generateBoxScoreUrls;
