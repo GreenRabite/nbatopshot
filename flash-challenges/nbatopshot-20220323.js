@@ -50,7 +50,7 @@ const runFunction = async () => {
   })
 
   const markdown = [
-    `# Mayhem Flash Challenge`,
+    `# Turn It To 11 Flash Challenge`,
     `## Scoring Leaders (Rookie/Hero)`,
     ...standingsByAttribute(wednesdaySortedRookie, 'points', {dividers: [10]} ),
     `## Scoring Leaders (Vet)`,
