@@ -31,7 +31,9 @@ const runFunction = async () => {
   const fridayPlayers = fridayResults.flat();
   const allPlayersRookie = fridayPlayers
   const sortedRookie = sortPlayersByAttribute(_.clone(allPlayersRookie), 'pointRebAst');
-  const fridayOngoingLeaders = _.clone(sortedRookie).filter(x=>!x.isSeasonMatch && !x.isPointMatch && !x.isRebAstMatch && !x.gameOver)
+
+  const onGoingSortedRookie = sortPlayersByAttribute(_.clone(allPlayersRookie), 'offTracker');
+  const fridayOngoingLeaders = _.clone(onGoingSortedRookie).filter(x=>!x.isSeasonMatch && !x.isPointMatch && !x.isRebAstMatch && !x.gameOver)
 
   const seasonMatchVet = _.clone(allPlayersRookie).filter(x => x.isSeasonMatch)
   const scorersVet = _.clone(allPlayersRookie).filter(x => x.isPointMatch)
@@ -49,7 +51,7 @@ const runFunction = async () => {
     `### RebAsts Matcher - S1/S2`,
     ...standingsByAttribute(rebAstVet, 'rebAst', {hasThreshold: false, hasDividers: false} ),
     `### Ongoing`,
-    ...standingsByAttribute(fridayOngoingLeaders, 'pointRebAst', {limit: 6} ),
+    ...standingsByAttribute(fridayOngoingLeaders, 'specialMsg', {limit: 6} ),
     `There are ${fridayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,

@@ -21,6 +21,12 @@ const formatStats = (players, gameData) => {
     const isSeasonMatch = points >= 27 && rebs >= 6 && assists >= 7;
     const isPointMatch = !isSeasonMatch && points >= 27;
     const isRebAstMatch = !isSeasonMatch && rebs >= 6 && assists >= 7;
+    const offTracker = () => {
+      if(isSeasonMatch || isPointMatch || isRebAstMatch) return 0;
+      const offPoints = 27 - points;
+      const offRebAst = Math.max((7 - assists), 0) + Math.max((6 - rebs), 0)
+      return Math.max(offPoints/27, offRebAst/13)
+    }
     
     return {
       playerId: player.personId,
@@ -46,6 +52,8 @@ const formatStats = (players, gameData) => {
       isSeasonMatch,
       isPointMatch,
       isRebAstMatch,
+      offTracker: offTracker(),
+      specialMsg: `${points}pts / ${rebs}rebs / ${assists}assists`
     }
   })
 }
