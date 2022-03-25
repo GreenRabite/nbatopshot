@@ -25,7 +25,7 @@ const formatStats = (players, gameData) => {
       if(isSeasonMatch || isPointMatch || isRebAstMatch) return 0;
       const offPoints = 27 - points;
       const offRebAst = Math.max((7 - assists), 0) + Math.max((6 - rebs), 0)
-      return Math.max(offPoints/27, offRebAst/13)
+      return Math.min(offPoints/27, offRebAst/13)
     }
     
     return {
