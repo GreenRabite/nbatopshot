@@ -19,8 +19,8 @@ const formatStats = (players, gameData) => {
     const plusMinus = Number(player.plusMinus);
 
     const isSeasonMatch = points >= 27 && rebs >= 6 && assists >= 7;
-    const isPointMatch = points >= 27;
-    const isRebAstMatch = rebs >= 6 && assists >= 7;
+    const isPointMatch = !isSeasonMatch && points >= 27;
+    const isRebAstMatch = !isSeasonMatch && rebs >= 6 && assists >= 7;
     const offTracker = () => {
       if(isSeasonMatch || isPointMatch || isRebAstMatch) return 0;
       const offPoints = Math.max((27 - points), 0);
