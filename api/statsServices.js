@@ -17,6 +17,10 @@ const formatStats = (players, gameData) => {
     const ftm = Number(player.ftm);
     const tpm = Number(player.tpm);
     const plusMinus = Number(player.plusMinus);
+
+    const isSeasonMatch = points >= 27 && rebs >= 6 && assists >= 7;
+    const isPointMatch = !isSeasonMatch && points >= 27;
+    const isRebAstMatch = !isSeasonMatch && rebs >= 6 && assists >= 7;
     
     return {
       playerId: player.personId,
@@ -30,6 +34,8 @@ const formatStats = (players, gameData) => {
       ftm,
       tpm,
       assists,
+      pointRebAst: points + rebs + assists,
+      rebAst: rebs + assists,
       teams: gameData.teams,
       ownTeam: gameData[player.teamId].code,
       gameOver: gameData.gameOver,
@@ -37,6 +43,9 @@ const formatStats = (players, gameData) => {
       plusMinus,
       secondsPlayed: calculateSeconds(player.min),
       timeLeft: gameData.timeLeft,
+      isSeasonMatch,
+      isPointMatch,
+      isRebAstMatch,
     }
   })
 }
