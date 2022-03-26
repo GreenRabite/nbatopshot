@@ -18,14 +18,14 @@ const formatStats = (players, gameData) => {
     const tpm = Number(player.tpm);
     const plusMinus = Number(player.plusMinus);
 
-    const isSeasonMatch = points >= 27 && rebs >= 6 && assists >= 7;
-    const isPointMatch = !isSeasonMatch && points >= 27;
+    const isSeasonMatch = points >= 28 && rebs >= 6 && assists >= 7;
+    const isPointMatch = !isSeasonMatch && points >= 28;
     const isRebAstMatch = !isSeasonMatch && rebs >= 6 && assists >= 7;
     const offTracker = () => {
       if(isSeasonMatch || isPointMatch || isRebAstMatch) return 0;
-      const offPoints = Math.max((27 - points), 0);
+      const offPoints = Math.max((28 - points), 0);
       const offRebAst = Math.max((7 - assists), 0) + Math.max((6 - rebs), 0)
-      return 1 - Math.min(offPoints/27, offRebAst/13)
+      return 1 - Math.min(offPoints/28, offRebAst/13)
     }
     
     return {
