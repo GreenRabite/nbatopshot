@@ -6,6 +6,7 @@ const timeServices = require('../api/timeServices')
 const _ = require('lodash')
 
 const DATE_1 = '20220325'
+const DATE_2 = '20220326'
 
 const FRIDAY_IDS = [
   '0022101100',
@@ -17,6 +18,17 @@ const FRIDAY_IDS = [
   '0022101106'
 ]
 
+const SATURDAY_IDS = [
+  '0022101107',
+  '0022101108',
+  '0022101109',
+  '0022101110',
+  '0022101111',
+  '0022101112',
+  '0022101113',
+  '0022101114'
+]
+
 const COMMENT_ID = 'i249q32'
 
 const runFunction = async () => {
@@ -25,33 +37,36 @@ const runFunction = async () => {
   const { standingsByAttribute } = standingsServices;
 
   const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_1);
+  const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchGameResults(FRIDAY_URLS)
+  const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
 
   const fridayPlayers = fridayResults.flat();
-  const allPlayersRookie = fridayPlayers
+  const saturdayPlayers = saturdayResults.flat();
+  const allPlayersRookie = [...fridayPlayers, ...saturdayPlayers]
   const sortedRookie = sortPlayersByAttribute(_.clone(allPlayersRookie), 'pointRebAst');
 
   const onGoingSortedRookie = sortPlayersByAttribute(_.clone(allPlayersRookie), 'offTracker');
-  const fridayOngoingLeaders = _.clone(onGoingSortedRookie).filter(x=>!x.isSeasonMatch && !x.isPointMatch && !x.isRebAstMatch && !x.gameOver)
+  const ongoingLeaders = _.clone(onGoingSortedRookie).filter(x=>!x.isSeasonMatch && !x.isPointMatch && !x.isRebAstMatch && !x.gameOver)
 
-  const seasonMatchVet = _.clone(allPlayersRookie).filter(x => x.isSeasonMatch)
-  const scorersVet = _.clone(allPlayersRookie).filter(x => x.isPointMatch)
-  const rebAstVet = _.clone(allPlayersRookie).filter(x => x.isRebAstMatch)
+  const seasonMatchVet = _.clone(sortedRookie).filter(x => x.isSeasonMatch)
+  const scorersVet = _.clone(sortedRookie).filter(x => x.isPointMatch)
+  const rebAstVet = _.clone(sortedRookie).filter(x => x.isRebAstMatch)
 
   const markdown = [
     `# Season Match Flash Challenge`,
     `## Season Match Leaders (Rookie/Hero)`,
-    ...standingsByAttribute(sortedRookie, 'pointRebAst', {dividers: [4], limit: 7} ),
+    ...standingsByAttribute(sortedRookie, 'pointRebAst', {dividers: [4], limit: 7, showTeams: true} ),
     `## Season Match Leaders (Vet)`,
     `### Season Matchers - R/L`,
-    ...standingsByAttribute(seasonMatchVet, 'pointRebAst', {hasThreshold: false, hasDividers: false} ),
+    ...standingsByAttribute(seasonMatchVet, 'pointRebAst', {hasThreshold: false, hasDividers: false, showTeams: true} ),
     `### Points Matcher - S1/S2`,
-    ...standingsByAttribute(scorersVet, 'points', {hasThreshold: false, hasDividers: false} ),
+    ...standingsByAttribute(scorersVet, 'points', {hasThreshold: false, hasDividers: false, showTeams: true} ),
     `### RebAsts Matcher - S1/S2`,
-    ...standingsByAttribute(rebAstVet, 'rebAst', {hasThreshold: false, hasDividers: false} ),
+    ...standingsByAttribute(rebAstVet, 'rebAst', {hasThreshold: false, hasDividers: false, showTeams: true} ),
     `### Ongoing`,
-    ...standingsByAttribute(fridayOngoingLeaders, 'specialMsg', {limit: 6} ),
+    ...standingsByAttribute(ongoingLeaders, 'specialMsg', {limit: 6} ),
     `There are ${fridayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,

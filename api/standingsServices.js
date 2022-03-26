@@ -42,7 +42,8 @@ const standingsByAttribute = (players, attribute, options = {}) => {
   }
 
   return players.map((player, idx) => {
-    const playerInfo = player.gameOver ? `* **${player.name}: ${player[attribute]}**` : `${player.name}: ${player[attribute]}`
+    const showTeams = options.showTeams ? `[${player.teams}]` : '';
+    const playerInfo = player.gameOver ? `* **${player.name}: ${player[attribute]}** ${showTeams}` : `${player.name}: ${player[attribute]} ${showTeams}`
 
     if(dividers.includes(idx)) return `${playerInfo} ${player.timeLeft}\n\n---------------------`
     if(idx >= threshold && player.gameOver) return undefined;
