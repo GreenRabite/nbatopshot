@@ -48,7 +48,7 @@ const standingsByAttribute = (players, attribute, options = {}) => {
     if(dividers.includes(idx)) return `${playerInfo} ${player.timeLeft}\n\n---------------------`
     if(idx >= threshold && player.gameOver) return undefined;
     return `${playerInfo} ${player.timeLeft}`;
-  }).filter(x => !!x).slice(0, limit)
+  }).filter(x => !!x).slice(0, options.hasThreshold ? limit : 99)
 }
 
 exports.standingsByAttribute = standingsByAttribute;
