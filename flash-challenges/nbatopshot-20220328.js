@@ -83,15 +83,15 @@ const listPlayByPlay = (sorted) => {
   }).slice(0,4)
 }
 
-const renderSortedArray = (result, stat) => {
+const renderSortedArray = (result, {stat, target}) => {
   if(result.status === 'finished'){
     return [
-      `_First to ${stat}_`,
+      `_First to ${target} ${stat}_`,
       `* **${result.name}**`
     ].join('\n\n')
   }else if(result.status === 'in_progress'){
     return [
-      `_First to ${stat}_`,
+      `_First to ${target} ${stat}_`,
       ...listPlayByPlay(result.sorted)
     ].join('\n\n')
   }
@@ -125,7 +125,7 @@ const runFunction = async () => {
     if(!results) return [];
     const method = config.method
     if(method === 'firstToStat'){
-      return  [`**${config.teams}**`, renderSortedArray(firstToStat(results, config.stat, config.number), config.stat)].join('\n\n')
+      return  [`**${config.teams}**`, renderSortedArray(firstToStat(results, config.stat, config.number), {stat: config.stat, target: config.number})].join('\n\n')
     }else if(method === 'lastMade'){
       const lastShot = lastMadeShot(results, config.stat)
       return renderLastShot(lastShot, {stat: config.stat})
