@@ -97,12 +97,12 @@ const renderSortedArray = (result, stat) => {
   }
 }
 
-const renderLastShot = (result) => {
+const renderLastShot = (result, {stat}) => {
   if(!result) return [];
   if(result.status === 'finished'){
-    return [`**${result.teams}**`,`* Last Shot:`, `**${result.name}**`].join('\n\n')
+    return [`**${result.teams}**`,`* Last Shot(${stat}):`, `**${result.name}**`].join('\n\n')
   }else if(result.status === 'in_progress'){
-    return [`**${result.teams}**`, `Current Last Shot:`, `${result.currentLastShot}`].join('\n\n')
+    return [`**${result.teams}**`, `Current Last Shot(${stat}):`, `${result.currentLastShot}`].join('\n\n')
   }
 }
 
@@ -122,12 +122,13 @@ const runFunction = async () => {
 
   const playByPlays = await BB.mapSeries(playByPlayUrls, async (config) => {
     const results = await fetchPlayByPlay(config.url);
+    if(!results) return [];
     const method = config.method
     if(method === 'firstToStat'){
       return  [`**${config.teams}**`, renderSortedArray(firstToStat(results, config.stat, config.number), config.stat)].join('\n\n')
     }else if(method === 'lastMade'){
       const lastShot = lastMadeShot(results, config.stat)
-      return renderLastShot(lastShot)
+      return renderLastShot(lastShot, {stat: config.stat})
     }else{
       return []
     }
@@ -151,5 +152,5 @@ const runFunction = async () => {
 
 }
 
-setInterval(runFunction, 30000)
-// runFunction()
+// setInterval(runFunction, 30000)
+runFunction()
