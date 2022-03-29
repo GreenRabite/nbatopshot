@@ -136,7 +136,7 @@ const runFunction = async () => {
 
   const markdown = [
     `# Spin It Challenge`,
-    `## The Highlight Reel`,
+    `## Rookie Rotation`,
     ...boxScores,
     ...playByPlays,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
