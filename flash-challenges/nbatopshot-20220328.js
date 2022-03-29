@@ -100,7 +100,7 @@ const renderSortedArray = (result, stat) => {
 const renderLastShot = (result, {stat}) => {
   if(!result) return [];
   if(result.status === 'finished'){
-    return [`**${result.teams}**`,`* Last Shot(${stat}):`, `**${result.name}**`].join('\n\n')
+    return [`**${result.teams}**`,`Last Shot(${stat}):`, `* **${result.name}**`].join('\n\n')
   }else if(result.status === 'in_progress'){
     return [`**${result.teams}**`, `Current Last Shot(${stat}):`, `${result.currentLastShot}`].join('\n\n')
   }
@@ -116,7 +116,7 @@ const runFunction = async () => {
 
   const boxScores = await BB.mapSeries(boxScoreUrls, async (config) => {
     const result = await fetchGameResult(config.url);
-    const sorted =  sortPlayersByAttribute(_.clone(result), config.stat)
+    const sorted =  sortPlayersByAttribute(_.clone(result).filter(x=> x.name !== 'Brandon Williams'), config.stat)
     return [`**${config.teams}**`, `_Most ${config.stat}_`, ...standingsByAttribute(sorted, config.stat, {dividers: [0], threshold: 1})].join('\n\n')
   })
 
