@@ -57,7 +57,7 @@ const runFunction = async () => {
   console.clear()
   console.log(markdown)
 
-  // redditBot.getComment(COMMENT_ID).edit(markdown)
+  redditBot.getComment(COMMENT_ID).edit(markdown)
 
 }
 
