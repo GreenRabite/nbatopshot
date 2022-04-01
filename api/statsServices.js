@@ -18,14 +18,13 @@ const formatStats = (players, gameData) => {
     const tpm = Number(player.tpm);
     const plusMinus = Number(player.plusMinus);
 
-    const isSeasonMatch = points >= 28 && rebs >= 6 && assists >= 7;
-    const isPointMatch = !isSeasonMatch && points >= 28;
-    const isRebAstMatch = !isSeasonMatch && rebs >= 6 && assists >= 7;
+    const isBlkMatch = blks >= 3;
+    const isStealsMatch = steals >=2;
+    const isTpmMatch = tpm >= 4;
     const offTracker = () => {
-      if(isSeasonMatch || isPointMatch || isRebAstMatch) return 0;
-      const offPoints = Math.max((28 - points), 0);
-      const offRebAst = Math.max((7 - assists), 0) + Math.max((6 - rebs), 0)
-      return 1 - Math.min(offPoints/28, offRebAst/13)
+      if(isBlkMatch) return 0;
+      const offBlks = Math.max((3 - blks), 0);
+      return 1 - Math.min(offBlks/3)
     }
     
     return {
@@ -49,11 +48,11 @@ const formatStats = (players, gameData) => {
       plusMinus,
       secondsPlayed: calculateSeconds(player.min),
       timeLeft: gameData.timeLeft,
-      isSeasonMatch,
-      isPointMatch,
-      isRebAstMatch,
+      isBlkMatch,
+      isStealsMatch,
+      isTpmMatch,
       offTracker: offTracker(),
-      specialMsg: `${points}pts / ${rebs}rebs / ${assists}assists`
+      specialMsg: `${steals}stls / ${blks}blks / ${tpm}TPM`
     }
   })
 }
