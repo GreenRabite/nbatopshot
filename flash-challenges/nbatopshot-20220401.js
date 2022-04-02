@@ -55,7 +55,7 @@ const runFunction = async () => {
   const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
   // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchGameResults(SUNDAY_URLS)
 
-  const fridayPlayers = fridayResults.flat().filter(x => x.name != 'Jamorko Pickett');
+  const fridayPlayers = fridayResults.flat().filter(x => x.name != 'Jamorko Pickett' && x.name != 'Zach Collins');
   const saturdayPlayers = saturdayResults.flat();
   // const sundayPlayers = sundayResults.flat();
   const allPlayersRookie = [...fridayPlayers, ...saturdayPlayers]
