@@ -22,9 +22,9 @@ const formatStats = (players, gameData) => {
     const isStealsMatch = steals >=2;
     const isTpmMatch = tpm >= 4;
     const offTracker = () => {
-      if(isBlkMatch) return 0;
-      const offBlks = Math.max((3 - blks), 0);
-      return 1 - Math.min(offBlks/3)
+      if(isStealsMatch) return 0;
+      const offSteals = Math.max((2 - blks), 0);
+      return 1 - Math.min(offSteals/2)
     }
     
     return {

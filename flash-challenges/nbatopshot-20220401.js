@@ -6,7 +6,7 @@ const timeServices = require('../api/timeServices')
 const _ = require('lodash')
 
 const DATE_1 = '20220401'
-// const DATE_2 = '20220326'
+const DATE_2 = '20220402'
 // const DATE_3 = '20220327'
 
 const FRIDAY_IDS = [
@@ -22,16 +22,13 @@ const FRIDAY_IDS = [
   '0022101160'
 ]
 
-// const SATURDAY_IDS = [
-//   '0022101107',
-//   '0022101108',
-//   '0022101109',
-//   '0022101110',
-//   '0022101111',
-//   '0022101112',
-//   '0022101113',
-//   '0022101114'
-// ]
+const SATURDAY_IDS = [
+  '0022101161',
+  '0022101162',
+  '0022101163',
+  '0022101164',
+  '0022101165',
+]
 
 // const SUNDAY_IDS = [
 //   '0022101115',
@@ -51,23 +48,23 @@ const runFunction = async () => {
   const { standingsByAttribute } = standingsServices;
 
   const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_1);
-  // const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
+  const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
   // const SUNDAY_URLS = apiServices.generateBoxScoreUrls(SUNDAY_IDS, DATE_3);
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchGameResults(FRIDAY_URLS)
-  // const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
+  const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchGameResults(SATURDAY_URLS)
   // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchGameResults(SUNDAY_URLS)
 
-  const fridayPlayers = fridayResults.flat();
-  // const saturdayPlayers = saturdayResults.flat();
+  const fridayPlayers = fridayResults.flat().filter(x => x.name != 'Jamorko Pickett');
+  const saturdayPlayers = saturdayResults.flat();
   // const sundayPlayers = sundayResults.flat();
-  const allPlayersRookie = [...fridayPlayers].filter(x => x.name != 'Jamorko Pickett')
+  const allPlayersRookie = [...fridayPlayers, ...saturdayPlayers]
   const sortedBlks = sortPlayersByAttribute(_.clone(allPlayersRookie), 'blks');
   const sortedStls = sortPlayersByAttribute(_.clone(allPlayersRookie), 'steals');
   const sortedTpm = sortPlayersByAttribute(_.clone(allPlayersRookie), 'tpm');
 
   const fridayBlkVet = filterPlayersByThreshold(_.clone(fridayPlayers), 'blks', 3)
-  // const saturdayStlsVet = filterPlayersByThreshold(_.clone(saturdayPlayers), 'steals', 2)
+  const saturdayStlsVet = filterPlayersByThreshold(_.clone(saturdayPlayers), 'steals', 2)
   // const sundayTpmVet = filterPlayersByThreshold(_.clone(sundayPlayers), 'tpm', 4)
 
   // Update
@@ -87,8 +84,7 @@ const runFunction = async () => {
     `### Friday Block Matchers`,
     ...standingsByAttribute(fridayBlkVet, 'blks', {hasThreshold: false, hasDividers: false, showTeams: true} ),
     `### Saturday Steals Matchers`,
-    'Games have not started yet',
-    // ...standingsByAttribute(saturdayStlsVet, 'steals', {hasThreshold: false, hasDividers: false, showTeams: true} ),
+    ...standingsByAttribute(saturdayStlsVet, 'steals', {hasThreshold: false, hasDividers: false, showTeams: true} ),
     `### Sunday 3PM Matchers`,
     'Games have not started yet',
     // ...standingsByAttribute(sundayTpmVet, 'tpm', {hasThreshold: false, hasDividers: false, showTeams: true} ),
