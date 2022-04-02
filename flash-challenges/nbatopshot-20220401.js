@@ -90,7 +90,7 @@ const runFunction = async () => {
     // ...standingsByAttribute(sundayTpmVet, 'tpm', {hasThreshold: false, hasDividers: false, showTeams: true} ),
     `### Ongoing`,
     ...standingsByAttribute(ongoingLeaders, 'specialMsg', {limit: 5} ),
-    `There are ${fridayRemainingGames} games that have not started yet.`,
+    `There are ${saturdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
