@@ -63,7 +63,7 @@ const runFunction = async () => {
   const fridayPlayers = fridayResults.flat().filter(x => x.name != 'Jamorko Pickett' && x.name != 'Zach Collins');
   const saturdayPlayers = saturdayResults.flat();
   const sundayPlayers = sundayResults.flat();
-  const allPlayersRookie = [...fridayPlayers, ...saturdayPlayers]
+  const allPlayersRookie = [...fridayPlayers, ...saturdayPlayers, ...sundayPlayers]
   const sortedBlks = sortPlayersByAttribute(_.clone(allPlayersRookie), 'blks');
   const sortedStls = sortPlayersByAttribute(_.clone(allPlayersRookie), 'steals');
   const sortedTpm = sortPlayersByAttribute(_.clone(allPlayersRookie), 'tpm');
