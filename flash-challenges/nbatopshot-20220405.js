@@ -44,14 +44,17 @@ const runFunction = async () => {
   const combinedPlayerMarkdown = tuesdayCombinedResults.map(result => {
     const sorted = sortPlayersByAttribute(_.clone(result), 'tpm');
     return [
-      sorted[0].teams,
+      `**${sorted[0].teams}**`,
       ...standingsByAttribute(sorted, 'tpm', {dividers: [0], limit: 3} )
     ].join('\n\n')
   })
 
   const combinedTeamMarkdown = tuesdayTeamStatResults.map(result => {
     const sorted = sortPlayersByAttribute(_.clone(result), 'tpm');
-    return standingsByTeamAttribute(sorted, 'tpm', {dividers: [1], limit: 2, showTeams: true}).join('\n\n')
+    return [
+      `**${sorted[0].teams}**`,
+      ...standingsByTeamAttribute(sorted, 'tpm', {dividers: [1], limit: 2, showTeams: true})
+    ].join('\n\n')
   })
 
   const markdown = [
