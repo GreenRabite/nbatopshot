@@ -61,6 +61,32 @@ const onGoingLeaders = (players, attribute, target, options = {}) => {
   }
 }
 
+const sortTeamsByAttribute = (teams, attribute, options = {}) => {
+  return teams.sort((a,b) => {
+    if(a[attribute] != b[attribute]){
+      return b[attribute] - a[attribute]
+    }
+
+    // custom tiebreakers
+    if(options.customSort?.length > 0){
+      for(let i=0; i < options.customSort.length; i++){
+        const sortVar = options.customSort[i];
+        if(a[sortVar] != b[sortVar]){
+          return b[sortVar] - a[sortVar]
+        }
+      }
+    }
+
+    // First tiebreaker
+    if(a.points != b.points){
+      return b.points - a.points
+    }
+
+    return 0;
+  })
+}
+
 exports.sortPlayersByAttribute = sortPlayersByAttribute;
 exports.filterPlayersByThreshold = filterPlayersByThreshold;
 exports.onGoingLeaders = onGoingLeaders;
+exports.sortTeamsByAttribute = sortTeamsByAttribute;

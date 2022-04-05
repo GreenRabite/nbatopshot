@@ -98,7 +98,7 @@ const fetchGameResult = async (url) => {
       })
 }
 
-const fetchTeamResults = async (urls) => {
+const fetchTeamResults = async (urls, {type = 'separate'}) => {
   let remainingGames= 0;
 
   return {
@@ -140,7 +140,69 @@ const fetchTeamResults = async (urls) => {
         const vTeamPlayers = formattedPlayers.filter(player => player.ownTeam === vTeamCode)
         const hTeamPlayers = formattedPlayers.filter(player => player.ownTeam === hTeamCode)
 
-        return [vTeamPlayers, hTeamPlayers]
+        if(type === 'combined'){
+          return formattedPlayers;
+        }else{
+          return [vTeamPlayers, hTeamPlayers]
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        // console.log(error)
+        remainingGames++
+        return undefined
+      })
+     }).filter(x=>!!x),
+     remainingGames
+  }
+}
+
+const fetchTeamStatsResults = async (urls) => {
+  let remainingGames= 0;
+
+  return {
+    results: await BB.mapSeries(urls, async url => {
+    return axios.get(url)
+      .then(response => {
+        const players = response.data.stats.activePlayers;
+        const clockRunning = !!response.data.basicGameData.clock
+        const period = response.data.basicGameData?.period?.current
+        const gameOver = !clockRunning && period > 3;
+        const timeLeft = timeServices.calculateTimeLeft(period, response.data.basicGameData.clock)
+        const vTeam = {
+          code: response.data.basicGameData.vTeam.triCode,
+          margin: Number(response.data.basicGameData.vTeam.score) - Number(response.data.basicGameData.hTeam.score),
+          points: Number(response.data.stats.vTeam.totals.points),
+          assists: Number(response.data.stats.vTeam.totals.assists),
+          tpm: Number(response.data.stats.vTeam.totals.tpm),
+          gameOver,
+          timeLeft
+        }
+
+        const hTeam = {
+          code: response.data.basicGameData.hTeam.triCode,
+          margin: Number(response.data.basicGameData.hTeam.score) - Number(response.data.basicGameData.vTeam.score),
+          points: Number(response.data.stats.hTeam.totals.points),
+          assists: Number(response.data.stats.hTeam.totals.assists),
+          tpm: Number(response.data.stats.hTeam.totals.tpm),
+          gameOver,
+          timeLeft
+        }
+
+        const gameData = {
+          teams: [vTeam.code, hTeam.code].join('-'),
+          gameOver: gameOver,
+          [response.data.basicGameData.hTeam.teamId]: hTeam,
+          [response.data.basicGameData.vTeam.teamId]: vTeam,
+          vTeam,
+          hTeam,
+          timeLeft,
+        }
+
+        return [
+          {...vTeam, ...{teams: gameData.teams}},
+           {...hTeam, ...{teams: gameData.teams}}
+        ]
       })
       .catch(function (error) {
         // handle error
@@ -196,6 +258,7 @@ exports.redditBot = redditBot;
 exports.fetchGameResults = fetchGameResults;
 exports.fetchGameResult = fetchGameResult;
 exports.fetchTeamResults = fetchTeamResults;
+exports.fetchTeamStatsResults = fetchTeamStatsResults;
 exports.fetchPlayByPlay = fetchPlayByPlay;
 exports.fetchMixScoreResults = fetchMixScoreResults;
 exports.generateBoxScoreUrls = generateBoxScoreUrls;

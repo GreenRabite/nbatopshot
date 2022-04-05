@@ -51,4 +51,44 @@ const standingsByAttribute = (players, attribute, options = {}) => {
   }).filter(x => !!x).slice(0, options.hasThreshold ? limit : 99)
 }
 
+const standingsByTeamAttribute = (teams, attribute, options = {}) => {
+  options = {...defaultOptions, ...options}
+
+  if(teams.length === 0) return ['No Teams Have Reached This Threshold']
+  if(options.hasDividers){
+    dividers = [4];
+  }
+
+  
+  if(options.dividers){
+    dividers = options.dividers
+  }
+
+  if(options.hasThreshold){
+    threshold = dividers.length > 0 ? dividers[dividers.length - 1] + 1 : 5;
+  }
+
+  if(options.threshold){
+    threshold = options.threshold
+  }
+
+  if(options.limit){
+    limit = options.limit;
+  }
+
+  return teams.map((team, idx) => {
+    const showTeams = options.showTeams ? `[${team.teams}]` : '';
+    const teamInfo = team.gameOver ? `* **${team.code}: ${team[attribute]}** ${showTeams}` : `${team.code}: ${team[attribute]} ${showTeams}`
+    if(dividers?.includes(idx)) return `${teamInfo} ${team.timeLeft}\n\n---------------------`
+    return `${teamInfo} ${team.timeLeft}`;
+  }).filter(x => !!x).slice(0, options.hasThreshold ? limit : 99)
+}
+
+const teamStandings = (teams, attribute, options = {}) => {
+  return teams.map(team => {
+    return `${team.code}: ${team[attribute]}`
+  }).join('\n\n')
+}
+
 exports.standingsByAttribute = standingsByAttribute;
+exports.standingsByTeamAttribute = standingsByTeamAttribute;
