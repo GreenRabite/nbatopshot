@@ -36,13 +36,13 @@ const runFunction = async () => {
   const {results:tuesdayTeamStatResults, remainingGames: _x2} = await fetchTeamStatsResults(TUESDAY_URLS)
 
   const tuesdayPlayers = tuesdayResults.flat();
-  const sortedPlayers = sortPlayersByAttribute(_.clone(tuesdayPlayers), 'tpm');
+  const sortedPlayers = sortPlayersByAttribute(_.clone(tuesdayPlayers), 'tpm', {customSort: ['points']});
   
   const tuesdayTeams = tuesdayTeamStatResults.flat()
   const sortedTeams = sortTeamsByAttribute(_.clone(tuesdayTeams), 'tpm')
 
   const combinedPlayerMarkdown = tuesdayCombinedResults.map(result => {
-    const sorted = sortPlayersByAttribute(_.clone(result), 'tpm');
+    const sorted = sortPlayersByAttribute(_.clone(result), 'tpm', {customSort: ['points']});
     return [
       `**${sorted[0].teams}**`,
       ...standingsByAttribute(sorted, 'tpm', {dividers: [0], limit: 3} )
@@ -83,5 +83,5 @@ const runFunction = async () => {
 
 }
 
-setInterval(runFunction, 30000)
-// runFunction()
+// setInterval(runFunction, 30000)
+runFunction()
