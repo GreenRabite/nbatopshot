@@ -6,6 +6,7 @@ const timeServices = require('../api/timeServices')
 const _ = require('lodash')
 
 const DATE_1 = '20220405'
+const DATE_2 = '20220406'
 
 const TUESDAY_IDS = [
   '0022101179',
@@ -22,6 +23,15 @@ const TUESDAY_IDS = [
   '0022101189'
 ]
 
+const WEDNESDAY_IDS = [
+  '0022101190',
+  '0022101191',
+  '0022101192',
+  '0022101193',
+  '0022101194',
+  '0022101195'
+]
+
 const COMMENT_ID = 'i3jumpl'
 
 const runFunction = async () => {
@@ -30,18 +40,27 @@ const runFunction = async () => {
   const { standingsByAttribute, standingsByTeamAttribute } = standingsServices;
 
   const TUESDAY_URLS = apiServices.generateBoxScoreUrls(TUESDAY_IDS, DATE_1);
+  const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
 
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchGameResults(TUESDAY_URLS)
   const {results:tuesdayCombinedResults, remainingGames: _x1} = await fetchTeamResults(TUESDAY_URLS, {type: 'combined'})
   const {results:tuesdayTeamStatResults, remainingGames: _x2} = await fetchTeamStatsResults(TUESDAY_URLS)
+  const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchGameResults(WEDNESDAY_URLS)
+  const {results:wednesdayCombinedResults, remainingGames: _x3} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
+  const {results:wednesdayTeamStatResults, remainingGames: _x4} = await fetchTeamStatsResults(WEDNESDAY_URLS)
 
   const tuesdayPlayers = tuesdayResults.flat();
-  const sortedPlayers = sortPlayersByAttribute(_.clone(tuesdayPlayers), 'tpm', {customSort: ['points']});
+  const wednesdayPlayers = wednesdayResults.flat();
+  const allPlayers = [...tuesdayPlayers, ...wednesdayPlayers]
+  const sortedPlayers = sortPlayersByAttribute(_.clone(allPlayers), 'tpm', {customSort: ['points']});
   
   const tuesdayTeams = tuesdayTeamStatResults.flat()
-  const sortedTeams = sortTeamsByAttribute(_.clone(tuesdayTeams), 'tpm')
+  const wednesdayTeams = wednesdayTeamStatResults.flat()
+  const allTeams = [...tuesdayTeams, ...wednesdayTeams]
+  const sortedTeams = sortTeamsByAttribute(_.clone(allTeams), 'tpm')
 
-  const combinedPlayerMarkdown = tuesdayCombinedResults.map(result => {
+  const combinedPlayers = [...tuesdayCombinedResults, ...wednesdayCombinedResults]
+  const combinedPlayerMarkdown = combinedPlayers.map(result => {
     const sorted = sortPlayersByAttribute(_.clone(result), 'tpm', {customSort: ['points']});
     return [
       `**${sorted[0].teams}**`,
@@ -49,7 +68,8 @@ const runFunction = async () => {
     ].join('\n\n')
   })
 
-  const combinedTeamMarkdown = tuesdayTeamStatResults.map(result => {
+  const combinedTeams = [...tuesdayTeamStatResults, ...wednesdayTeamStatResults]
+  const combinedTeamMarkdown = combinedTeams.map(result => {
     const sorted = sortPlayersByAttribute(_.clone(result), 'tpm');
     return [
       `**${sorted[0].teams}**`,
@@ -69,7 +89,7 @@ const runFunction = async () => {
     ...combinedPlayerMarkdown,
     `### Teams`,
     ...combinedTeamMarkdown,
-    `There are ${tuesdayRemainingGames} games that have not started yet.`,
+    `There are ${wednesdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
