@@ -11,6 +11,10 @@ const VALID_LAST_MADE_SHOT = {
   fgm: true,
 }
 
+const VALID_FIRST_MADE_SHOT = {
+  fgm: true,
+}
+
 /** 
  * Exported function that will take in an array of plays from NBA.com play by play
  * endpoint, the stat you are tracking, and the target number of the stat you are
@@ -45,6 +49,17 @@ const lastMadeShot = (plays, stat) => {
     return findLastMade3pm(plays)
   }else if(stat === 'fgm'){
     return findLastMadeShot(plays)
+  }
+}
+
+const firstMadeShot = (plays, stat) => {
+  if(!VALID_FIRST_MADE_SHOT[stat]){
+    throw 'Stat isnt valid for this function'
+  }
+  if(plays.length === 0) return undefined;
+
+  if(stat === 'fgm'){
+    return findFirstMadeFgm(plays)
   }
 }
 
@@ -222,6 +237,29 @@ const findLastMadeShot = (plays) => {
   };
 }
 
+const findFirstMadeFgm = (plays) => {
+  const teams = _.uniq(plays.map(play => play.teamTricode).filter(x=>x)).join('-')
+  const lastPlay = plays[plays.length - 1]
+  const scoringPlays = plays.filter(play => play?.shotResult === 'Made' && play.isFieldGoal === 1);
+  const winningShot = scoringPlays[0]
+  let winner;
+  if(!!winningShot){
+    const playerName = winningShot.playerNameI
+    winner = {
+      name: playerName,
+      team: winningShot.teamTricode,
+      teams,
+      status: 'finished'
+    }
+    return winner;
+  }
+
+  return {
+    teams,
+    status: 'in_progress'
+  };
+}
+
 const findLastMade3pm = (plays) => {
   const teams = _.uniq(plays.map(play => play.teamTricode).filter(x=>x)).join('-')
   const lastPlay = plays[plays.length - 1]
@@ -250,3 +288,4 @@ const findLastMade3pm = (plays) => {
 
 exports.firstToStat = firstToStat
 exports.lastMadeShot = lastMadeShot
+exports.firstMadeShot = firstMadeShot

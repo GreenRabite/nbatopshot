@@ -20,15 +20,32 @@ const renderFirstToStat = (result, {stat, target}) => {
   }
 }
 
-const renderLastShot = (result, {stat}) => {
+const renderLastShot = (result, {stat, showOnlyPlayer = false}) => {
+  if(!result) return [];
+  if(showOnlyPlayer){
+    if(result.status === 'finished'){
+      return [`* **${result.name}** [${result.teams}]`].join('\n\n')
+    }
+  }else{
+    if(result.status === 'finished'){
+      return [`**${result.teams}**`,`Last Shot(${stat}):`, `* **${result.name}**`].join('\n\n')
+    }else if(result.status === 'in_progress'){
+      return [`**${result.teams}**`, `Current Last Shot(${stat}):`, `${result.currentLastShot}`].join('\n\n')
+    }
+  }
+}
+const renderFirstShot = (result, {stat, showOnlyPlayer = false}) => {
   if(!result) return [];
   if(result.status === 'finished'){
-    return [`**${result.teams}**`,`Last Shot(${stat}):`, `* **${result.name}**`].join('\n\n')
-  }else if(result.status === 'in_progress'){
-    return [`**${result.teams}**`, `Current Last Shot(${stat}):`, `${result.currentLastShot}`].join('\n\n')
+    if(!showOnlyPlayer){
+      return [`**${result.teams}**`,`First Shot(${stat}):`, `* **${result.name}**`].join('\n\n')
+    }else{
+      return [`* **${result.name}** [${result.teams}]`].join('\n\n')
+    }
   }
 }
 
 exports.renderLiveStanding = renderLiveStanding
 exports.renderFirstToStat = renderFirstToStat
 exports.renderLastShot = renderLastShot
+exports.renderFirstShot = renderFirstShot

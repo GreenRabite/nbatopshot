@@ -215,6 +215,19 @@ const fetchTeamStatsResults = async (urls) => {
   }
 }
 
+const fetchPlayByPlays = async (urls) => {
+  const results = await BB.mapSeries(urls, async url => {
+    return fetchPlayByPlay(url);
+  })
+
+  const remainingGames = results.filter(result => result.length === 0).length
+
+  return {
+    results,
+    remainingGames
+  }
+}
+
 const fetchPlayByPlay = async (url) => {
   return axios.get(url)
       .then(response => {
@@ -232,6 +245,7 @@ const generateBoxScoreUrls = async (ids, date) => {
 
 const generateBoxScoreUrl = (id, date) => `https://data.nba.net/10s/prod/v1/${date}/${id}_boxscore.json`;
 
+const generatePlayByPlayUrls = (gameIds)  => gameIds.map(gameId => `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gameId}.json`);
 const generatePlayByPlayUrl = (gameId)  => `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_${gameId}.json`;
 
 const fetchMixScoreResults = async (teamsAndGameIds, date, map) => {
@@ -259,7 +273,9 @@ exports.fetchGameResults = fetchGameResults;
 exports.fetchGameResult = fetchGameResult;
 exports.fetchTeamResults = fetchTeamResults;
 exports.fetchTeamStatsResults = fetchTeamStatsResults;
+exports.fetchPlayByPlays = fetchPlayByPlays;
 exports.fetchPlayByPlay = fetchPlayByPlay;
 exports.fetchMixScoreResults = fetchMixScoreResults;
 exports.generateBoxScoreUrls = generateBoxScoreUrls;
 exports.generateBoxScoreUrl = generateBoxScoreUrl;
+exports.generatePlayByPlayUrls = generatePlayByPlayUrls;
