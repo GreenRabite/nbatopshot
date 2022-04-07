@@ -38,8 +38,8 @@ const runFunction = async () => {
     return lastMadeShot(result, 'fgm')
   })
 
-  const firstMadeMarkdown = firstMadeResults.map(game => renderFirstShot(game, {stat: 'fgm', showOnlyPlayer: true})).filter(x=>x?.length)
-  const lastMadeMarkdown = lastMadeResults.map(game => renderLastShot(game, {stat: 'fgm', showOnlyPlayer: true})).filter(x=>x?.length)
+  const firstMadeMarkdown = firstMadeResults.map(game => renderFirstShot(game, {stat: 'fgm', showOnlyPlayer: true}))?.filter(x=>x?.length)
+  const lastMadeMarkdown = lastMadeResults.map(game => renderLastShot(game, {stat: 'fgm', showOnlyPlayer: true}))?.filter(x=>x?.length)
 
   const markdown = [
     `# Starter and Finisher Flash Challenge`,

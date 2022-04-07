@@ -239,7 +239,6 @@ const findLastMadeShot = (plays) => {
 
 const findFirstMadeFgm = (plays) => {
   const teams = _.uniq(plays.map(play => play.teamTricode).filter(x=>x)).join('-')
-  const lastPlay = plays[plays.length - 1]
   const scoringPlays = plays.filter(play => play?.shotResult === 'Made' && play.isFieldGoal === 1);
   const winningShot = scoringPlays[0]
   let winner;
