@@ -61,7 +61,7 @@ const runFunction = async () => {
 
   const combinedPlayers = [...tuesdayCombinedResults, ...wednesdayCombinedResults]
   const combinedPlayerMarkdown = combinedPlayers.map(result => {
-    const sorted = sortPlayersByAttribute(_.clone(result), 'tpm', {customSort: ['points']});
+    const sorted = sortPlayersByAttribute(_.clone(result.filter(x => x.name !== 'Jaylen Hoard')), 'tpm', {customSort: ['points']});
     return [
       `**${sorted[0].teams}**`,
       ...standingsByAttribute(sorted, 'tpm', {dividers: [0], limit: 3} )
