@@ -232,7 +232,7 @@ const findLastMadeShot = (plays) => {
 
   return {
     teams,
-    currentLastShot: winningShot.playerNameI,
+    currentLastShot: winningShot?.playerNameI,
     status: 'in_progress'
   };
 }
