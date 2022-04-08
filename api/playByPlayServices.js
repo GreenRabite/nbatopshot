@@ -216,7 +216,7 @@ const findFirstToPoints = (plays, number) => {
 const findLastMadeShot = (plays) => {
   const teams = _.uniq(plays.map(play => play.teamTricode).filter(x=>x)).join('-')
   const lastPlay = plays[plays.length - 1]
-  const scoringPlays = plays.filter(play => play?.shotResult === 'Made' && play.isFieldGoal === 1);
+  const scoringPlays = plays.filter(play => play?.shotResult === 'Made' && play.isFieldGoal === 1).filter(x => x.playerNameI !== 'D. Cannady');
   const winningShot = scoringPlays[scoringPlays.length - 1]
   let winner;
   if(lastPlay.actionType === 'game' && lastPlay.subType === 'end'){
