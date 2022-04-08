@@ -278,7 +278,7 @@ const findLastMade3pm = (plays) => {
 
   return {
     teams,
-    currentLastShot: winningShot.playerNameI,
+    currentLastShot: winningShot?.playerNameI,
     status: 'in_progress'
   };
 }
