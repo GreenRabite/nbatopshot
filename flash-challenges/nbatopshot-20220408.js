@@ -62,7 +62,7 @@ const runFunction = async () => {
 
   const markdown = [
     `# Season End Wheel Challenge Flash Challenge`,
-    `## Season End Wheel Challenge Leaders (Vert)`,
+    `## Season End Wheel Challenge Leaders (Rookie/Vet)`,
     `### Friday: Last Made 3PM`,
     ...lastMadeMarkdown,
     `### Saturday: Most Steals`,
