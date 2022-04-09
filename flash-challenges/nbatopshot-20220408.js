@@ -50,7 +50,7 @@ const runFunction = async () => {
     const finalResult = result.filter(play => play.playerNameI !== 'I. Thomas')
     return lastMadeShot(finalResult, 'tpm')
   })
-  const lastMadeMarkdown = lastMadeResults.map(game => renderLastShot(game, {stat: 'tpm'}))?.filter(x=>x?.length)
+  const lastMadeMarkdown = lastMadeResults.map(game => renderLastShot(game, {stat: 'tpm', showOnlyPlayer: true}))?.filter(x=>x?.length)
 
   const saturdaySortedTeamPlayers = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'steals'))
   const saturdayTeamDisplay = saturdaySortedTeamPlayers.map(sortTeam => {
