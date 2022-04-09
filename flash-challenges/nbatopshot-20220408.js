@@ -7,7 +7,7 @@ const playByPlayServices = require('../api/playByPlayServices')
 const markdownServices = require('../api/markdownServices')
 const _ = require('lodash')
 
-const DATE_1 = "20220408"
+// const DATE_1 = "20220408"
 const DATE_2 = "20220409"
 const DATE_3 = "20220410"
 
@@ -23,6 +23,13 @@ const FRIDAY_IDS = [
   '0022101211'
 ]
 
+const SATURDAY_IDS = [ 
+ '0022101214',
+ '0022101213',
+ '0022101215',
+ '0022101212',
+]
+
 const COMMENT_ID = 'i3yiga5'
 
 const runFunction = async () => {
@@ -33,7 +40,7 @@ const runFunction = async () => {
   const { renderLastShot, renderFirstShot } = markdownServices;
 
   const FRIDAY_URLS = apiServices.generatePlayByPlayUrls(FRIDAY_IDS);
-  const FRIDAY_BOXSCORE_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_1);
+  const FRIDAY_BOXSCORE_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchPlayByPlays(FRIDAY_URLS)
   const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchTeamResults(FRIDAY_BOXSCORE_URLS, {type: 'combined'})
@@ -67,12 +74,11 @@ const runFunction = async () => {
     `### Friday: Last Made 3PM`,
     ...lastMadeMarkdown,
     `### Saturday: Most Steals`,
-    `Games have not started yet`,
-    // ...saturdayTeamDisplay,
+    ...saturdayTeamDisplay,
     `### Sunday: Most FGM`,
     `Games have not started yet`,
     // ...sundayTeamDisplay,
-    `There are ${fridayRemainingGames} games that have not started yet.`,
+    `There are ${saturdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
