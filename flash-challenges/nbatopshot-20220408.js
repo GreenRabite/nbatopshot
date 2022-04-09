@@ -40,7 +40,8 @@ const runFunction = async () => {
   const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchTeamResults(FRIDAY_BOXSCORE_URLS, {type: 'combined'})
 
   const lastMadeResults = fridayResults.map(result => {
-    return lastMadeShot(result, 'tpm')
+    const finalResult = result.filter(play => play.playerNameI !== 'I. Thomas')
+    return lastMadeShot(finalResult, 'tpm')
   })
   const lastMadeMarkdown = lastMadeResults.map(game => renderLastShot(game, {stat: 'tpm'}))?.filter(x=>x?.length)
 
