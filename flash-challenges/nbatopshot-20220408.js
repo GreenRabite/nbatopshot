@@ -54,9 +54,10 @@ const runFunction = async () => {
 
   const saturdaySortedTeamPlayers = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'steals'))
   const saturdayTeamDisplay = saturdaySortedTeamPlayers.map(sortTeam => {
+    const filterTeam = sortTeam.filter(player => player.name != "Jared Harper")
     return [
-      `**${sortTeam[0].teams}**`,
-      standingsByAttribute(sortTeam, 'steals', {dividers:[0], limit: 3}).join('\n\n')
+      `**${filterTeam[0].teams}**`,
+      standingsByAttribute(filterTeam, 'steals', {dividers:[0], limit: 3}).join('\n\n')
     ].join('\n\n')
   })
 
