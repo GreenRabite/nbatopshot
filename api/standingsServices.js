@@ -45,7 +45,7 @@ const standingsByAttribute = (players, attribute, options = {}) => {
     const showTeams = options.showTeams ? `[${player.teams}]` : '';
     const playerInfo = player.gameOver ? `* **${player.name}: ${player[attribute]}** ${showTeams}` : `${player.name}: ${player[attribute]} ${showTeams}`
 
-    if(dividers.includes(idx)) return `${playerInfo} ${player.timeLeft}\n\n-+-+-+-+-+-+-+-+-+-+-+-`
+    if(dividers.includes(idx)) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
     if(idx >= threshold && player.gameOver) return undefined;
     return `${playerInfo} ${player.timeLeft}`;
   }).filter(x => !!x).slice(0, options.hasThreshold ? limit : 99)
@@ -79,7 +79,7 @@ const standingsByTeamAttribute = (teams, attribute, options = {}) => {
   return teams.map((team, idx) => {
     const showTeams = options.showTeams ? `[${team.teams}]` : '';
     const teamInfo = team.gameOver ? `* **${team.code}: ${team[attribute]}** ${showTeams}` : `${team.code}: ${team[attribute]} ${showTeams}`
-    if(dividers?.includes(idx)) return `${teamInfo} ${team.timeLeft}\n\n-+-+-+-+-+-+-+-+-+-+-+-`
+    if(dividers?.includes(idx)) return `${teamInfo} ${team.timeLeft}\n\n-------------------------`
     return `${teamInfo} ${team.timeLeft}`;
   }).filter(x => !!x).slice(0, options.hasThreshold ? limit : 99)
 }
