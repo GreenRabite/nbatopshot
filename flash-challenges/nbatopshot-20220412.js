@@ -8,18 +8,17 @@ const markdownServices = require('../api/markdownServices')
 const _ = require('lodash')
 
 const DATE_1 = "20220412"
+const DATE_2 = "20220413"
 
 const TUESDAY_IDS = [ 
   '0052100101',
   '0052100121' 
 ]
 
-// const SATURDAY_IDS = [ 
-//  '0022101214',
-//  '0022101213',
-//  '0022101215',
-//  '0022101212',
-// ]
+const WEDNESDAY_IDS = [ 
+ '0052100111',
+ '0052100131',
+]
 
 // const SUNDAY_IDS = [
 //   '0022101216',
@@ -49,16 +48,17 @@ const runFunction = async () => {
   const { renderLastShot, renderFirstShot } = markdownServices;
 
   const TUESDAY_URLS = apiServices.generateBoxScoreUrls(TUESDAY_IDS,DATE_1);
-  // const SATURDAY_BOXSCORE_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
+  const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
   // const SUNDAY_BOXSCORE_URLS = apiServices.generateBoxScoreUrls(SUNDAY_IDS, DATE_3);
 
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchTeamResults(TUESDAY_URLS, {type: 'combined'})
-  // const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchTeamResults(SATURDAY_BOXSCORE_URLS, {type: 'combined'})
+  const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
   // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchTeamResults(SUNDAY_BOXSCORE_URLS, {type: 'combined'})
 
   const tuesdaySortedTeamPlayers = tuesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
+  const wednesdaySortedTeamPlayers = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
 
-  const allTeams = [...tuesdaySortedTeamPlayers]
+  const allTeams = [...tuesdaySortedTeamPlayers, ...wednesdaySortedTeamPlayers]
   const teamDisplay = allTeams.map(sortTeam => {
     return [
       `**${sortTeam[0].teams}**`,
@@ -70,7 +70,7 @@ const runFunction = async () => {
     `# Earn Your Spot Flash Challenge`,
     `## Most Points`,
     ...teamDisplay,
-    `There are ${tuesdayRemainingGames} games that have not started yet.`,
+    `There are ${wednesdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
