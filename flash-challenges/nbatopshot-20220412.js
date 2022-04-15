@@ -9,6 +9,7 @@ const _ = require('lodash')
 
 const DATE_1 = "20220412"
 const DATE_2 = "20220413"
+const DATE_3 = "20220415"
 
 const TUESDAY_IDS = [ 
   '0052100101',
@@ -20,23 +21,10 @@ const WEDNESDAY_IDS = [
  '0052100131',
 ]
 
-// const SUNDAY_IDS = [
-//   '0022101216',
-//   '0022101217',
-//   '0022101218',
-//   '0022101221',
-//   '0022101223',
-//   '0022101226',
-//   '0022101227',
-//   '0022101228',
-//   '0022101224',
-//   '0022101219',
-//   '0022101220',
-//   '0022101222',
-//   '0022101225',
-//   '0022101229',
-//   '0022101230',
-// ]
+const FRIDAY_IDS = [
+  '0052100201',
+  '0052100211' 
+]
 
 const COMMENT_ID = 'i4hmzkx'
 
@@ -49,16 +37,17 @@ const runFunction = async () => {
 
   const TUESDAY_URLS = apiServices.generateBoxScoreUrls(TUESDAY_IDS,DATE_1);
   const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
-  // const SUNDAY_BOXSCORE_URLS = apiServices.generateBoxScoreUrls(SUNDAY_IDS, DATE_3);
+  const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_3);
 
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchTeamResults(TUESDAY_URLS, {type: 'combined'})
   const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
-  // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchTeamResults(SUNDAY_BOXSCORE_URLS, {type: 'combined'})
+  const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchTeamResults(FRIDAY_URLS, {type: 'combined'})
 
   const tuesdaySortedTeamPlayers = tuesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   const wednesdaySortedTeamPlayers = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
+  const fridaySortedTeamPlayers = fridayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
 
-  const allTeams = [...tuesdaySortedTeamPlayers, ...wednesdaySortedTeamPlayers]
+  const allTeams = [...tuesdaySortedTeamPlayers, ...wednesdaySortedTeamPlayers, ...fridaySortedTeamPlayers]
   const teamDisplay = allTeams.map(sortTeam => {
     return [
       `**${sortTeam[0].teams}**`,
@@ -70,7 +59,7 @@ const runFunction = async () => {
     `# Earn Your Spot Flash Challenge`,
     `## Most Points`,
     ...teamDisplay,
-    `There are ${wednesdayRemainingGames} games that have not started yet.`,
+    `There are ${fridayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
