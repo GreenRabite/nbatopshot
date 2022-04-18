@@ -37,8 +37,8 @@ const runFunction = async () => {
   })
 
   const markdown = [
-    `# Rise & Dime Flash Challenge`,
-    `## Rise & Dime Leaders (Rookie/Hero)`,
+    `# 🏀 Rise & Dime Flash Challenge`,
+    `## ⭐️ Rise & Dime Leaders (Rookie/Hero)`,
     ...mondayTeamDisplay,
     `There are ${mondayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
