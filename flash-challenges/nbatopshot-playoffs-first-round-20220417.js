@@ -74,14 +74,14 @@ const runFunction = async () => {
   const {results:chiMilResults, remainingGames: _x7} = await fetchGameResults(CHI_VS_MIL_URLS)
   const {results:nopPhxResults, remainingGames: _x8} = await fetchGameResults(NOP_VS_PHX_URLS)
 
-  const dallasUtahSort = sortPlayersByAttribute(_.clone(combineStats(dallasUtahResults)[0]), 'points');
-  const minnMemphisSort = sortPlayersByAttribute(_.clone(combineStats(minnMemphisResults)[0]), 'ftm');
-  const torPhiSort = sortPlayersByAttribute(_.clone(combineStats(torPhiResults[0])), 'assists');
-  const denGSWSort = sortPlayersByAttribute(_.clone(combineStats(denGSWResults[0])), 'blks');
-  const atlMiaSort = sortPlayersByAttribute(_.clone(combineStats(atlMiaResults[0])), 'tpm');
-  const bknBosSort = sortPlayersByAttribute(_.clone(combineStats(bknBosResults[0])), 'fgm');
-  const chiMilSort = sortPlayersByAttribute(_.clone(combineStats(chiMilResults[0])), 'steals');
-  const nopPhxSort = sortPlayersByAttribute(_.clone(combineStats(nopPhxResults[0])), 'rebs');
+  const dallasUtahSort = sortPlayersByAttribute(_.clone(combineStats(dallasUtahResults.flat())), 'points');
+  const minnMemphisSort = sortPlayersByAttribute(_.clone(combineStats(minnMemphisResults.flat())), 'ftm');
+  const torPhiSort = sortPlayersByAttribute(_.clone(combineStats(torPhiResults.flat())), 'assists');
+  const denGSWSort = sortPlayersByAttribute(_.clone(combineStats(denGSWResults.flat())), 'blks');
+  const atlMiaSort = sortPlayersByAttribute(_.clone(combineStats(atlMiaResults.flat())), 'tpm');
+  const bknBosSort = sortPlayersByAttribute(_.clone(combineStats(bknBosResults.flat())), 'fgm');
+  const chiMilSort = sortPlayersByAttribute(_.clone(combineStats(chiMilResults.flat())), 'steals');
+  const nopPhxSort = sortPlayersByAttribute(_.clone(combineStats(nopPhxResults.flat())), 'rebs');
 
   const markdown = [
     `# The Wheel 🏀 Round 1 NBA Playoffs`,
