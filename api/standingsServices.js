@@ -46,7 +46,7 @@ const standingsByAttribute = (players, attribute, options = {}) => {
     const playerInfo = player.gameOver ? `* **${player.name}: ${player[attribute]}** ${showTeams}` : `${player.name}: ${player[attribute]} ${showTeams}`
 
     if(dividers.includes(idx)) return `${playerInfo} ${player.timeLeft}\n\n-------------------------`
-    if(idx >= threshold && player.gameOver) return undefined;
+    if(idx >= threshold && player.gameOver && !options.dontHideFinished) return undefined;
     return `${playerInfo} ${player.timeLeft}`;
   }).filter(x => !!x).slice(0, options.hasThreshold ? limit : 99)
 }

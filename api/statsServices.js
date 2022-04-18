@@ -57,4 +57,29 @@ const formatStats = (players, gameData) => {
   })
 }
 
+const combineStats = (players) => {
+  const results =  players.reduce((accum, player) => {
+    if(accum[player.playerId]){
+      const oldPlayerStat = accum[player.playerId];
+      accum[player.playerId] = {
+        ...player,
+        points: oldPlayerStat.points + player.points,
+        tpm: oldPlayerStat.tpm + player.tpm,
+        fgm: oldPlayerStat.fgm + player.fgm,
+        steals: oldPlayerStat.steals + player.steals,
+        assists: oldPlayerStat.assists + player.assists,
+        rebs: oldPlayerStat.rebs + player.rebs,
+        ftm: oldPlayerStat.ftm + player.ftm,
+        blks: oldPlayerStat.blks + player.blks,
+      };
+    }else{
+      accum[player.playerId] = player;
+    }
+    return accum;
+  }, {})
+
+  return Object.values(results)
+}
+
 exports.formatStats = formatStats;
+exports.combineStats = combineStats;
