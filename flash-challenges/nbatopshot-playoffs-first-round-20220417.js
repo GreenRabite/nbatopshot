@@ -115,5 +115,5 @@ const runFunction = async () => {
 
 }
 
-setInterval(runFunction, 30000)
+setInterval(runFunction, 45000)
 // runFunction()
