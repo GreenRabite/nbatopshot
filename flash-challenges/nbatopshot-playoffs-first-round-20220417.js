@@ -10,6 +10,7 @@ const _ = require('lodash')
 const DATE_1 = "20220416"
 const DATE_2 = "20220417"
 const DATE_3 = "20220418"
+const DATE_4 = "20220419"
 
 const DAL_VS_UTAH_IDS = [
   [DATE_1, '0042100171'],
@@ -18,6 +19,7 @@ const DAL_VS_UTAH_IDS = [
 
 const MIN_VS_MEM_IDS = [
   [DATE_1, '0042100151'],
+  [DATE_4, '0042100152'],
 ]
 
 const TOR_VS_PHI_IDS = [
@@ -32,6 +34,7 @@ const DEN_VS_GSW_IDS = [
 
 const ATL_VS_MIA_IDS = [
   [DATE_2, '0042100101'],
+  [DATE_4, '0042100102'],
 ]
 
 const BKN_VS_BOS_IDS = [
@@ -44,6 +47,7 @@ const CHI_VS_MIL_IDS = [
 
 const NOP_VS_PHX_IDS = [
   [DATE_2, '0042100141'],
+  [DATE_4, '0042100142'],
 ]
 
 const COMMENT_ID = 'i53ku6y'
