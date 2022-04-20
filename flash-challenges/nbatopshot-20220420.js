@@ -24,14 +24,14 @@ const runFunction = async () => {
 
   const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_1);
 
-  const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'separate'})
+  const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
 
-  const wednesdayPlayers = wednesdayResults.flat(1);
-  const wednesdaySorted = wednesdayPlayers.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'rebs', {customSort: ['teamMargin', 'points', 'plusMinus', 'secondsPlayed']}))
+  // const wednesdayPlayers = wednesdayResults.flat(1);
+  const wednesdaySorted = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'rebs', {customSort: ['teamMargin', 'points', 'plusMinus', 'secondsPlayed']}))
 
   const wednesdayTeamDisplay = wednesdaySorted.map(sortTeam => {
     return [
-      `**${sortTeam[0].ownTeam}**`,
+      `**${sortTeam[0].teams}**`,
       standingsByAttribute(sortTeam, 'rebs', {dividers:[0], limit: 3}).join('\n\n')
     ].join('\n\n')
   })
