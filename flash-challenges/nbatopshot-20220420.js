@@ -15,6 +15,12 @@ const WEDNESDAY_IDS = [
   '0042100122' 
 ]
 
+const THURSDAY_IDS = [
+  '0042100153',
+  '0042100173',
+  '0042100163' ,
+]
+
 const COMMENT_ID = 'i5jpnng'
 
 const runFunction = async () => {
@@ -23,13 +29,18 @@ const runFunction = async () => {
   const { standingsByAttribute } = standingsServices;
 
   const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_1);
+  const THURSDAY_URLS = apiServices.generateBoxScoreUrls(THURSDAY_IDS, DATE_1);
 
   const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
+  const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchTeamResults(THURSDAY_URLS, {type: 'combined'})
 
   // const wednesdayPlayers = wednesdayResults.flat(1);
   const wednesdaySorted = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'rebs', {customSort: ['teamMargin', 'points', 'plusMinus', 'secondsPlayed']}))
+  const thursdaySorted = thursdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'rebs', {customSort: ['teamMargin', 'points', 'plusMinus', 'secondsPlayed']}))
 
-  const wednesdayTeamDisplay = wednesdaySorted.map(sortTeam => {
+  const allPlayers = [...wednesdaySorted, ...thursdaySorted]
+
+  const teamDisplay = allPlayers.map(sortTeam => {
     return [
       `**${sortTeam[0].teams}**`,
       standingsByAttribute(sortTeam, 'rebs', {dividers:[0], limit: 3}).join('\n\n')
@@ -39,8 +50,8 @@ const runFunction = async () => {
   const markdown = [
     `# 🏀 Heroic Hustle Flash Challenge`,
     `## ⭐️ Heroic Hustle Leaders - Rebs (Rookie/Hero)`,
-    ...wednesdayTeamDisplay,
-    `There are ${wednesdayRemainingGames} games that have not started yet.`,
+    ...teamDisplay,
+    `There are ${thursdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
