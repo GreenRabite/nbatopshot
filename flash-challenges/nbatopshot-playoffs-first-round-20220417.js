@@ -13,6 +13,7 @@ const DATE_3 = "20220418"
 const DATE_4 = "20220419"
 const DATE_5 = "20220420"
 const DATE_6 = "20220421"
+const DATE_7 = "20220422"
 
 const DAL_VS_UTAH_IDS = [
   [DATE_1, '0042100171'],
@@ -41,6 +42,7 @@ const DEN_VS_GSW_IDS = [
 const ATL_VS_MIA_IDS = [
   [DATE_2, '0042100101'],
   [DATE_4, '0042100102'],
+  [DATE_7, '0042100103'],
 ]
 
 const BKN_VS_BOS_IDS = [
@@ -51,11 +53,13 @@ const BKN_VS_BOS_IDS = [
 const CHI_VS_MIL_IDS = [
   [DATE_2, '0042100121'],
   [DATE_5, '0042100122'],
+  [DATE_7, '0042100123'],
 ]
 
 const NOP_VS_PHX_IDS = [
   [DATE_2, '0042100141'],
   [DATE_4, '0042100142'],
+  [DATE_7, '0042100143'],
 ]
 
 const COMMENT_ID = 'i53ku6y'
@@ -86,11 +90,47 @@ const runFunction = async () => {
   const {results:chiMilResults, remainingGames: _x7} = await fetchGameResults(CHI_VS_MIL_URLS)
   const {results:nopPhxResults, remainingGames: _x8} = await fetchGameResults(NOP_VS_PHX_URLS)
 
+  const updatedAtlMiaResults = [{
+      playerId: "203992",
+      name: "Bogdan Bogdanovic",
+      teamId: "1610612737",
+      tpm: 5,
+      gameOver: true,
+      timeLeft: '',
+      teamMargin: -10,
+      teams: 'ATL-MIA',
+      ownTeam: 'ATL',
+    },
+    {
+      playerId: "200782",
+      name: "P.J. Tucker",
+      teamId: "1610612748",
+      tpm: 1,
+      gameOver: true,
+      timeLeft: '',
+      teamMargin: 10,
+      teams: 'ATL-MIA',
+      ownTeam: 'MIA',
+    },
+    {
+      playerId: "1629216",
+      name: "Gabe Vincent",
+      teamId: "1610612748",
+      tpm: 3,
+      gameOver: true,
+      timeLeft: '',
+      teamMargin: 10,
+      teams: 'ATL-MIA',
+      ownTeam: 'MIA',
+    },
+  ...atlMiaResults.flat()]
+
+  
   const dallasUtahSort = sortPlayersByAttribute(_.clone(combineStats(dallasUtahResults.flat())), 'points');
   const minnMemphisSort = sortPlayersByAttribute(_.clone(combineStats(minnMemphisResults.flat())), 'ftm');
   const torPhiSort = sortPlayersByAttribute(_.clone(combineStats(torPhiResults.flat())), 'assists');
   const denGSWSort = sortPlayersByAttribute(_.clone(combineStats(denGSWResults.flat())), 'blks');
-  const atlMiaSort = sortPlayersByAttribute(_.clone(combineStats(atlMiaResults.flat())), 'tpm');
+  const atlMiaSort = sortPlayersByAttribute(_.clone(combineStats(updatedAtlMiaResults)), 'tpm');
   const bknBosSort = sortPlayersByAttribute(_.clone(combineStats(bknBosResults.flat())), 'fgm');
   const chiMilSort = sortPlayersByAttribute(_.clone(combineStats(chiMilResults.flat())), 'steals');
   const nopPhxSort = sortPlayersByAttribute(_.clone(combineStats(nopPhxResults.flat())), 'rebs');
