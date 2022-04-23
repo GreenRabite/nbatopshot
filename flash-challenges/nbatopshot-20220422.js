@@ -18,6 +18,13 @@ const FRIDAY_IDS = [
   '0042100143'
 ]
 
+const SATURDAY_IDS = [
+  '0042100134',
+  '0042100174',
+  '0042100113',
+  '0042100154',
+ ]
+
 const COMMENT_ID = 'i5tmz0y'
 
 const runFunction = async () => {
@@ -28,12 +35,12 @@ const runFunction = async () => {
   const { renderLastShot, renderFirstShot } = markdownServices;
 
   const FRIDAY_URLS = apiServices.generatePlayByPlayUrls(FRIDAY_IDS);
-  // const THURSDAY_URLS = apiServices.generatePlayByPlayUrls(THURSDAY_IDS);
+  const SATURDAY_URLS = apiServices.generatePlayByPlayUrls(SATURDAY_IDS);
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchPlayByPlays(FRIDAY_URLS)
-  // const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchPlayByPlays(THURSDAY_URLS, {type: 'combined'})
+  const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchPlayByPlays(SATURDAY_URLS)
 
-  const allPlayers = [...fridayResults]
+  const allPlayers = [...fridayResults, ...saturdayResults]
   const lastMadeResults = allPlayers.map(result => {
     return lastMadeShot(result, 'fgm')
   })

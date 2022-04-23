@@ -14,23 +14,28 @@ const DATE_4 = "20220419"
 const DATE_5 = "20220420"
 const DATE_6 = "20220421"
 const DATE_7 = "20220422"
+const DATE_8 = "20220423"
+
 
 const DAL_VS_UTAH_IDS = [
   [DATE_1, '0042100171'],
   [DATE_3, '0042100172'],
   [DATE_6, '0042100173'],
+  [DATE_8, '0042100174'],
 ]
 
 const MIN_VS_MEM_IDS = [
   [DATE_1, '0042100151'],
   [DATE_4, '0042100152'],
   [DATE_6, '0042100153'],
+  [DATE_8, '0042100154'],
 ]
 
 const TOR_VS_PHI_IDS = [
   [DATE_1, '0042100131'],
   [DATE_3, '0042100132'],
   [DATE_5, '0042100133'],
+  [DATE_8, '0042100134'],
 ]
 
 const DEN_VS_GSW_IDS = [
@@ -48,6 +53,7 @@ const ATL_VS_MIA_IDS = [
 const BKN_VS_BOS_IDS = [
   [DATE_2, '0042100111'],
   [DATE_5, '0042100112'],
+  [DATE_8, '0042100113'],
 ]
 
 const CHI_VS_MIL_IDS = [
