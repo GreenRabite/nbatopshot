@@ -25,6 +25,13 @@ const SATURDAY_IDS = [
   '0042100154',
  ]
 
+ const SUNDAY_IDS = [
+  '0042100124',
+  '0042100164',
+  '0042100104',
+  '0042100144',
+]
+
 const COMMENT_ID = 'i5tmz0y'
 
 const runFunction = async () => {
@@ -36,11 +43,13 @@ const runFunction = async () => {
 
   const FRIDAY_URLS = apiServices.generatePlayByPlayUrls(FRIDAY_IDS);
   const SATURDAY_URLS = apiServices.generatePlayByPlayUrls(SATURDAY_IDS);
+  const SUNDAY_URLS = apiServices.generatePlayByPlayUrls(SUNDAY_IDS);
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchPlayByPlays(FRIDAY_URLS)
   const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchPlayByPlays(SATURDAY_URLS)
+  const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchPlayByPlays(SUNDAY_URLS)
 
-  const allPlayers = [...fridayResults, ...saturdayResults]
+  const allPlayers = [...fridayResults, ...saturdayResults, ...sundayResults]
   const lastMadeResults = allPlayers.map(result => {
     return lastMadeShot(result, 'fgm')
   })
@@ -51,7 +60,7 @@ const runFunction = async () => {
     `# 🏀 Closing Time Flash Challenge`,
     `## ⭐️ Closing Time Leaders - Rebs (Rookie/Hero)`,
     ...lastMadeMarkdown,
-    `There are ${fridayRemainingGames} games that have not started yet.`,
+    `There are ${sundayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     // `**Bolded players** are done for the challenge`,
     // `[Numbers] in bracket show time left in regulation for the game`,
