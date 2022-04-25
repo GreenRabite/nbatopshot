@@ -52,7 +52,7 @@ const formatStats = (players, gameData) => {
       isStealsMatch,
       isTpmMatch,
       offTracker: offTracker(),
-      specialMsg: `${steals}stls / ${blks}blks / ${tpm}TPM`
+      specialMsg: `${points}points`
     }
   })
 }
