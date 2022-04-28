@@ -39,7 +39,7 @@ const formatStats = (players, gameData) => {
       ftm,
       tpm,
       assists,
-      pointRebAst: points + rebs + assists,
+      pointAst: points + assists,
       rebAst: rebs + assists,
       teams: gameData.teams,
       ownTeam: gameData[player.teamId].code,
@@ -52,7 +52,7 @@ const formatStats = (players, gameData) => {
       isStealsMatch,
       isTpmMatch,
       offTracker: offTracker(),
-      specialMsg: `${points}points`
+      specialMsg: `${points + assists} (${points}points | ${assists}assists)`
     }
   })
 }
