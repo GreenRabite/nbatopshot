@@ -8,11 +8,16 @@ const exec = require('child_process').exec;
 const file = require('./nbatopshot-playoffs-first-round-20220417.js')
 
 const DATE_1 = '20220428'
+const DATE_2 = '20220429'
 
 const THURSDAY_IDS = [
   '0042100136',
   '0042100146',
   '0042100176',
+]
+
+const FRIDAY_IDS = [
+  '0042100156',
 ]
 
 const COMMENT_ID = 'i6la5hv'
@@ -23,15 +28,15 @@ const runFunction = async () => {
   const { standingsByAttribute } = standingsServices;
 
   const THURSDAY_URLS = apiServices.generateBoxScoreUrls(THURSDAY_IDS, DATE_1);
-  // const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
+  const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_2);
 
   const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchTeamResults(THURSDAY_URLS, {type: 'combined'})
-  // const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
+  const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchTeamResults(FRIDAY_URLS, {type: 'combined'})
 
   const thursdaySorted = thursdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'pointAst'))
-  // const wednesdaySorted = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'pointAst'))
+  const fridaySorted = fridayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'pointAst'))
 
-  const allPlayers = [...thursdaySorted]
+  const allPlayers = [...thursdaySorted, ...fridaySorted]
 
   const teamDisplay = allPlayers.map(sortTeam => {
     return [
@@ -44,7 +49,7 @@ const runFunction = async () => {
     `# 🏀 You Get What You Give Flash Challenge`,
     `## ⭐️ You Get What You Give Leaders - Points/Ast`,
     ...teamDisplay,
-    `There are ${thursdayRemainingGames} games that have not started yet.`,
+    `There are ${fridayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,

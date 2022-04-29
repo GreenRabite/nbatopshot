@@ -20,6 +20,7 @@ const DATE_10 = "20220425"
 const DATE_11 = "20220426"
 const DATE_12 = "20220427"
 const DATE_13 = "20220428"
+const DATE_14 = "20220429"
 
 
 const DAL_VS_UTAH_IDS = [
@@ -37,6 +38,8 @@ const MIN_VS_MEM_IDS = [
   [DATE_6, '0042100153'],
   [DATE_8, '0042100154'],
   [DATE_11, '0042100155'],
+  [DATE_11, '0042100155'],
+  [DATE_14, '0042100156']
 ]
 
 const TOR_VS_PHI_IDS = [
