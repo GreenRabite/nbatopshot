@@ -29,11 +29,16 @@ const sortPlayersByAttribute = (players, attribute, options = {}) => {
     }
 
     // Second tiebreaker
+    if(a.points != b.points){
+      return b.points - a.points
+    }
+
+    // Third tiebreaker
     if(a.plusMinus != b.plusMinus){
       return b.plusMinus - a.plusMinus
     }
 
-    // Third tiebreaker
+    // Fourth tiebreaker
     if(a.secondsPlayed != b.secondsPlayed){
       return b.secondsPlayed - a.secondsPlayed
     }

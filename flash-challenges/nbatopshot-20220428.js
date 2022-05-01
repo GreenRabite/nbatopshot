@@ -9,6 +9,7 @@ const file = require('./nbatopshot-playoffs-first-round-20220417.js')
 
 const DATE_1 = '20220428'
 const DATE_2 = '20220429'
+const DATE_3 = '20220501'
 
 const THURSDAY_IDS = [
   '0042100136',
@@ -20,6 +21,11 @@ const FRIDAY_IDS = [
   '0042100156',
 ]
 
+const SUNDAY_IDS = [
+  '0042100211',
+  '0042100231',
+]
+
 const COMMENT_ID = 'i6la5hv'
 
 const runFunction = async () => {
@@ -29,14 +35,17 @@ const runFunction = async () => {
 
   const THURSDAY_URLS = apiServices.generateBoxScoreUrls(THURSDAY_IDS, DATE_1);
   const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_2);
+  const SUNDAY_URLS = apiServices.generateBoxScoreUrls(SUNDAY_IDS, DATE_3);
 
   const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchTeamResults(THURSDAY_URLS, {type: 'combined'})
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchTeamResults(FRIDAY_URLS, {type: 'combined'})
+  const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchTeamResults(SUNDAY_URLS, {type: 'combined'})
 
   const thursdaySorted = thursdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'pointAst'))
   const fridaySorted = fridayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'pointAst'))
+  const sundaySorted = sundayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'pointAst'))
 
-  const allPlayers = [...thursdaySorted, ...fridaySorted]
+  const allPlayers = [...thursdaySorted, ...fridaySorted,  ...sundaySorted]
 
   const teamDisplay = allPlayers.map(sortTeam => {
     return [
@@ -49,11 +58,11 @@ const runFunction = async () => {
     `# 🏀 You Get What You Give Flash Challenge`,
     `## ⭐️ You Get What You Give Leaders - Points/Ast`,
     ...teamDisplay,
-    `There are ${fridayRemainingGames} games that have not started yet.`,
+    `There are ${sundayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
-    // `Tiebreakers: Points Scored / Player's ± / Minutes Played`,
+    `Tiebreakers: Team Margin / Points Scored / Player's ± / Minutes Played`,
   ].join("\n\n")
 
   console.clear()
@@ -63,6 +72,5 @@ const runFunction = async () => {
 
 }
 
-exec('./nbatopshot-playoffs-first-round-20220417.js')
 setInterval(runFunction, 30000)
 // runFunction()
