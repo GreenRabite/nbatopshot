@@ -5,7 +5,7 @@ const statsServices = require('../api/statsServices')
 const timeServices = require('../api/timeServices')
 const _ = require('lodash')
 const exec = require('child_process').exec;
-const file = require('./nbatopshot-playoffs-first-round-20220417.js')
+const file = require('./nbatopshot-playoffs-second-round-playoffs-20220502.js')
 
 const DATE_1 = '20220502'
 // const DATE_2 = '20220427'
@@ -62,5 +62,6 @@ const runFunction = async () => {
 
 }
 
+exec('./nbatopshot-playoffs-second-round-playoffs-20220502.js')
 setInterval(runFunction, 30000)
 // runFunction()
