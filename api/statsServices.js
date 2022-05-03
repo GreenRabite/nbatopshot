@@ -18,13 +18,11 @@ const formatStats = (players, gameData) => {
     const tpm = Number(player.tpm);
     const plusMinus = Number(player.plusMinus);
 
-    const isBlkMatch = blks >= 3;
-    const isStealsMatch = steals >=2;
-    const isTpmMatch = tpm >= 4;
+    const atLeastOne = (num) => num > 0;
+    const isFiveCat = atLeastOne(points) && atLeastOne(rebs) && atLeastOne(blks) && atLeastOne(steals) && atLeastOne(assists);
     const offTracker = () => {
-      if(isTpmMatch) return 0;
-      const offTpm = Math.max((4 - tpm), 0);
-      return 1 - Math.min(offTpm/4)
+      if(isFiveCat) return 0;
+      return [atLeastOne(points), atLeastOne(rebs), atLeastOne(blks), atLeastOne(steals), atLeastOne(assists)].filter(x=>x).length
     }
     
     return {
@@ -39,7 +37,7 @@ const formatStats = (players, gameData) => {
       ftm,
       tpm,
       assists,
-      pointAst: points + assists,
+      fiveCat: isFiveCat,
       rebAst: rebs + assists,
       teams: gameData.teams,
       ownTeam: gameData[player.teamId].code,
@@ -48,11 +46,9 @@ const formatStats = (players, gameData) => {
       plusMinus,
       secondsPlayed: calculateSeconds(player.min),
       timeLeft: gameData.timeLeft,
-      isBlkMatch,
-      isStealsMatch,
-      isTpmMatch,
       offTracker: offTracker(),
-      specialMsg: `${points + assists} (${points}points | ${assists}assists)`
+      specialMsg: `[${points}pts | ${rebs}rebs | ${steals}steals | ${assists}assists | ${blks}blks]`,
+      specialMsg2: ``,
     }
   })
 }

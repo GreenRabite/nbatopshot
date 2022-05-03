@@ -50,7 +50,7 @@ const fetchGameResults = async (urls) => {
       })
       .catch(function (error) {
         // handle error
-        // console.log(error)
+        console.log(error)
         remainingGames++
         return undefined
       })
