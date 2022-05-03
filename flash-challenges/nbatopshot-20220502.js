@@ -39,7 +39,7 @@ const runFunction = async () => {
   const sortedPlayers = sortPlayersByAttribute(_.clone(players), 'points');
   const finishedPlayers = sortedPlayers.filter(player => player.fiveCat)
 
-  const onGoingSorted = sortPlayersByAttribute(_.clone(sortedPlayers.filter(player => !player.fiveCat && player.gameOver)), 'offTracker');
+  const onGoingSorted = sortPlayersByAttribute(_.clone(sortedPlayers.filter(player => !player.fiveCat && !player.gameOver)), 'offTracker');
 
   const markdown = [
     `# 🏀 It’s Gonna Be Me Flash Challenge`,
