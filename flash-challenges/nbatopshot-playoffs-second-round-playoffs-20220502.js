@@ -82,10 +82,10 @@ const runFunction = async () => {
     `Tiebreakers: Team Margin / Player's ± / Minutes Played`,
   ].join("\n\n")
 
-  // console.clear()
+  console.clear()
   console.log(markdown)
 
-  // redditBot.getComment(COMMENT_ID).edit(markdown)
+  redditBot.getComment(COMMENT_ID).edit(markdown)
 
 }
 
