@@ -9,7 +9,7 @@ const _ = require('lodash')
 
 const DATE_1 = "20220501"
 const DATE_2 = "20220502"
-// const DATE_3 = "20220418"
+const DATE_3 = "20220503"
 // const DATE_4 = "20220419"
 // const DATE_5 = "20220420"
 // const DATE_6 = "20220421"
@@ -25,10 +25,12 @@ const DATE_2 = "20220502"
 
 const MIL_VS_BOS_IDS = [
   [DATE_1, '0042100211'],
+  [DATE_3, '0042100212'],
 ]
 
 const GSW_VS_MEM_IDS = [
   [DATE_1, '0042100231'],
+  [DATE_3, '0042100232'],
 ]
 
 const PHI_VS_MIA_IDS = [
@@ -89,5 +91,5 @@ const runFunction = async () => {
 
 }
 
-// setInterval(runFunction, 15000)
-runFunction()
+setInterval(runFunction, 15000)
+// runFunction()
