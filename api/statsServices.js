@@ -48,7 +48,7 @@ const formatStats = (players, gameData) => {
       timeLeft: gameData.timeLeft,
       offTracker: offTracker(),
       specialMsg: `[${points}pts | ${rebs}rebs | ${steals}steals | ${assists}assists | ${blks}blks]`,
-      specialMsg2: ``,
+      specialMsg2: points + rebs + steals + assists + blks,
     }
   })
 }
