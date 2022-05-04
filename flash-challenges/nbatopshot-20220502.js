@@ -9,6 +9,7 @@ const file = require('./nbatopshot-playoffs-second-round-playoffs-20220502.js')
 
 const DATE_1 = '20220502'
 const DATE_2 = '20220503'
+const DATE_2 = '20220504'
 
 const MONDAY_IDS = [
   '0042100201',
@@ -20,6 +21,11 @@ const TUESDAY_IDS = [
   '0042100232',
 ]
 
+const WEDNESDAY_IDS = [
+  '0042100202',
+  '0042100222',
+]
+
 const COMMENT_ID = 'i73d4a1'
 
 const runFunction = async () => {
@@ -29,13 +35,16 @@ const runFunction = async () => {
 
   const MONDAY_URLS = apiServices.generateBoxScoreUrls(MONDAY_IDS, DATE_1);
   const TUESDAY_URLS = apiServices.generateBoxScoreUrls(TUESDAY_IDS, DATE_2);
+  const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
 
   const {results:mondayResults, remainingGames: mondayRemainingGames} = await fetchGameResults(MONDAY_URLS)
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchGameResults(TUESDAY_URLS)
+  const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchGameResults(WEDNESDAY_URLS)
 
   const mondayPlayers = mondayResults.flat()
   const tuesdayPlayers = tuesdayResults.flat()
-  const players = [...mondayPlayers, ...tuesdayPlayers]
+  const wednesdayPlayers = wednesdayResults.flat()
+  const players = [...mondayPlayers, ...tuesdayPlayers, ...wednesdayPlayers]
   const sortedPlayers = sortPlayersByAttribute(_.clone(players), 'points');
   const finishedPlayers = sortedPlayers.filter(player => player.fiveCat)
 
