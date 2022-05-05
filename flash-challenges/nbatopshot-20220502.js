@@ -9,7 +9,7 @@ const file = require('./nbatopshot-playoffs-second-round-playoffs-20220502.js')
 
 const DATE_1 = '20220502'
 const DATE_2 = '20220503'
-const DATE_2 = '20220504'
+const DATE_3 = '20220504'
 
 const MONDAY_IDS = [
   '0042100201',
@@ -35,7 +35,7 @@ const runFunction = async () => {
 
   const MONDAY_URLS = apiServices.generateBoxScoreUrls(MONDAY_IDS, DATE_1);
   const TUESDAY_URLS = apiServices.generateBoxScoreUrls(TUESDAY_IDS, DATE_2);
-  const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
+  const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_3);
 
   const {results:mondayResults, remainingGames: mondayRemainingGames} = await fetchGameResults(MONDAY_URLS)
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchGameResults(TUESDAY_URLS)
