@@ -10,7 +10,7 @@ const exec = require('child_process').exec;
 const file = require('./nbatopshot-playoffs-second-round-playoffs-20220502.js')
 
 const DATE_1 = '20220506'
-// const DATE_2 = '20220503'
+const DATE_2 = '20220507'
 // const DATE_3 = '20220504'
 
 const FRIDAY_IDS = [
@@ -18,10 +18,10 @@ const FRIDAY_IDS = [
   '0042100203'
 ]
 
-// const TUESDAY_IDS = [
-//   '0042100212',
-//   '0042100232',
-// ]
+const SATURDAY_IDS = [
+  '0042100213',
+  '0042100233'
+]
 
 // const WEDNESDAY_IDS = [
 //   '0042100202',
@@ -38,6 +38,16 @@ const FRIDAY_STARTING_LINEUP = [
   '1629622', '1630178'
 ]
 
+const SATURDAY_STARTING_LINEUP = [
+  '201143',  '201572',  '201939',
+  '201950',  '202083',  '202691',
+  '203110',  '203507',  '203935',
+  '203952',  '1627759', '1628369',
+  '1628960', '1628991', '1629057',
+  '1629630', '1629673', '1630214',
+  '1630217', '1630533'
+]
+
 const COMMENT_ID = 'i7mrht8'
 
 const runFunction = async () => {
@@ -49,16 +59,24 @@ const runFunction = async () => {
 
   const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_1);
   const FRIDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(FRIDAY_IDS);
+  const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
+  const SATURDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(FRIDAY_IDS);
   // const TUESDAY_URLS = apiServices.generateBoxScoreUrls(TUESDAY_IDS, DATE_2);
   // const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_3);
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchTeamResults(FRIDAY_URLS, {type: 'combined'})
   const {results:fridayPlayResults, remainingGames: _x1} = await fetchPlayByPlays(FRIDAY_PLAY_URLS)
+  const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchTeamResults(SATURDAY_URLS, {type: 'combined'})
+  const {results:saturdayPlayResults, remainingGames: _x2} = await fetchPlayByPlays(SATURDAY_PLAY_URLS)
 
   const fridaySorted = fridayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   const fridayFilterSorted = fridaySorted.map(teamPlayers => teamPlayers.filter(player => !FRIDAY_STARTING_LINEUP.includes(String(player.playerId))))
+  const saturdaySorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
+  const saturdayFilterSorted = saturdaySorted.map(teamPlayers => teamPlayers.filter(player => !SATURDAY_STARTING_LINEUP.includes(String(player.playerId))))
   
-  const teamDisplay = fridayFilterSorted.map(sortTeam => {
+  allTeamPlayers = [...fridayFilterSorted, ...saturdayFilterSorted]
+  
+  const teamDisplay = allTeamPlayers.map(sortTeam => {
     return [
       `**${sortTeam[0].teams}**`,
       standingsByAttribute(sortTeam, 'points', {dividers:[0], limit: 3}).join('\n\n')

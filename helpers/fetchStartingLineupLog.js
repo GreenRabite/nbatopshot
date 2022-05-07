@@ -37,7 +37,7 @@ axios.get(TODAY_LINEUP)
       })
     })
 
-    // console.log(Object.values(results).map(x => x.id))
-    console.log(Object.values(results))
+    console.log(Object.values(results).map(x => x.id))
+    // console.log(Object.values(results))
     return results
   })
