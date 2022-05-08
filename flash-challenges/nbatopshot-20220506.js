@@ -83,7 +83,7 @@ const runFunction = async () => {
     ].join('\n\n')
   })
 
-  const allResults = [...fridayPlayResults]
+  const allResults = [...fridayPlayResults, ...saturdayPlayResults]
   
   const firstReachedResults = allResults.map(result => {
     return firstToStat(result, 'points', 15)
