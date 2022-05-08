@@ -44,7 +44,7 @@ const SATURDAY_STARTING_LINEUP = [
   '203110',  '203507',  '203935',
   '203952',  '1627759', '1628369',
   '1628960', '1628991', '1629057',
-  '1629630', '1629673', '1630214',
+  '1629630', '1630228', '1630214',
   '1630217', '1630533'
 ]
 
@@ -60,7 +60,7 @@ const runFunction = async () => {
   const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_1);
   const FRIDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(FRIDAY_IDS);
   const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
-  const SATURDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(FRIDAY_IDS);
+  const SATURDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(SATURDAY_IDS);
   // const TUESDAY_URLS = apiServices.generateBoxScoreUrls(TUESDAY_IDS, DATE_2);
   // const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_3);
 
