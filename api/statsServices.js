@@ -39,6 +39,7 @@ const formatStats = (players, gameData) => {
       assists,
       fiveCat: isFiveCat,
       rebAst: rebs + assists,
+      rebStlBlk: rebs + steals + blks,
       teams: gameData.teams,
       ownTeam: gameData[player.teamId].code,
       gameOver: gameData.gameOver,
