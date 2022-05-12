@@ -17,7 +17,7 @@ const DATE_8 = "20220508"
 const DATE_10 = "20220509"
 const DATE_11 = "20220510"
 const DATE_12 = "20220511"
-// const DATE_13 = "20220428"
+const DATE_13 = "20220512"
 // const DATE_14 = "20220429"
 
 
@@ -43,6 +43,7 @@ const PHI_VS_MIA_IDS = [
   [DATE_6, '0042100203'],
   [DATE_8, '0042100204'],
   [DATE_11, '0042100205'],
+  [DATE_13, '0042100206'],
 ]
 
 const DAL_VS_PHX_IDS = [
@@ -51,6 +52,7 @@ const DAL_VS_PHX_IDS = [
   [DATE_6, '0042100223'],
   [DATE_8, '0042100224'],
   [DATE_11, '0042100225'],
+  [DATE_13, '0042100226'],
 ]
 
 const COMMENT_ID = 'i73dhx4'
