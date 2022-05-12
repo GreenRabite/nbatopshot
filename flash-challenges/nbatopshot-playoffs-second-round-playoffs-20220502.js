@@ -16,7 +16,7 @@ const DATE_7 = "20220507"
 const DATE_8 = "20220508"
 const DATE_10 = "20220509"
 const DATE_11 = "20220510"
-// const DATE_12 = "20220427"
+const DATE_12 = "20220511"
 // const DATE_13 = "20220428"
 // const DATE_14 = "20220429"
 
@@ -26,6 +26,7 @@ const MIL_VS_BOS_IDS = [
   [DATE_3, '0042100212'],
   [DATE_7, '0042100213'],
   [DATE_10, '0042100214'],
+  [DATE_12, '0042100215'],
 ]
 
 const GSW_VS_MEM_IDS = [
@@ -33,6 +34,7 @@ const GSW_VS_MEM_IDS = [
   [DATE_3, '0042100232'],
   [DATE_7, '0042100233'],
   [DATE_10, '0042100234'],
+  [DATE_12, '0042100235'],
 ]
 
 const PHI_VS_MIA_IDS = [
