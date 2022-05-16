@@ -19,6 +19,7 @@ const DATE_11 = "20220510"
 const DATE_12 = "20220511"
 const DATE_13 = "20220512"
 const DATE_14 = "20220513"
+const DATE_15 = "20220515"
 
 
 const MIL_VS_BOS_IDS = [
@@ -28,6 +29,7 @@ const MIL_VS_BOS_IDS = [
   [DATE_10, '0042100214'],
   [DATE_12, '0042100215'],
   [DATE_14, '0042100216'],
+  [DATE_15, '0042100217'],
 ]
 
 const GSW_VS_MEM_IDS = [
@@ -55,6 +57,7 @@ const DAL_VS_PHX_IDS = [
   [DATE_8, '0042100224'],
   [DATE_11, '0042100225'],
   [DATE_13, '0042100226'],
+  [DATE_15, '0042100227'],
 ]
 
 const COMMENT_ID = 'i73dhx4'
