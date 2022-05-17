@@ -51,6 +51,7 @@ const runFunction = async () => {
   // const {results:sundayPlayResults, remainingGames: _x3} = await fetchPlayByPlays(SUNDAY_PLAY_URLS)
 
   const tuesdaySorted = tuesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
+  const tuesdayHeroSorted = tuesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   // const saturdaySorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   // const saturdaySorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   // const saturdayFilterSorted = saturdaySorted.map(teamPlayers => teamPlayers.filter(player => !SATURDAY_STARTING_LINEUP.includes(String(player.playerId))))
@@ -58,11 +59,19 @@ const runFunction = async () => {
   // const sundayFilterSorted = sundaySorted.map(teamPlayers => teamPlayers.filter(player => !startingLineups.includes(String(player.playerId))))
 
   const allTeamsSorted = [...tuesdaySorted]
+  const allTeamsHeroSorted = [...tuesdayHeroSorted]
   
   const teamDisplay = allTeamsSorted.map(sortTeam => {
     return [
       `**${sortTeam[0].teams}**`,
       standingsByAttribute(sortTeam, 'assists', {dividers:[0], limit: 3}).join('\n\n')
+    ].join('\n\n')
+  })
+
+  const heroTeamDisplay = allTeamsHeroSorted.map(sortTeam => {
+    return [
+      `**${sortTeam[0].teams}**`,
+      standingsByAttribute(sortTeam, 'points', {dividers:[0], limit: 3}).join('\n\n')
     ].join('\n\n')
   })
 
@@ -82,13 +91,15 @@ const runFunction = async () => {
   const markdown = [
     `# 🏀 Come Together Flash Challenge`,
     `## ⭐️ Come Together Leaders`,
-    `### Tuesday Challenges`,
+    `### Tuesday Challenges (Rookie)`,
     `### Assists`,
     ...teamDisplay,
     `### First to 5 Rebs`,
     ...firstReachedMarkdown,
     `### Last Made 3PM`,
     ...finalReachedMarkdown,
+    `### Tuesday Challenges (Hero)`,
+    ...heroTeamDisplay,
     `There are ${tuesdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
