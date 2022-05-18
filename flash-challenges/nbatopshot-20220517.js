@@ -9,11 +9,15 @@ const fetchStartersService = require('../helpers/fetchStartingLineupLog.js')
 const _ = require('lodash')
 
 const DATE_1 = '20220517'
-// const DATE_2 = '20220507'
+const DATE_2 = '20220518'
 // const DATE_3 = '20220508'
 
 const TUESDAY_IDS = [
   '0042100301',
+]
+
+const WEDNESDAY_IDS = [
+  '0042100311',
 ]
 
 // const SATURDAY_IDS = [
@@ -38,28 +42,26 @@ const runFunction = async () => {
 
   const TUESDAY_URLS = apiServices.generateBoxScoreUrls(TUESDAY_IDS, DATE_1);
   const TUESDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(TUESDAY_IDS);
-  // const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
-  // const SATURDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(SATURDAY_IDS);
-  // const SUNDAY_URLS = apiServices.generateBoxScoreUrls(SUNDAY_IDS, DATE_3);
-  // const SUNDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(SUNDAY_IDS);
+  const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
+  const WEDNESDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(WEDNESDAY_IDS);
 
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchTeamResults(TUESDAY_URLS, {type: 'combined'})
   const {results:tuesdayPlayResults, remainingGames: _x1} = await fetchPlayByPlays(TUESDAY_PLAY_URLS)
-  // const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchTeamResults(SATURDAY_URLS, {type: 'combined'})
-  // const {results:saturdayPlayResults, remainingGames: _x2} = await fetchPlayByPlays(SATURDAY_PLAY_URLS)
-  // const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchTeamResults(SUNDAY_URLS, {type: 'combined'})
-  // const {results:sundayPlayResults, remainingGames: _x3} = await fetchPlayByPlays(SUNDAY_PLAY_URLS)
+  const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
+  const {results:wednesdayPlayResults, remainingGames: _x2} = await fetchPlayByPlays(WEDNESDAY_PLAY_URLS)
 
   const tuesdaySorted = tuesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
   const tuesdayHeroSorted = tuesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
+  const wednesdaySorted = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
+  const wednesdayHeroSorted = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   // const saturdaySorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   // const saturdaySorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   // const saturdayFilterSorted = saturdaySorted.map(teamPlayers => teamPlayers.filter(player => !SATURDAY_STARTING_LINEUP.includes(String(player.playerId))))
   // const sundaySorted = sundayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   // const sundayFilterSorted = sundaySorted.map(teamPlayers => teamPlayers.filter(player => !startingLineups.includes(String(player.playerId))))
 
-  const allTeamsSorted = [...tuesdaySorted]
-  const allTeamsHeroSorted = [...tuesdayHeroSorted]
+  const allTeamsSorted = [...tuesdaySorted, ...wednesdaySorted]
+  const allTeamsHeroSorted = [...tuesdayHeroSorted, ...wednesdayHeroSorted]
   
   const teamDisplay = allTeamsSorted.map(sortTeam => {
     return [
@@ -99,8 +101,9 @@ const runFunction = async () => {
     `### Last Made 3PM`,
     ...finalReachedMarkdown,
     `### Tuesday Challenges (Hero)`,
+    `### Points`,
     ...heroTeamDisplay,
-    `There are ${tuesdayRemainingGames} games that have not started yet.`,
+    `There are ${wednesdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
