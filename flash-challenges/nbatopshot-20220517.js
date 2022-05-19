@@ -77,7 +77,7 @@ const runFunction = async () => {
     ].join('\n\n')
   })
 
-  const allPlayResults = [...tuesdayPlayResults]
+  const allPlayResults = [...tuesdayPlayResults,...wednesdayPlayResults]
   
   const firstReachedResults = allPlayResults.map(result => {
     return firstToStat(result, 'rebs', 5)
@@ -117,5 +117,5 @@ const runFunction = async () => {
 
 }
 
-setInterval(runFunction, 30000)
-// runFunction()
+// setInterval(runFunction, 30000)
+runFunction()
