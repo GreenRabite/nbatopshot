@@ -10,7 +10,7 @@ const _ = require('lodash')
 
 const DATE_1 = '20220517'
 const DATE_2 = '20220518'
-// const DATE_3 = '20220508'
+const DATE_3 = '20220519'
 
 const TUESDAY_IDS = [
   '0042100301',
@@ -18,6 +18,10 @@ const TUESDAY_IDS = [
 
 const WEDNESDAY_IDS = [
   '0042100311',
+]
+
+const THURSDAY_IDS = [
+  '0042100302',
 ]
 
 // const SATURDAY_IDS = [
@@ -44,24 +48,25 @@ const runFunction = async () => {
   const TUESDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(TUESDAY_IDS);
   const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
   const WEDNESDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(WEDNESDAY_IDS);
+  const THURSDAY_URLS = apiServices.generateBoxScoreUrls(THURSDAY_IDS, DATE_3);
+  const THURSDAY_PLAY_URLS = apiServices.generatePlayByPlayUrls(THURSDAY_IDS);
 
   const {results:tuesdayResults, remainingGames: tuesdayRemainingGames} = await fetchTeamResults(TUESDAY_URLS, {type: 'combined'})
   const {results:tuesdayPlayResults, remainingGames: _x1} = await fetchPlayByPlays(TUESDAY_PLAY_URLS)
   const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
   const {results:wednesdayPlayResults, remainingGames: _x2} = await fetchPlayByPlays(WEDNESDAY_PLAY_URLS)
+  const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchTeamResults(THURSDAY_URLS, {type: 'combined'})
+  const {results:thursdayPlayResults, remainingGames: _x3} = await fetchPlayByPlays(THURSDAY_PLAY_URLS)
 
   const tuesdaySorted = tuesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
   const tuesdayHeroSorted = tuesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
   const wednesdaySorted = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
   const wednesdayHeroSorted = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
-  // const saturdaySorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
-  // const saturdaySorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
-  // const saturdayFilterSorted = saturdaySorted.map(teamPlayers => teamPlayers.filter(player => !SATURDAY_STARTING_LINEUP.includes(String(player.playerId))))
-  // const sundaySorted = sundayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
-  // const sundayFilterSorted = sundaySorted.map(teamPlayers => teamPlayers.filter(player => !startingLineups.includes(String(player.playerId))))
+  const thursdaySorted = thursdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
+  const thursdayHeroSorted = thursdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'points'))
 
-  const allTeamsSorted = [...tuesdaySorted, ...wednesdaySorted]
-  const allTeamsHeroSorted = [...tuesdayHeroSorted, ...wednesdayHeroSorted]
+  const allTeamsSorted = [...tuesdaySorted, ...wednesdaySorted, ...thursdaySorted]
+  const allTeamsHeroSorted = [...tuesdayHeroSorted, ...wednesdayHeroSorted, ...thursdayHeroSorted]
   
   const teamDisplay = allTeamsSorted.map(sortTeam => {
     return [
@@ -77,7 +82,7 @@ const runFunction = async () => {
     ].join('\n\n')
   })
 
-  const allPlayResults = [...tuesdayPlayResults,...wednesdayPlayResults]
+  const allPlayResults = [...tuesdayPlayResults,...wednesdayPlayResults, ...thursdayPlayResults]
   
   const firstReachedResults = allPlayResults.map(result => {
     return firstToStat(result, 'rebs', 5)
@@ -103,7 +108,7 @@ const runFunction = async () => {
     `### Tuesday Challenges (Hero)`,
     `### Points`,
     ...heroTeamDisplay,
-    `There are ${wednesdayRemainingGames} games that have not started yet.`,
+    `There are ${thursdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
