@@ -89,7 +89,8 @@ const runFunction = async () => {
   })
 
   const finalReachedResults = allPlayResults.map(result => {
-    return lastMadeShot(result, 'tpm')
+    const filterResults = result.filter(res => res.playerNameI !== 'N. Stauskas')
+    return lastMadeShot(filterResults, 'tpm')
   })
 
   const firstReachedMarkdown = firstReachedResults.map(game => renderFirstToStat(game, {stat: 'rebs', target:5}))
@@ -122,5 +123,5 @@ const runFunction = async () => {
 
 }
 
-setInterval(runFunction, 30000)
-// runFunction()
+// setInterval(runFunction, 30000)
+runFunction()
