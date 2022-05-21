@@ -9,16 +9,18 @@ const fetchStartersService = require('../helpers/fetchStartingLineupLog.js')
 const _ = require('lodash')
 
 const DATE_1 = '20220520'
-// const DATE_2 = '20220518'
+const DATE_2 = '20220521'
 // const DATE_3 = '20220519'
 
 const FRIDAY_IDS = [
+  // DAL-GSW
   '0042100312',
 ]
 
-// const WEDNESDAY_IDS = [
-//   '0042100311',
-// ]
+const SATURDAY_IDS = [
+  // MIA-BOS
+  '0042100303',
+]
 
 // const THURSDAY_IDS = [
 //   '0042100302',
@@ -35,19 +37,21 @@ const runFunction = async () => {
   const { fetchStartingLineup } = fetchStartersService;
 
   const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_1);
+  const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
   // const WEDNESDAY_URLS = apiServices.generateBoxScoreUrls(WEDNESDAY_IDS, DATE_2);
   // const THURSDAY_URLS = apiServices.generateBoxScoreUrls(THURSDAY_IDS, DATE_3);
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchTeamResults(FRIDAY_URLS, {type: 'combined'})
+  const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchTeamResults(SATURDAY_URLS, {type: 'combined'})
   // const {results:wednesdayResults, remainingGames: wednesdayRemainingGames} = await fetchTeamResults(WEDNESDAY_URLS, {type: 'combined'})
   // const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchTeamResults(THURSDAY_URLS, {type: 'combined'})
 
   const fridayTpmSorted = fridayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'tpm', {customSort: ['points', 'plusMinus', 'secondsPlayed']}))
-  // const wednesdaySorted = wednesdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'blkStls'))
+  const saturdayDefenderSorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'blkStls'))
   // const thursdaySorted = thursdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
 
   const gswVsDal = [...fridayTpmSorted]
-  const miaVsBos = []
+  const miaVsBos = [...saturdayDefenderSorted]
   
   const gswVsDalDisplay = gswVsDal.map(sortTeam => {
     return [
@@ -69,8 +73,8 @@ const runFunction = async () => {
     `### Marksman (tpm)`,
     ...gswVsDalDisplay,
     `### Defender (blocks + steals)`,
-    'No Games have started yet',
-    `There are ${fridayRemainingGames} games that have not started yet.`,
+    ...miaVsBosDisplay,
+    `There are ${saturdayRemainingGames} games that have not started yet.`,
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
