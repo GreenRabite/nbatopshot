@@ -74,7 +74,7 @@ const runFunction = async () => {
     `**Update: ${new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"})} PST**`,
     `**Bolded players** are done for the challenge`,
     `[Numbers] in bracket show time left in regulation for the game`,
-    `Tiebreakers: Team Margin / Player's ± / Minutes Played`,
+    `Tiebreakers: Points Scored / Player's ± / Minutes Played`,
   ].join("\n\n")
 
   console.clear()
