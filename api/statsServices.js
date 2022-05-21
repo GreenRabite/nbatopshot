@@ -17,7 +17,7 @@ const formatStats = (players, gameData) => {
     const ftm = Number(player.ftm);
     const tpm = Number(player.tpm);
     const plusMinus = Number(player.plusMinus);
-
+    const blkStls = blks + steals;
     const atLeastOne = (num) => num > 0;
     const isFiveCat = atLeastOne(points) && atLeastOne(rebs) && atLeastOne(blks) && atLeastOne(steals) && atLeastOne(assists);
     const offTracker = () => {
@@ -37,6 +37,7 @@ const formatStats = (players, gameData) => {
       ftm,
       tpm,
       assists,
+      blkStls,
       fiveCat: isFiveCat,
       rebAst: rebs + assists,
       rebStlBlk: rebs + steals + blks,
