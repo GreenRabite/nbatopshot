@@ -47,7 +47,7 @@ const runFunction = async () => {
   // const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchTeamResults(THURSDAY_URLS, {type: 'combined'})
 
   const fridayTpmSorted = fridayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'tpm', {customSort: ['points', 'plusMinus', 'secondsPlayed']}))
-  const saturdayDefenderSorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'blkStls'))
+  const saturdayDefenderSorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'blkStls', {customSort: ['points', 'plusMinus', 'secondsPlayed']}))
   // const thursdaySorted = thursdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
 
   const gswVsDal = [...fridayTpmSorted]
