@@ -11,6 +11,7 @@ const _ = require('lodash')
 const DATE_1 = '20220520'
 const DATE_2 = '20220521'
 const DATE_3 = '20220522'
+const DATE_4 = '20220523'
 
 const FRIDAY_IDS = [
   // DAL-GSW
@@ -27,6 +28,11 @@ const SUNDAY_IDS = [
   '0042100313',
 ]
 
+const MONDAY_IDS = [
+  // MIA-BOS
+  '0042100304',
+]
+
 const COMMENT_ID = 'i9e8zk3'
 
 const runFunction = async () => {
@@ -39,20 +45,20 @@ const runFunction = async () => {
   const FRIDAY_URLS = apiServices.generateBoxScoreUrls(FRIDAY_IDS, DATE_1);
   const SATURDAY_URLS = apiServices.generateBoxScoreUrls(SATURDAY_IDS, DATE_2);
   const SUNDAY_URLS = apiServices.generateBoxScoreUrls(SUNDAY_IDS, DATE_3);
-  // const THURSDAY_URLS = apiServices.generateBoxScoreUrls(THURSDAY_IDS, DATE_3);
+  const MONDAY_URLS = apiServices.generateBoxScoreUrls(MONDAY_IDS, DATE_4);
 
   const {results:fridayResults, remainingGames: fridayRemainingGames} = await fetchTeamResults(FRIDAY_URLS, {type: 'combined'})
   const {results:saturdayResults, remainingGames: saturdayRemainingGames} = await fetchTeamResults(SATURDAY_URLS, {type: 'combined'})
   const {results:sundayResults, remainingGames: sundayRemainingGames} = await fetchTeamResults(SUNDAY_URLS, {type: 'combined'})
-  // const {results:thursdayResults, remainingGames: thursdayRemainingGames} = await fetchTeamResults(THURSDAY_URLS, {type: 'combined'})
+  const {results:mondayResults, remainingGames: mondayRemainingGames} = await fetchTeamResults(MONDAY_URLS, {type: 'combined'})
 
   const fridayTpmSorted = fridayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'tpm', {customSort: ['points', 'plusMinus', 'secondsPlayed']}))
   const saturdayDefenderSorted = saturdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'blkStls', {customSort: ['points', 'plusMinus', 'secondsPlayed']}))
   const sundayTpmSorted = sundayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'tpm', {customSort: ['points', 'plusMinus', 'secondsPlayed']}))
-  // const thursdaySorted = thursdayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'assists'))
+  const mondayDefenderSorted = mondayResults.map(teamPlayers => sortPlayersByAttribute(_.clone(teamPlayers), 'blkStls', {customSort: ['points', 'plusMinus', 'secondsPlayed']}))
 
   const gswVsDal = [...fridayTpmSorted, ...sundayTpmSorted]
-  const miaVsBos = [...saturdayDefenderSorted]
+  const miaVsBos = [...saturdayDefenderSorted, ...mondayDefenderSorted]
   
   const gswVsDalDisplay = gswVsDal.map(sortTeam => {
     return [
